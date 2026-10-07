@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-07",
+  "timestamp": "2026-10-07T04:12:28.404Z",
+  "platform": "Yos Hub API",
+  "base": "https://api.yoshub.com/v1",
+  "requestedModel": "deepseek-v4-flash",
+  "fixture": "匿名测试台账，非真实用户数据",
+  "checks": [
+    {
+      "label": "空台账真实周报",
+      "status": "pass",
+      "elapsedMs": 4903,
+      "text": "**概览**  \n2026-10-07 至 2026-10-13 的未来七天预约计划中，总预约量为 **0**，总预约容量为 **63**，整体预约率 **0%**。当前尚无任何预约记录。\n\n**设备差异**  \n数码相机、便携投影仪、录音笔的预约量均为 **0**，各自预约容量均为 **21**，预约率均为 **0%**。三类设备之间暂无明显预约差异。\n\n**可执行建议**  \n1. 若后续确有设备使用需求，建议提前通过预约系统登记，便于确认档期。  \n2. 当前无预约冲突，无需进行预约调整；可继续关注后续预约计划变化。  \n3. 可定期核对设备预约容量与开放状态，但本周期计划未显示任何预约，不能据此判断真实使用情况。",
+      "usage": {
+        "prompt_tokens": 194,
+        "completion_tokens": 563,
+        "total_tokens": 757,
+        "completion_tokens_details": {
+          "reasoning_tokens": 380
+        }
+      },
+      "source": {
+        "start": "2026-10-07",
+        "end": "2026-10-13",
+        "total": 0,
+        "capacity": 63,
+        "devices": [
+          {
+            "id": "camera",
+            "name": "数码相机",
+            "booked": 0,
+            "capacity": 21,
+            "percent": 0
+          },
+          {
+            "id": "projector",
+            "name": "便携投影仪",
+            "booked": 0,
+            "capacity": 21,
+            "percent": 0
+          },
+          {
+            "id": "recorder",
+            "name": "录音笔",
+            "booked": 0,
+            "capacity": 21,
+            "percent": 0
+          }
+        ]
+      },
+      "query": null,
+      "matches": null
+    },
+    {
+      "label": "明日下午投影仪已占用的真实解析与台账核对",
+      "status": "pass",
+      "elapsedMs": 1674,
+      "text": "2026-10-08 空闲查询\n便携投影仪：指定时段已被预约\n\n结果来自当前预约台账，请选择时段并提交；提交时会再次检测冲突。",
+      "usage": {
+        "prompt_tokens": 204,
+        "completion_tokens": 76,
+        "total_tokens": 280,
+        "completion_tokens_details": {
+          "reasoning_tokens": 48
+        }
+      },
+      "source": null,
+      "query": {
+        "date": "2026-10-08",
+        "equipmentId": "projector",
+        "slot": "14:00–16:00"
+      },
+      "matches": [
+        {
+          "name": "便携投影仪",
+          "slots": []
+        }
+      ]
+    }
+  ]
+}

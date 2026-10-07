@@ -6,7 +6,7 @@
 [十天交付与验收路线](docs/十天交付与验收路线.md) · [界面检查表](docs/界面设计与验收.md) · [AI接入与成本](docs/AI接入与成本.md)
 
 本分支feat/glass-review-workspace是待本人检查的界面/AI候选版，localhost:3004本地预览；未合入主干或替换公开部署。
-2026-10-07本地20组测试通过，包括AI模拟异常；真实模型调用仍待用户指定平台并本机填写.env。可以运行根目录配置AI.ps1隐藏输入Key；配置后重启预览再验收。只读MCP练习与路演草稿已备妥，教师审批/互评/录像未发生。
+2026-10-07本地22组测试通过，包含AI模拟异常及截断处理；Yos Hub/deepseek-v4-flash的真实本地周报和条件解析已通过。可以运行根目录配置AI.ps1隐藏输入Key；配置后重启预览再验收。只读MCP练习与路演草稿已备妥，教师审批/互评/录像未发生。
 
 [![Course CI](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/workflows/ci.yml)
 
@@ -22,7 +22,7 @@
 
 ## 项目：借一下 · 实验室设备预约（题库第5项）
 
-三条样例设备台账、日期/时段预约、冲突拒绝、我的预约筛选、取消与到期标记。后端保存本机 JSON 数据，刷新和重启保留记录。[正式选题](docs/正式选题.md)说明最小闭环和第7天AI周报/查询计划；目前尚未接入真实大模型。
+三条样例设备台账、日期/时段预约、冲突拒绝、我的预约筛选、取消与到期标记。后端保存本机 JSON 数据，刷新和重启保留记录。[正式选题](docs/正式选题.md)说明最小闭环和第7天AI周报/查询计划；当前候选分支已接入Yos Hub/deepseek-v4-flash，真实本地周报与空闲查询通过；公开旧版仍未提供服务端AI。
 
 ### 本地启动
 

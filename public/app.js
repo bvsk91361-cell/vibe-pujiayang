@@ -144,7 +144,7 @@ async function askAI(mode,question=''){
  if(aiBusy)return;aiBusy=true;$('#ai-report').disabled=true;$('#ai-form button').disabled=true;$('#ai-message').textContent='正在整理台账，请稍候…';$('#ai-message').classList.remove('error');$('#ai-result').hidden=true;
  try{const result=await api('/api/ai/assist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode,question})});
  const output=$('#ai-result');output.textContent=result.text;output.hidden=false;
- $('#ai-message').textContent=`本次由 ${result.model} 生成，空闲数据经服务端核对。`;}
+ $('#ai-message').textContent=mode==='report'?`本次由 ${result.model} 生成，依据当前七天预约计划汇总。`:`本次由 ${result.model} 解析，空闲数据经服务端核对。`;}
  catch(error){$('#ai-message').textContent=error.message;$('#ai-message').classList.add('error');}
  finally{aiBusy=false;$('#ai-report').disabled=false;$('#ai-form button').disabled=false;}
 }

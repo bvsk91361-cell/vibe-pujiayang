@@ -29,7 +29,7 @@ export function createAiAssistant({ config = process.env, fetchImpl = fetch, tim
   let payload;
   busy=true;calls+=1;
   try {
-   const response=await fetchImpl(endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${settings.key}`},body:JSON.stringify({model:settings.model,messages:[{role:'system',content:input.mode==='report'?reportPrompt:queryPrompt},{role:'user',content:input.mode==='report'?JSON.stringify(summary):input.question.trim()}],max_tokens:800,temperature:0.2,stream:false}),signal:AbortSignal.timeout(timeoutMs),redirect:'error'});
+   const response=await fetchImpl(endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${settings.key}`},body:JSON.stringify({model:settings.model,messages:[{role:'system',content:input.mode==='report'?reportPrompt:queryPrompt},{role:'user',content:input.mode==='report'?JSON.stringify(summary):input.question.trim()}],max_tokens:input.mode==='report'?2000:800,temperature:0.2,stream:false}),signal:AbortSignal.timeout(timeoutMs),redirect:'error'});
    if (!response.ok) {
     if ([401,403].includes(response.status)) throw new BookingError('模型授权失败，请检查本机密钥和模型权限；普通预约不受影响。',503);
     if ([402,429].includes(response.status)) throw new BookingError('模型额度不足或限流，请稍后再试或手动预约。',503);
@@ -42,9 +42,11 @@ export function createAiAssistant({ config = process.env, fetchImpl = fetch, tim
    throw new BookingError('暂时连接不到模型服务，请检查网络；普通预约可继续使用。',502);
   } finally { busy=false; }
   const content=payload?.choices?.[0]?.message?.content;
-  if (typeof content !== 'string' || !content.trim() || content.length > 12000) throw new BookingError('助手没有返回有效内容，请稍后再试。',502);
   promptTokens+=Math.max(0,Number(payload.usage?.prompt_tokens)||0);
   completionTokens+=Math.max(0,Number(payload.usage?.completion_tokens)||0);
+  if (payload?.choices?.[0]?.finish_reason === 'length') throw new BookingError('助手输出被截断，本次结果不完整，请稍后重试或缩小问题范围。',502);
+  if (typeof content !== 'string' || !content.trim() || content.length > 12000) throw new BookingError('助手没有返回有效内容，请稍后再试。',502);
+  if (input.mode === 'report' && content.trim().length < 30) throw new BookingError('助手周报内容不完整，请重试；本次不作为有效报告。',502);
   if (input.mode === 'report') return { text:content.trim(), model:settings.model, source:summary, usage:payload.usage||null };
   const query=parsedJson(content);
   if (!query || typeof query.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(query.date) || localDate(new Date(`${query.date}T12:00:00`)) !== query.date || query.date < localDate() || query.date > addDays(localDate(),365)) throw new BookingError('助手未识别有效日期，请明确指定今天至未来一年内的日期。',502);
