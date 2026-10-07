@@ -22,7 +22,7 @@ try {
  await check('空台账真实周报',{mode:'report'},[],result=>{assert.equal(result.source.total,0);assert.ok(result.text.trim());});
  const date=addDays(localDate(),1);
  await check('明日下午投影仪已占用的真实解析与台账核对',{mode:'availability',question:'明天下午有空闲的投影仪吗？'},[{equipmentId:'projector',date,slot:'14:00–16:00'}],result=>{
-  assert.deepEqual(result.query,{date,equipmentId:'projector',slot:'14:00–16:00'});
+  assert.deepEqual(result.query,{intent:'availability',date,equipmentId:'projector',slot:'14:00–16:00'});
   assert.deepEqual(result.matches,[{name:'便携投影仪',slots:[]}]);
  });
  console.log('PASS: both checks used real Yos Hub calls; no credential data saved.');

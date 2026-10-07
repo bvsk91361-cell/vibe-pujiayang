@@ -141,11 +141,11 @@ $('#export').addEventListener('click',async()=>{
  catch(error){notify(error.message,true);}
 });
 async function askAI(mode,question=''){
- if(aiBusy)return;aiBusy=true;$('#ai-report').disabled=true;$('#ai-form button').disabled=true;$('#ai-message').textContent='正在整理台账，请稍候…';$('#ai-message').classList.remove('error');$('#ai-result').hidden=true;
- try{const result=await api('/api/ai/assist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode,question})});
+ if(aiBusy)return;aiBusy=true;$('#ai-report').disabled=true;$('#ai-form button').disabled=true;$('#ai-message').textContent='正在生成：正在核对预约台账，请稍候…';$('#ai-message').dataset.state='generating';$('#ai-message').classList.remove('error');$('#ai-result').hidden=true;
+ try{const result=await api('/api/ai/assist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode,question}),signal:AbortSignal.timeout(35000)});
  const output=$('#ai-result');output.textContent=result.text;output.hidden=false;
- $('#ai-message').textContent=mode==='report'?`本次由 ${result.model} 生成，依据当前七天预约计划汇总。`:`本次由 ${result.model} 解析，空闲数据经服务端核对。`;}
- catch(error){$('#ai-message').textContent=error.message;$('#ai-message').classList.add('error');}
+ $('#ai-message').dataset.state='completed';$('#ai-message').textContent=mode==='report'?`已完成：${result.model} 基于台账选择建议，统计经服务端核对。`:`已完成：${result.model} 解析，结果经预约台账核对。`;}
+ catch(error){const message=['TimeoutError','AbortError'].includes(error.name)?'等待助手超时，请稍后手动重试。':error.name==='TypeError'?'无法连接本地服务，请检查网络与预览服务是否运行。':error.message;$('#ai-message').dataset.state='failed';$('#ai-message').textContent=`生成失败：${message}`;$('#ai-message').classList.add('error');}
  finally{aiBusy=false;$('#ai-report').disabled=false;$('#ai-form button').disabled=false;}
 }
 $('#ai-report').addEventListener('click',()=>askAI('report'));

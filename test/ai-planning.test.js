@@ -5,6 +5,7 @@ import { addDays, freeSlots, planSummary } from '../src/planning.js';
 import { validateBooking, localDate } from '../src/booking.js';
 const config={YOSHUB_API_KEY:'unit-test-secret',YOSHUB_BASE_URL:'https://unit-test.example/v1',YOSHUB_MODEL:'test-model'};
 const response=content=>({ok:true,json:async()=>({choices:[{message:{content}}],usage:{prompt_tokens:12,completion_tokens:8}})});
+const report=JSON.stringify({sections:{overview:['window','count','sample'],popular:['popular'],peak:['peak'],anomalies:['anomalies'],utilization:['utilization']},suggestions:['collect-samples','review-plan']});
 
 test('规划统计由真实记录生成，七天容量、跨月日期和时间终点正确',()=>{
  const now=new Date('2026-10-07T11:00:00');
@@ -23,7 +24,7 @@ test('AI未配置时明确503，不发送外部请求',async()=>{
 });
 
 test('周报仅发送汇总台账，不发送预约人姓名或泄露密钥；usage来自接口',async()=>{
- let sent;const ai=createAiAssistant({config,fetchImpl:async(url,options)=>{sent=JSON.parse(options.body);return response('本测试周报仅供自动化验证，包含预约概览、设备差异与规划建议，不代表真实模型调用。');}});
+ let sent;const ai=createAiAssistant({config,fetchImpl:async(url,options)=>{sent=JSON.parse(options.body);return response(report);}});
  const output=await ai.assist({mode:'report'},[{name:'私密测试姓名',equipmentId:'camera',date:localDate(),slot:'19:00–21:00'}]);
  assert.equal(output.model,'test-model');assert.equal(sent.messages[1].content.includes('私密测试姓名'),false);assert.equal(JSON.stringify(ai.status()).includes('unit-test-secret'),false);
  assert.equal(ai.status().promptTokens,12);assert.equal(output.source.total,1);
@@ -54,7 +55,7 @@ test('模型401、额度、网络、超时等错误提供安全兜底，不暴�
 });
 
 test('模型每日调用上限阻止重复消耗，HTTPS地址必须有效',async()=>{
- const ai=createAiAssistant({config,fetchImpl:async()=>response('本测试周报仅供自动化验证，包含预约概览、设备差异与规划建议，不代表真实模型调用。')});
+ const ai=createAiAssistant({config,fetchImpl:async()=>response(report)});
  for(let index=0;index<20;index++)await ai.assist({mode:'report'},[]);
  await assert.rejects(ai.assist({mode:'report'},[]),error=>error.status===429);
  const invalid=createAiAssistant({config:{...config,YOSHUB_BASE_URL:'http://unit-test.example'},fetchImpl:async()=>{throw new Error('Should not call');}});
@@ -63,7 +64,7 @@ test('模型每日调用上限阻止重复消耗，HTTPS地址必须有效',asyn
 
 test('Yos Hub默认地址和模型生效，密钥只进入服务端Authorization，不进入返回状态',async()=>{
  let request;
- const ai=createAiAssistant({config:{YOSHUB_API_KEY:'server-only-fixture'},fetchImpl:async(url,options)=>{request={url,options};return response('本测试周报仅供自动化验证，包含预约概览、设备差异与规划建议，不代表真实模型调用。');}});
+ const ai=createAiAssistant({config:{YOSHUB_API_KEY:'server-only-fixture'},fetchImpl:async(url,options)=>{request={url,options};return response(report);}});
  await ai.assist({mode:'report'},[]);
  assert.equal(request.url,'https://api.yoshub.com/v1/chat/completions');
  assert.equal(JSON.parse(request.options.body).model,'deepseek-v4-flash');
@@ -77,7 +78,7 @@ test('Yos Hub默认地址和模型生效，密钥只进入服务端Authorization
 test('报告输出截断或只有标题时不能显示为有效报告，截断usage仍计入统计',async()=>{
  const truncated=createAiAssistant({config,fetchImpl:async()=>({ok:true,json:async()=>({choices:[{finish_reason:'length',message:{content:'报告标题'}}],usage:{prompt_tokens:10,completion_tokens:800}})})});
  await assert.rejects(truncated.assist({mode:'report'},[]),error=>error.status===502&&/截断/.test(error.message));
- assert.equal(truncated.status().completionTokens,800);
+ assert.equal(truncated.status().completionTokens,1600);
  const short=createAiAssistant({config,fetchImpl:async()=>response('报告标题')});
  await assert.rejects(short.assist({mode:'report'},[]),error=>error.status===502&&/不完整/.test(error.message));
 });
