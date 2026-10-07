@@ -1,0 +1,218 @@
+[
+  {
+    "content": 1242,
+    "height": 768,
+    "left": 55,
+    "overflow": 0,
+    "right": 54,
+    "view": "discover",
+    "viewport": 1366
+  },
+  {
+    "content": 1242,
+    "height": 768,
+    "left": 55,
+    "overflow": 0,
+    "right": 54,
+    "view": "equipment",
+    "viewport": 1366
+  },
+  {
+    "content": 1242,
+    "height": 768,
+    "left": 55,
+    "overflow": 0,
+    "right": 54,
+    "view": "plans",
+    "viewport": 1366
+  },
+  {
+    "content": 1242,
+    "height": 768,
+    "left": 55,
+    "overflow": 0,
+    "right": 54,
+    "view": "booking",
+    "viewport": 1366
+  },
+  {
+    "content": 1242,
+    "height": 768,
+    "left": 55,
+    "overflow": 0,
+    "right": 54,
+    "view": "advisor",
+    "viewport": 1366
+  },
+  {
+    "content": 1242,
+    "height": 768,
+    "left": 55,
+    "overflow": 0,
+    "right": 54,
+    "view": "space",
+    "viewport": 1366
+  },
+  {
+    "content": 1310,
+    "height": 900,
+    "left": 58,
+    "overflow": 0,
+    "right": 57,
+    "view": "discover",
+    "viewport": 1440
+  },
+  {
+    "content": 1310,
+    "height": 900,
+    "left": 58,
+    "overflow": 0,
+    "right": 57,
+    "view": "equipment",
+    "viewport": 1440
+  },
+  {
+    "content": 1310,
+    "height": 900,
+    "left": 58,
+    "overflow": 0,
+    "right": 57,
+    "view": "plans",
+    "viewport": 1440
+  },
+  {
+    "content": 1310,
+    "height": 900,
+    "left": 58,
+    "overflow": 0,
+    "right": 57,
+    "view": "booking",
+    "viewport": 1440
+  },
+  {
+    "content": 1310,
+    "height": 900,
+    "left": 58,
+    "overflow": 0,
+    "right": 57,
+    "view": "advisor",
+    "viewport": 1440
+  },
+  {
+    "content": 1310,
+    "height": 900,
+    "left": 58,
+    "overflow": 0,
+    "right": 57,
+    "view": "space",
+    "viewport": 1440
+  },
+  {
+    "content": 1440,
+    "height": 900,
+    "left": 72,
+    "overflow": 0,
+    "right": 73,
+    "view": "discover",
+    "viewport": 1600
+  },
+  {
+    "content": 1440,
+    "height": 900,
+    "left": 72,
+    "overflow": 0,
+    "right": 73,
+    "view": "equipment",
+    "viewport": 1600
+  },
+  {
+    "content": 1440,
+    "height": 900,
+    "left": 72,
+    "overflow": 0,
+    "right": 73,
+    "view": "plans",
+    "viewport": 1600
+  },
+  {
+    "content": 1440,
+    "height": 900,
+    "left": 72,
+    "overflow": 0,
+    "right": 73,
+    "view": "booking",
+    "viewport": 1600
+  },
+  {
+    "content": 1440,
+    "height": 900,
+    "left": 72,
+    "overflow": 0,
+    "right": 73,
+    "view": "advisor",
+    "viewport": 1600
+  },
+  {
+    "content": 1440,
+    "height": 900,
+    "left": 72,
+    "overflow": 0,
+    "right": 73,
+    "view": "space",
+    "viewport": 1600
+  },
+  {
+    "content": 1440,
+    "height": 1080,
+    "left": 233,
+    "overflow": 0,
+    "right": 232,
+    "view": "discover",
+    "viewport": 1920
+  },
+  {
+    "content": 1440,
+    "height": 1080,
+    "left": 233,
+    "overflow": 0,
+    "right": 232,
+    "view": "equipment",
+    "viewport": 1920
+  },
+  {
+    "content": 1440,
+    "height": 1080,
+    "left": 233,
+    "overflow": 0,
+    "right": 232,
+    "view": "plans",
+    "viewport": 1920
+  },
+  {
+    "content": 1440,
+    "height": 1080,
+    "left": 233,
+    "overflow": 0,
+    "right": 232,
+    "view": "booking",
+    "viewport": 1920
+  },
+  {
+    "content": 1440,
+    "height": 1080,
+    "left": 233,
+    "overflow": 0,
+    "right": 232,
+    "view": "advisor",
+    "viewport": 1920
+  },
+  {
+    "content": 1440,
+    "height": 1080,
+    "left": 233,
+    "overflow": 0,
+    "right": 232,
+    "view": "space",
+    "viewport": 1920
+  }
+]

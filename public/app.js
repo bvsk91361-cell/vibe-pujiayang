@@ -39,7 +39,7 @@ async function api(path, options) {
  if (!response.ok) throw new Error(result.error || '请求失败，请稍后再试。');
  return result;
 }
-function toast(text){const box=node('div','toast'),close=node('button','','×');close.innerHTML=icon('close');close.type='button';close.setAttribute('aria-label','关闭通知');close.addEventListener('click',()=>box.remove());box.append(node('span','',text),close);$('#toasts').replaceChildren(box);setTimeout(()=>box.remove(),6500);}
+function toast(text,failed=false){const box=node('div','toast'),close=node('button','','×');close.innerHTML=icon('close');close.type='button';close.setAttribute('aria-label','关闭通知');close.addEventListener('click',()=>box.remove());box.classList.toggle('is-error',failed);box.append(node('span','',text),close);$('#toasts').replaceChildren(box);setTimeout(()=>box.remove(),6500);}
 function notify(text, failed = false) { $('#message').textContent = text; $('#message').classList.toggle('error', failed);toast(text); }
 function chosenDate() { return form.elements.date.value || today(); }
 function selectedEquipment() { return equipment.find(item => item.id === form.elements.equipmentId.value); }
@@ -48,7 +48,7 @@ function selectEquipment(id) {
  if(equipment.find(item=>item.id===id)?.operationalStatus==='maintenance'){notify('这件设备正在维护，请选择其他设备。',true);return;}
  form.elements.equipmentId.value = id;
  setStep(1);
- submission.reset();$('#booking-success').hidden=true;
+ submission.reset();$('#booking-success').hidden=true;$('#message').textContent='';$('#message').classList.remove('error');
  $('#selection').textContent = `已选：${selectedEquipment()?.name || '请选择设备'}`;
  renderCatalog(); renderSchedule(); renderSummary();
 }
@@ -59,7 +59,7 @@ function renderCatalog() {
  $('#show-more').hidden=visible.length<=9||expanded;
  $('#show-more').replaceChildren(document.createTextNode(`显示全部 ${visible.length} 件设备 `));const moreIcon=node('span','');moreIcon.innerHTML=icon('arrow');$('#show-more').append(moreIcon);
  const grid = $('#equipment'); grid.replaceChildren();
- if (!visible.length) { const empty = node('div','empty'); empty.append(node('b','', '暂时没有找到这件设备'),node('span','', '换个关键词，或选择“全部设备”再看看。')); grid.append(empty); return; }
+ if (!visible.length) { const empty = node('div','empty'); empty.append(node('b','', '没有找到这件设备。'));const reset=node('button','secondary','查看全部设备');reset.type='button';reset.addEventListener('click',()=>$('#clear-filters').click());empty.append(reset); grid.append(empty); return; }
  for (const item of (expanded?visible:visible.slice(0,9))) {
   const card = node('article',`card${item.id === form.elements.equipmentId.value ? ' selected' : ''}`);
   card.dataset.equipmentId=item.id;
@@ -110,7 +110,7 @@ function renderInsights(){
  $('#metric-free').replaceChildren(document.createTextNode(String(free)),node('small','','个'));
  const mine = visibleReservations(allRecords,form.elements.name.value,true).filter(record=>!reservationStatus(record).expired).length;
  $('#metric-mine').replaceChildren(document.createTextNode(String(mine)),node('small','','条'));
- $('#overview-date').textContent = `${date} · 台账共 ${allRecords.length} 条预约`;
+ $('#overview-date').textContent = `${date} · 共 ${allRecords.length} 项安排`;
  const summary = planSummary(allRecords,today(),equipment);const chart = $('#utilization'); chart.replaceChildren();
  for(const item of [...summary.devices].sort((a,b)=>b.booked-a.booked).slice(0,6)){
   const row = node('div','util-row');const bar = node('div','util-bar'); const fill = node('span');
@@ -120,7 +120,7 @@ function renderInsights(){
 function renderRecords(){
  const records=visibleReservations(allRecords,form.elements.name.value,$('#mine').checked);
  const list=$('#reservations');list.replaceChildren();
- if(!records.length){const empty=node('div','empty');empty.append(node('b','',$('#mine').checked?'你的下一次安排，从这里开始。':'好设备，正在等一个好想法。'),node('span','',$('#mine').checked?'这个姓名下还没有预约，选择设备后即可开始。':'目前还没有预约记录，试着安排一次创作。'));list.append(empty);return;}
+ if(!records.length){const empty=node('div','empty');empty.append(node('b','',$('#mine').checked?'你的下一次安排，从这里开始。':'好设备，正在等一个好想法。'),node('span','',$('#mine').checked?'选一件设备，留好时间。':'目前还没有预约记录，试着安排一次创作。'));const explore=node('button','secondary','去选设备');explore.type='button';explore.addEventListener('click',()=>goView('equipment'));empty.append(explore);list.append(empty);return;}
  for(const record of [...records].sort((a,b)=>a.date.localeCompare(b.date)||a.slot.localeCompare(b.slot))){
   const row=node('article','reservation');const detail=node('div','record-detail');const item=equipment.find(item=>item.id===record.equipmentId);
   detail.append(node('strong','',`${item?.name || '设备'} · ${record.name}`),node('p','',`${record.date} / ${record.slot}`));
@@ -196,7 +196,7 @@ async function initialize(){
  form.elements.date.min=today();form.elements.date.value=today();weekStart=today();$('#selection').textContent=`已选：${equipment[0].name}`;await refresh();
  try{const state=await api('/api/ai/status');$('#ai-state').textContent=state.configured?'助手已连接。让AI把台账整理成建议，空闲结果由系统核对。':'助手尚未配置。普通预约不受影响，完成服务端设置后即可使用。';}
  catch{$('#ai-state').textContent=staticMode?'静态演示提供预约体验。AI助手需要连接配置模型的后端。':'暂时无法连接助手，普通预约可继续使用。';}
- await mountProduct({api,equipment,getRecords:()=>allRecords,notify,openDetail:item=>showroom.openDetail(item),setAccount:user=>{form.elements.name.value=user.name;form.elements.userId.value=user.id;$('#mine').checked=true;renderAll();},setBooking:(id,date,slot)=>{if(id)selectEquipment(id);if(date){form.elements.date.value=date;weekStart=date;}if(slot)form.elements.slot.value=slot;else{const available=freeSlots(allRecords,chosenDate(),form.elements.equipmentId.value);form.elements.slot.value=available[0]||slots[0];}submission.reset();$('#booking-success').hidden=true;renderAll();}});
+ await mountProduct({api,equipment,getRecords:()=>allRecords,notify:toast,openDetail:item=>showroom.openDetail(item),setAccount:user=>{form.elements.name.value=user.name;form.elements.userId.value=user.id;$('#mine').checked=true;renderAll();},setBooking:(id,date,slot)=>{if(id)selectEquipment(id);if(date){form.elements.date.value=date;weekStart=date;}if(slot)form.elements.slot.value=slot;else{const available=freeSlots(allRecords,chosenDate(),form.elements.equipmentId.value);form.elements.slot.value=available[0]||slots[0];}submission.reset();$('#booking-success').hidden=true;renderAll();}});
  $('#ai-state').textContent='告诉我你准备做什么。';
  $('#storage-note').hidden=true;renderAll();
 }

@@ -126,3 +126,6 @@
  --scene-tab-ink:#dce7ff;
  --scene-tab-line:#526388;
 }
+
+/* One desktop content ruler; the width excludes decorative outer gutters. */
+:root{--page-max-width:1440px;--page-padding-desktop:clamp(48px,4vw,72px);--desktop-column-gap:32px;--desktop-section-gap:72px;--font-caption:.875rem;--scene-card-height:480px;--scene-status-ink:#c9f1e7;--scene-status-bg:#6ed8bb14;--scene-status-line:#86d8bc40}

@@ -120,3 +120,71 @@
 
 /* One animation owner: the carousel handles reveal, not the legacy page entrance. */
 .hero-copy,.hero-art{animation:none}
+
+/* Final desktop ruler and information hierarchy. */
+.ghost{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;background:transparent;color:var(--color-muted);padding:12px 16px;border-radius:var(--radius-control);min-height:44px}
+.ghost:hover{background:var(--color-mist);color:var(--color-ink)}
+.context-back{margin-bottom:8px;padding-left:0}
+.view{animation:none}
+.profile-identity{display:flex;align-items:center;gap:36px;text-align:left}
+.profile-copy{min-width:0}
+.profile-copy h2{margin:0 0 10px;line-height:1.15}
+.profile-copy>p{font-size:var(--font-body-lg);color:var(--color-muted);margin:0}
+.profile-identity .space-avatar{margin:0;width:128px;height:128px;flex-shrink:0;border:1px solid var(--color-line);position:relative}
+.profile-avatar-button::after{content:'更换';position:absolute;inset:auto 0 0;background:#0b163bba;color:white;font-size:var(--font-caption);padding:7px;opacity:0;transform:translateY(6px);transition:opacity var(--motion-fast),transform var(--motion-fast)}
+.profile-avatar-button:hover::after,.profile-avatar-button:focus-visible::after{opacity:1;transform:none}
+.profile-identity .space-actions{justify-content:flex-start;gap:12px;margin-top:24px;flex-wrap:wrap}
+#avatar-dialog{width:min(600px,calc(100% - 48px));padding:32px}
+#avatar-preview{width:116px;height:116px;font-size:2.5rem;margin:28px auto;overflow:hidden;border-radius:var(--radius-xl)}
+.avatar-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+#avatar-themes{justify-content:center;margin-top:26px}
+.avatar-file-help,#avatar-message{text-align:center;font-size:var(--font-caption);line-height:1.6;margin:22px 0 0;color:var(--color-muted)}
+#avatar-message.error{color:var(--color-error)}
+.experience-card{min-height:var(--scene-card-height);height:100%;padding:26px}
+.experience-card .scene-art{height:216px;flex:0 0 216px;margin:0 0 16px}
+.experience-card h3{font-size:1.625rem;margin:0 0 10px}
+.experience-card p{font-size:1rem;line-height:1.6;max-width:none;margin:0 0 18px}
+.experience-card .scene-availability{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;margin:0;padding:8px 12px;border:1px solid var(--scene-status-line);border-radius:var(--radius-pill);background:var(--scene-status-bg);color:var(--scene-status-ink);font-size:.9375rem;line-height:1.4}
+.scene-availability i{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.scene-availability strong{font-variant-numeric:tabular-nums;letter-spacing:.03em}
+.scene-availability.is-busy{color:#e5c7a2;border-color:#e5c7a240;background:#e5c7a210}
+.experience-card>b{font-size:.9375rem;margin-top:auto;transition:border-color var(--motion-standard),background var(--motion-standard)}
+.experience-card:hover>b{border-color:#b4c4ff77;background:#b4c4ff0a}
+.experience-card>b .icon{transition:transform var(--motion-standard) var(--ease-out)}
+.experience-card:hover>b .icon{transform:translateX(3px)}
+.scene-art svg{transition:transform var(--motion-standard) var(--ease-out)}
+.experience-card:hover .scene-art svg{transform:translateY(-2px)}
+.card:hover .device-art svg{transform:scale(1.02)}
+.card-info>p,.mini-device p,.kit-item p,.picker-equipment p{font-size:1rem;line-height:1.6}
+.card-scenes,.availability,.kit-item>span,.picker-equipment span,.plan-device p,.plan-device span{font-size:.9375rem}
+.draft-status{font-size:.9375rem;padding:8px 12px;border-radius:var(--radius-pill);background:var(--color-mist);color:var(--color-muted);white-space:nowrap}
+.draft-status.changed{color:var(--accent)}
+.editor-heading{flex-wrap:wrap;gap:14px}
+.editor-heading input{min-width:240px;flex:1}
+.plan-moments button{font-size:.9375rem;min-height:44px}
+.optimization-context{padding:20px 24px;background:var(--color-mist);border:var(--border);border-radius:var(--radius-control);display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:24px}
+.optimization-context p{font-size:1rem;line-height:1.6;margin:0}
+@media(min-width:960px){
+ .content,.view.content,footer{width:min(var(--page-max-width),calc(100% - var(--page-padding-desktop)*2));max-width:none;margin-inline:auto;padding-inline:0}
+ .view.content{padding-top:120px}
+ .view.content>.section:first-of-type{margin-top:26px}
+ .view .section{margin-block:var(--desktop-section-gap)}
+ .hero-inner,.hero-controls{width:min(var(--page-max-width),calc(100% - var(--page-padding-desktop)*2));max-width:none;margin-inline:auto;padding-inline:0}
+ .topbar{width:min(calc(100% - var(--page-padding-desktop)*2 + 64px),calc(var(--page-max-width) + 64px));padding-inline:32px}
+ .scenes-showcase{width:100%;grid-template-columns:300px minmax(0,1fr);gap:40px}
+ .scene-experiences{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--desktop-column-gap)}
+ .scene-intro h2{font-size:clamp(42px,3.1vw,60px);line-height:1.17}
+ .scene-intro>p{font-size:1.0625rem;line-height:1.75}
+ .scene-intro{top:132px}
+ .space-hero{padding:38px;background:var(--color-surface);border:var(--border);border-radius:var(--radius-product)}
+ .footprint-card{grid-template-columns:minmax(250px,.75fr) minmax(0,1.75fr);gap:40px}
+ .space-hero h2{font-size:clamp(44px,4vw,66px)}
+ .plan-controls .text-button{font-size:.9375rem}
+}
+@media(max-width:959px){.profile-identity{justify-content:center;flex-wrap:wrap;text-align:center}.profile-identity .space-actions{justify-content:center}.experience-card{height:auto;min-height:430px}.experience-card>b{margin-top:20px}.experience-card .scene-art{height:180px;flex-basis:180px}}
+@media(prefers-reduced-motion:reduce){.experience-card:hover .scene-art svg,.card:hover .device-art svg,.experience-card:hover>b .icon{transform:none}}
+:root[data-motion=reduce] .experience-card:hover .scene-art svg,:root[data-motion=reduce] .card:hover .device-art svg{transform:none}
+
+@media(min-width:960px){.nav-link{font-size:1rem}.hero-nav button,.quick-prompt,.plan-readiness p,.plan-readiness span,.history-row,.account-card{font-size:1rem}.card-scenes,.availability,.plan-device p,.plan-device span{font-size:1rem}.experience-card>b{margin-top:18px}.section-heading>div>p{font-size:var(--font-body-lg)}}
+
+.dialog-heading>.icon-button{margin-left:auto}

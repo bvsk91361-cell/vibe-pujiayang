@@ -12,6 +12,7 @@ const assets = new Map([
   ...['camera','pocket','air','mic','beam'].map(name=>['/assets/'+name+'.webp',['public/assets/'+name+'.webp','image/webp']]),
   ...['cinema','vlog','outdoor','voice','presentation'].map(name=>['/assets/hero-'+name+'.webp',['public/assets/hero-'+name+'.webp','image/webp']]),
   ['/scene-art.js',['public/scene-art.js','text/javascript; charset=utf-8']],
+  ['/profile-client.js',['public/profile-client.js','text/javascript; charset=utf-8']],
   ['/plan-flow.js',['public/plan-flow.js','text/javascript; charset=utf-8']],
   ['/desktop-polish.css',['public/desktop-polish.css','text/css; charset=utf-8']],
   ['/creative.js',['src/creative.js','text/javascript; charset=utf-8']],
