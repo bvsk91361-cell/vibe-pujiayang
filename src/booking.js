@@ -1,8 +1,5 @@
-export const equipment = [
-  { id: 'camera', name: '数码相机', icon: '📷', description: '课程拍摄、活动记录', color: 'peach' },
-  { id: 'projector', name: '便携投影仪', icon: '📽️', description: '小组汇报、作品演示', color: 'purple' },
-  { id: 'recorder', name: '录音笔', icon: '🎙️', description: '采访录音、课堂采集', color: 'green' }
-];
+import { equipment } from './catalog.js';
+export { equipment };
 export const slots = ['09:00–11:00', '14:00–16:00', '19:00–21:00'];
 export function localDate(date = new Date()) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -16,6 +13,7 @@ export function validateBooking(input, records, today = localDate(), now = new D
   const name = typeof input.name === 'string' ? input.name.trim() : '';
   if (!name || name.length > 30) throw new BookingError('姓名需填写 1–30 个字符。');
   if (!equipment.some(item => item.id === equipmentId)) throw new BookingError('请选择有效器材。');
+  if (equipment.find(item=>item.id===equipmentId).operationalStatus==='maintenance') throw new BookingError('这件设备正在维护，请选择其他设备。');
   if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new BookingError('请选择有效日期。');
   const parsed = new Date(`${date}T12:00:00`);
   if (Number.isNaN(parsed.getTime()) || localDate(parsed) !== date || date < today) throw new BookingError('请选择今天或以后的有效日期。');

@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createAiAssistant } from '../src/ai.js';
+import { createAiAssistant as createAssistant } from '../src/ai.js';
+import { legacyEquipment } from '../src/catalog.js';
+const createAiAssistant=options=>createAssistant({...options,catalog:legacyEquipment});
 import { addDays, freeSlots, planSummary } from '../src/planning.js';
 import { validateBooking, localDate } from '../src/booking.js';
 const config={YOSHUB_API_KEY:'unit-test-secret',YOSHUB_BASE_URL:'https://unit-test.example/v1',YOSHUB_MODEL:'test-model'};
@@ -12,7 +14,7 @@ test('规划统计由真实记录生成，七天容量、跨月日期和时间�
  assert.deepEqual(freeSlots([], '2026-10-07','camera',now),['14:00–16:00','19:00–21:00']);
  assert.deepEqual(freeSlots([], '2026-10-06','camera',now),[]);
  assert.equal(addDays('2026-12-30',3),'2027-01-02');
- const summary=planSummary([{equipmentId:'camera',date:'2026-10-07',slot:'14:00–16:00'},{equipmentId:'projector',date:'2026-10-14',slot:'14:00–16:00'}],'2026-10-07');
+ const summary=planSummary([{equipmentId:'camera',date:'2026-10-07',slot:'14:00–16:00'},{equipmentId:'projector',date:'2026-10-14',slot:'14:00–16:00'}],'2026-10-07',legacyEquipment);
  assert.equal(summary.total,1);assert.equal(summary.capacity,63);assert.equal(summary.devices[0].booked,1);
  assert.throws(()=>validateBooking({name:'测试',equipmentId:'camera',date:'2026-10-07',slot:'09:00–11:00'},[],'2026-10-07',now),/已经结束/);
 });

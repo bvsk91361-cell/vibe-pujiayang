@@ -1,0 +1,7 @@
+{
+  "sourceSecretScan": true,
+  "diffSecretScan": true,
+  "archiveRefsUnchanged": true,
+  "archiveFilesUnchanged": true,
+  "branch": "feat/glass-review-workspace"
+}

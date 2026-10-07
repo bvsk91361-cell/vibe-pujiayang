@@ -3,6 +3,7 @@ await mkdir('dist', { recursive: true });
 await cp('public', 'dist', { recursive: true });
 await cp('src/booking.js', 'dist/booking.js');
 await cp('src/planning.js', 'dist/planning.js');
+await cp('src/catalog.js', 'dist/catalog.js');
 const html = await readFile('public/index.html', 'utf8');
 await writeFile('dist/index.html', html.replace('<head>', '<head><meta name="storage-mode" content="browser">'));
 await writeFile('dist/.nojekyll', '');

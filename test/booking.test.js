@@ -4,6 +4,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createApp } from '../server.js';
+import { legacyEquipment } from '../src/catalog.js';
 import { createStore } from '../src/store.js';
 import { validateBooking, BookingError } from '../src/booking.js';
 import { request } from 'node:http';
@@ -38,7 +39,7 @@ test('接口闭环：预约保存、重建存储后读取、重复拒绝、取�
   t.after(() => rm(directory, { recursive: true, force: true }));
   const file = join(directory, 'reservations.json');
   const store = createStore(file);
-  const app = createApp(store);
+  const app = createApp(store,undefined,{catalog:legacyEquipment});
   await new Promise(resolve => app.listen(0, '127.0.0.1', resolve));
   t.after(() => new Promise(resolve => app.close(resolve)));
   const base = `http://127.0.0.1:${app.address().port}`;

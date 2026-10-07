@@ -16,15 +16,19 @@ const assets = new Map([
   ['/reservation-view.js', ['public/reservation-view.js', 'text/javascript; charset=utf-8']],
   ['/planning.js', ['src/planning.js', 'text/javascript; charset=utf-8']],
   ['/device-art.js', ['public/device-art.js', 'text/javascript; charset=utf-8']],
+  ...['carousel.js','preferences.js','catalog-view.js','submission.js','showcase.js'].map(file=>['/'+file,['public/'+file,'text/javascript; charset=utf-8']]),
+  ['/catalog.js', ['src/catalog.js', 'text/javascript; charset=utf-8']],
   ['/vendor/papaparse.min.js', ['public/vendor/papaparse.min.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']]
+  ,...['tokens.css','shell.css','showcase.css','workspace.css'].map(file=>['/'+file,['public/'+file,'text/css; charset=utf-8']])
 ]);
-export function createApp(store = createStore(resolve(root, 'data/reservations.json')), assistant = createAiAssistant()) {
+export function createApp(store = createStore(resolve(root, 'data/reservations.json')), assistant = null, {catalog=equipment}={}) {
+  assistant ||= createAiAssistant({catalog});
   return createServer(async (req, res) => {
     function json(status, value) { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(value)); }
     try {
       const path = new URL(req.url, 'http://localhost').pathname;
-      if (req.method === 'GET' && path === '/api/equipment') return json(200, { equipment, slots });
+      if (req.method === 'GET' && path === '/api/equipment') return json(200, { equipment:catalog, slots });
       if (req.method === 'GET' && path === '/api/reservations') return json(200, await store.list());
       if (req.method === 'GET' && path === '/api/ai/status') return json(200, assistant.status());
       if (req.method === 'POST' && path === '/api/ai/assist') {
