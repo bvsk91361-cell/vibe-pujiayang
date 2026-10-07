@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRouteMemory} from '../public/navigation.js';
-import {readAvatar,MAX_AVATAR_BYTES,createPreferenceQueue} from '../public/profile-client.js';
+import {readAvatar,MAX_AVATAR_BYTES,createPreferenceQueue,accountPreferences} from '../public/profile-client.js';
 import {draftSnapshot,saveDraft,readDraft,planOptimizationQuestion,optimizedDraft} from '../public/plan-flow.js';
 const catalog=[{id:'camera',name:'相机'},{id:'mic',name:'无线麦'}];
 const draft={id:'mine',name:'校园采访',sceneId:'interview',date:'2026-10-09',slot:'14:00–16:00',equipmentIds:['camera']};
@@ -25,3 +25,5 @@ test('optimization timeout remains finite, with exactly one upstream call',async
 
 test('preference writes preserve account and click order across delayed responses',async()=>{let release,started;const began=new Promise(resolve=>started=resolve),calls=[];const queue=createPreferenceQueue(async(id,value)=>{calls.push({id,value});if(calls.length===1){started();await new Promise(resolve=>release=resolve);}return value;});const first=queue('a',{font:'large'}),second=queue('b',{font:'standard'});await began;assert.equal(calls.length,1);release();await Promise.all([first,second]);assert.deepEqual(calls,[{id:'a',value:{font:'large'}},{id:'b',value:{font:'standard'}}]);});
 test('failed preference save does not block subsequent settings',async()=>{let count=0;const queue=createPreferenceQueue(async()=>{if(++count===1)throw Error('offline');return 'saved';});const first=queue('a',{}),second=queue('a',{});await assert.rejects(first,/offline/);assert.equal(await second,'saved');assert.equal(count,2);});
+
+test('an account with no saved preferences resets previous account appearance',()=>{const first={font:'xlarge',theme:'dark',reduceMotion:true};assert.deepEqual(accountPreferences(first),first);assert.deepEqual(accountPreferences({}),{font:'standard',theme:'auto',reduceMotion:false});assert.deepEqual(accountPreferences({font:'invalid',theme:'invalid'}),{font:'standard',theme:'auto',reduceMotion:false});assert.deepEqual(first,{font:'xlarge',theme:'dark',reduceMotion:true});});

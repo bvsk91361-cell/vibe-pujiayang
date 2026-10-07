@@ -6,442 +6,447 @@ TAP version 13
 # Subtest: 空台账周报完整六节、两条建议，明确样本不足和无法推断实际利用
 ok 1 - 空台账周报完整六节、两条建议，明确样本不足和无法推断实际利用
   ---
-  duration_ms: 7.1996
+  duration_ms: 4.3807
   ...
 # Subtest: 有预约周报准确计数、热门设备、高峰和异常，重复或非法记录不虚增占用
 ok 2 - 有预约周报准确计数、热门设备、高峰和异常，重复或非法记录不虚增占用
   ---
-  duration_ms: 1.4689
+  duration_ms: 1.1979
   ...
 # Subtest: 空内容最多自动重试一次，第二次仍为空清晰失败
 ok 3 - 空内容最多自动重试一次，第二次仍为空清晰失败
   ---
-  duration_ms: 1.1554
+  duration_ms: 0.7338
   ...
 # Subtest: 标题过短最多重试一次且不作为成功周报返回
 ok 4 - 标题过短最多重试一次且不作为成功周报返回
   ---
-  duration_ms: 1.0349
+  duration_ms: 0.4593
   ...
 # Subtest: 长度截断后一次重试可成功，token上限固定1800/2400，累计两次usage
 ok 5 - 长度截断后一次重试可成功，token上限固定1800/2400，累计两次usage
   ---
-  duration_ms: 1.0129
+  duration_ms: 0.8201
   ...
 # Subtest: 模型引用不存在的数据或遗漏章节时拒绝，一次重试后停止
 ok 6 - 模型引用不存在的数据或遗漏章节时拒绝，一次重试后停止
   ---
-  duration_ms: 1.996
+  duration_ms: 1.5846
   ...
 # Subtest: 上游429与500不自动重试、不透传包含敏感值的错误正文
 ok 7 - 上游429与500不自动重试、不透传包含敏感值的错误正文
   ---
-  duration_ms: 0.7459
+  duration_ms: 0.7895
   ...
 # Subtest: 超时信号生效并返回504，不因超时触发额外调用
 ok 8 - 超时信号生效并返回504，不因超时触发额外调用
   ---
-  duration_ms: 12.5629
+  duration_ms: 13.6813
   ...
 # Subtest: HTTP非JSON响应不自动重试；模型非法JSON重试一次后停止
 ok 9 - HTTP非JSON响应不自动重试；模型非法JSON重试一次后停止
   ---
-  duration_ms: 1.3227
+  duration_ms: 0.9447
   ...
 # Subtest: 查询先发送真实设备和匿名预约上下文，再按完整台账核对占用；输出token受限
 ok 10 - 查询先发送真实设备和匿名预约上下文，再按完整台账核对占用；输出token受限
   ---
-  duration_ms: 2.0533
+  duration_ms: 1.2001
   ...
 # Subtest: 替代查询不把相机或录音笔冒充投影设备；最忙时段结论由实际记录计算
 ok 11 - 替代查询不把相机或录音笔冒充投影设备；最忙时段结论由实际记录计算
   ---
-  duration_ms: 0.8807
+  duration_ms: 0.4812
   ...
 # Subtest: 连续并发请求整段处理期间被拒绝，避免双重API消耗；释放后可再次使用
 ok 12 - 连续并发请求整段处理期间被拒绝，避免双重API消耗；释放后可再次使用
   ---
-  duration_ms: 0.8869
+  duration_ms: 0.4596
   ...
 # Subtest: 用户输入过长在调用前拒绝；查询空或截断不自动重试
 ok 13 - 用户输入过长在调用前拒绝；查询空或截断不自动重试
   ---
-  duration_ms: 0.6899
+  duration_ms: 0.392
   ...
 # Subtest: 七天窗口外的预约不计入周报，但指定日期查询仍使用完整真实台账
 ok 14 - 七天窗口外的预约不计入周报，但指定日期查询仍使用完整真实台账
   ---
-  duration_ms: 0.7852
+  duration_ms: 0.2436
   ...
 # Subtest: 规划统计由真实记录生成，七天容量、跨月日期和时间终点正确
 ok 15 - 规划统计由真实记录生成，七天容量、跨月日期和时间终点正确
   ---
-  duration_ms: 4.5665
+  duration_ms: 5.2341
   ...
 # Subtest: AI未配置时明确503，不发送外部请求
 ok 16 - AI未配置时明确503，不发送外部请求
   ---
-  duration_ms: 0.8475
+  duration_ms: 0.9227
   ...
 # Subtest: 周报仅发送汇总台账，不发送预约人姓名或泄露密钥；usage来自接口
 ok 17 - 周报仅发送汇总台账，不发送预约人姓名或泄露密钥；usage来自接口
   ---
-  duration_ms: 3.1659
+  duration_ms: 3.6121
   ...
 # Subtest: 空闲查询严格解析模型条件，空闲列表按台账计算而非模型推测
 ok 18 - 空闲查询严格解析模型条件，空闲列表按台账计算而非模型推测
   ---
-  duration_ms: 1.6603
+  duration_ms: 1.4893
   ...
 # Subtest: 模型格式、未知设备和日期异常必须拒绝，不能当成正确空闲答案
 ok 19 - 模型格式、未知设备和日期异常必须拒绝，不能当成正确空闲答案
   ---
-  duration_ms: 1.9644
+  duration_ms: 1.3921
   ...
 # Subtest: 模型401、额度、网络、超时等错误提供安全兜底，不暴露上游内容
 ok 20 - 模型401、额度、网络、超时等错误提供安全兜底，不暴露上游内容
   ---
-  duration_ms: 2.7664
+  duration_ms: 2.2846
   ...
 # Subtest: 模型每日调用上限阻止重复消耗，HTTPS地址必须有效
 ok 21 - 模型每日调用上限阻止重复消耗，HTTPS地址必须有效
   ---
-  duration_ms: 3.1872
+  duration_ms: 3.845
   ...
 # Subtest: Yos Hub默认地址和模型生效，密钥只进入服务端Authorization，不进入返回状态
 ok 22 - Yos Hub默认地址和模型生效，密钥只进入服务端Authorization，不进入返回状态
   ---
-  duration_ms: 0.4383
+  duration_ms: 0.5075
   ...
 # Subtest: 报告输出截断或只有标题时不能显示为有效报告，截断usage仍计入统计
 ok 23 - 报告输出截断或只有标题时不能显示为有效报告，截断usage仍计入统计
   ---
-  duration_ms: 0.9846
+  duration_ms: 1.2271
   ...
-# (node:64552) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:82756) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: 业务规则1：有效预约保留器材、日期、时段，并去掉姓名两端空格
 ok 24 - 业务规则1：有效预约保留器材、日期、时段，并去掉姓名两端空格
   ---
-  duration_ms: 3.6547
+  duration_ms: 3.5822
   ...
 # Subtest: 业务规则2：同器材、同日期、同时段的重复预约返回409
 ok 25 - 业务规则2：同器材、同日期、同时段的重复预约返回409
   ---
-  duration_ms: 0.782
+  duration_ms: 0.6672
   ...
 # Subtest: 业务规则3：不同器材或日期或时段不会被误判为重复
 ok 26 - 业务规则3：不同器材或日期或时段不会被误判为重复
   ---
-  duration_ms: 0.4401
+  duration_ms: 0.3933
   ...
 # Subtest: 业务规则4：空姓名、未知器材和非法时段必须被拒绝
 ok 27 - 业务规则4：空姓名、未知器材和非法时段必须被拒绝
   ---
-  duration_ms: 0.4465
+  duration_ms: 0.3942
   ...
 # Subtest: 业务规则5：过去日期、不存在的日期和错误日期格式必须被拒绝
 ok 28 - 业务规则5：过去日期、不存在的日期和错误日期格式必须被拒绝
   ---
-  duration_ms: 0.4968
+  duration_ms: 0.5466
   ...
 # Subtest: 接口闭环：预约保存、重建存储后读取、重复拒绝、取消后重新预约
 ok 29 - 接口闭环：预约保存、重建存储后读取、重复拒绝、取消后重新预约
   ---
-  duration_ms: 87.9997
+  duration_ms: 89.0164
   ...
 # Subtest: 并发护栏：同时提交两个重复预约，只允许一个写入
 ok 30 - 并发护栏：同时提交两个重复预约，只允许一个写入
   ---
-  duration_ms: 14.3506
+  duration_ms: 9.754
   ...
 # Subtest: HTTP分块UTF-8：中文姓名跨数据块时必须原样保存
 ok 31 - HTTP分块UTF-8：中文姓名跨数据块时必须原样保存
   ---
-  duration_ms: 30.4087
+  duration_ms: 30.6938
   ...
-# (node:61508) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:25208) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: 十个场景都有真实设备与能力组合，关联图仅返回真实id
 ok 32 - 十个场景都有真实设备与能力组合，关联图仅返回真实id
   ---
-  duration_ms: 1.2803
+  duration_ms: 1.5164
   ...
 # Subtest: 准备度只按真实时段计算，冲突、维护、无效设备或日期不会假装就绪
 ok 33 - 准备度只按真实时段计算，冲突、维护、无效设备或日期不会假装就绪
   ---
-  duration_ms: 2.8426
+  duration_ms: 2.4042
   ...
 # Subtest: Smart Replace同用途、真实空闲、排除已选与维护，适配度可解释
 ok 34 - Smart Replace同用途、真实空闲、排除已选与维护，适配度可解释
   ---
-  duration_ms: 0.9069
+  duration_ms: 0.6903
   ...
 # Subtest: SQLite seed可重复，不覆盖偏好、不重复账号、设备或收藏
 ok 35 - SQLite seed可重复，不覆盖偏好、不重复账号、设备或收藏
   ---
-  duration_ms: 4.1984
+  duration_ms: 2.9884
   ...
 # Subtest: 多账号收藏、方案、历史、导出来源隔离；取消保留历史并可重约
 ok 36 - 多账号收藏、方案、历史、导出来源隔离；取消保留历史并可重约
   ---
-  duration_ms: 3.231
+  duration_ms: 2.2075
   ...
 # Subtest: SQLite唯一时段继续拒绝重复；预约不伪造真实使用或守约率
 ok 37 - SQLite唯一时段继续拒绝重复；预约不伪造真实使用或守约率
   ---
-  duration_ms: 2.5783
+  duration_ms: 1.6822
   ...
 # Subtest: 方案保存、修改、冲突替换、完成准备与里程碑均真实持久化
 ok 38 - 方案保存、修改、冲突替换、完成准备与里程碑均真实持久化
   ---
-  duration_ms: 4.4082
+  duration_ms: 2.8262
   ...
 # Subtest: 本人已经预约的计划设备视为锁定，不能错误推荐替换自己的预约
 ok 39 - 本人已经预约的计划设备视为锁定，不能错误推荐替换自己的预约
   ---
-  duration_ms: 3.7487
+  duration_ms: 1.4519
   ...
 # Subtest: 方案归属、未知账号、重复昵称与不安全头像拒绝
 ok 40 - 方案归属、未知账号、重复昵称与不安全头像拒绝
   ---
-  duration_ms: 3.163
+  duration_ms: 3.3309
   ...
 # Subtest: 旧JSON迁移先备份且保留id，重开SQLite与重复seed不丢预约
 ok 41 - 旧JSON迁移先备份且保留id，重开SQLite与重复seed不丢预约
   ---
-  duration_ms: 66.1115
+  duration_ms: 60.1828
   ...
 # Subtest: AI创作推荐来自真实catalog、匿名台账，结构化操作结果与冲突一致
 ok 42 - AI创作推荐来自真实catalog、匿名台账，结构化操作结果与冲突一致
   ---
-  duration_ms: 3.6664
+  duration_ms: 2.8298
   ...
 # Subtest: AI虚构设备被过滤，全部虚构时按真实场景重配，不放行未知场景
 ok 43 - AI虚构设备被过滤，全部虚构时按真实场景重配，不放行未知场景
   ---
-  duration_ms: 0.5356
+  duration_ms: 0.4589
   ...
 # Subtest: Command Palette联合设备、场景、计划和AI入口，不误匹配原始HTML
 ok 44 - Command Palette联合设备、场景、计划和AI入口，不误匹配原始HTML
   ---
-  duration_ms: 0.4474
+  duration_ms: 0.5529
   ...
 # Subtest: HTTP产品路径可操作，私有SQLite/备份/env和后端模块不可访问
 ok 45 - HTTP产品路径可操作，私有SQLite/备份/env和后端模块不可访问
   ---
-  duration_ms: 103.322
+  duration_ms: 85.9832
   ...
 # Subtest: 视觉参数保留USB、无线频率、视频与焦距的完整单位
 ok 46 - 视觉参数保留USB、无线频率、视频与焦距的完整单位
   ---
-  duration_ms: 0.316
+  duration_ms: 0.276
   ...
 # Subtest: 创作推荐截断、空回答与非法结构清晰失败且每次只有一次上游调用
 ok 47 - 创作推荐截断、空回答与非法结构清晰失败且每次只有一次上游调用
   ---
-  duration_ms: 0.9561
+  duration_ms: 0.824
   ...
 # Subtest: 首页轮播：5秒循环、手动切换重置计时、不进入永久暂停
 ok 48 - 首页轮播：5秒循环、手动切换重置计时、不进入永久暂停
   ---
-  duration_ms: 2.065
+  duration_ms: 1.8123
   ...
 # Subtest: 方案加件：保留原组合、去重、最多8件、拒绝不存在或维护设备
 ok 49 - 方案加件：保留原组合、去重、最多8件、拒绝不存在或维护设备
   ---
-  duration_ms: 0.5875
+  duration_ms: 0.4548
   ...
 # Subtest: 兴趣引导：六个场景生成可继续编辑的2至4件装备问题；五张Hero专属海报不重复
 ok 50 - 兴趣引导：六个场景生成可继续编辑的2至4件装备问题；五张Hero专属海报不重复
   ---
-  duration_ms: 0.4648
+  duration_ms: 0.3287
   ...
 # Subtest: 智能建议固定2至4件真实设备，单件补足、过长收敛、未知设备不会进入方案
 ok 51 - 智能建议固定2至4件真实设备，单件补足、过长收敛、未知设备不会进入方案
   ---
-  duration_ms: 2.901
+  duration_ms: 2.3835
   ...
 # Subtest: 方案主动替换：原位置不变、没有重复、维护和失效目标拒绝、8件满额仍可换
 ok 52 - 方案主动替换：原位置不变、没有重复、维护和失效目标拒绝、8件满额仍可换
   ---
-  duration_ms: 0.605
+  duration_ms: 0.3878
   ...
 # Subtest: navigation restores each view scroll and browser back/forward
 ok 53 - navigation restores each view scroll and browser back/forward
   ---
-  duration_ms: 1.4616
+  duration_ms: 0.9394
   ...
 # Subtest: same-view actions do not scroll to the top
 ok 54 - same-view actions do not scroll to the top
   ---
-  duration_ms: 0.8891
+  duration_ms: 0.6377
   ...
 # Subtest: new navigation after back discards forward trail
 ok 55 - new navigation after back discards forward trail
   ---
-  duration_ms: 0.2887
+  duration_ms: 0.1591
   ...
 # Subtest: avatar accepts decoded png
 ok 56 - avatar accepts decoded png
   ---
-  duration_ms: 0.4079
+  duration_ms: 0.2412
   ...
 # Subtest: avatar accepts decoded jpeg
 ok 57 - avatar accepts decoded jpeg
   ---
-  duration_ms: 0.2958
+  duration_ms: 0.1649
   ...
 # Subtest: avatar accepts decoded webp
 ok 58 - avatar accepts decoded webp
   ---
-  duration_ms: 0.1326
+  duration_ms: 0.0633
   ...
 # Subtest: avatar rejects unsupported types and oversize before reading
 ok 59 - avatar rejects unsupported types and oversize before reading
   ---
-  duration_ms: 0.9256
+  duration_ms: 0.5011
   ...
 # Subtest: avatar rejects invalid image decoding or read failure
 ok 60 - avatar rejects invalid image decoding or read failure
   ---
-  duration_ms: 0.4635
+  duration_ms: 0.2013
   ...
 # Subtest: drafts persist per account without sharing equipment arrays
 ok 61 - drafts persist per account without sharing equipment arrays
   ---
-  duration_ms: 2.346
+  duration_ms: 1.6722
   ...
 # Subtest: invalid drafts and storage failures are recoverable
 ok 62 - invalid drafts and storage failures are recoverable
   ---
-  duration_ms: 0.8859
+  duration_ms: 0.5985
   ...
 # Subtest: AI optimization carries real plan and respects input limit
 ok 63 - AI optimization carries real plan and respects input limit
   ---
-  duration_ms: 0.5218
+  duration_ms: 0.3367
   ...
 # Subtest: AI optimization replaces only equipment, preserving name, identity and moment
 ok 64 - AI optimization replaces only equipment, preserving name, identity and moment
   ---
-  duration_ms: 0.2596
+  duration_ms: 0.1299
   ...
 # Subtest: only explicit plan optimization gets a 4096 token budget and separate deadline
 ok 65 - only explicit plan optimization gets a 4096 token budget and separate deadline
   ---
-  duration_ms: 31.2354
+  duration_ms: 29.9743
   ...
 # Subtest: optimization timeout remains finite, with exactly one upstream call
 ok 66 - optimization timeout remains finite, with exactly one upstream call
   ---
-  duration_ms: 30.46
+  duration_ms: 29.3262
   ...
 # Subtest: preference writes preserve account and click order across delayed responses
 ok 67 - preference writes preserve account and click order across delayed responses
   ---
-  duration_ms: 0.4487
+  duration_ms: 0.5486
   ...
 # Subtest: failed preference save does not block subsequent settings
 ok 68 - failed preference save does not block subsequent settings
   ---
-  duration_ms: 0.2651
+  duration_ms: 0.1821
+  ...
+# Subtest: an account with no saved preferences resets previous account appearance
+ok 69 - an account with no saved preferences resets previous account appearance
+  ---
+  duration_ms: 0.133
   ...
 # Subtest: 在线存储：预约、重复拒绝、刷新保留、取消后重约
-ok 69 - 在线存储：预约、重复拒绝、刷新保留、取消后重约
+ok 70 - 在线存储：预约、重复拒绝、刷新保留、取消后重约
   ---
-  duration_ms: 5.5415
+  duration_ms: 4.2965
   ...
 # Subtest: 存储不可用时拒绝保存，不显示虚假的预约成功
-ok 70 - 存储不可用时拒绝保存，不显示虚假的预约成功
+ok 71 - 存储不可用时拒绝保存，不显示虚假的预约成功
   ---
-  duration_ms: 0.406
+  duration_ms: 0.2325
   ...
 # Subtest: 外部CSV组件：中文表头、逗号引号换行与公式注入防护
-ok 71 - 外部CSV组件：中文表头、逗号引号换行与公式注入防护
+ok 72 - 外部CSV组件：中文表头、逗号引号换行与公式注入防护
   ---
-  duration_ms: 9.0488
+  duration_ms: 7.1788
   ...
-# (node:53828) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:67888) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: 生产台账28件10类、ID唯一、旧设备保持、Hero指向可借设备，型号参数齐全
-ok 72 - 生产台账28件10类、ID唯一、旧设备保持、Hero指向可借设备，型号参数齐全
+ok 73 - 生产台账28件10类、ID唯一、旧设备保持、Hero指向可借设备，型号参数齐全
   ---
-  duration_ms: 2.3782
+  duration_ms: 1.2055
   ...
 # Subtest: 新增设备遵循原冲突规则；维护设备拒约且不虚增空闲或计划容量
-ok 73 - 新增设备遵循原冲突规则；维护设备拒约且不虚增空闲或计划容量
+ok 74 - 新增设备遵循原冲突规则；维护设备拒约且不虚增空闲或计划容量
   ---
-  duration_ms: 3.634
+  duration_ms: 2.18
   ...
 # Subtest: 分类、型号/用途搜索、场景与维护过滤一致；热门只用实际预约数量排序
-ok 74 - 分类、型号/用途搜索、场景与维护过滤一致；热门只用实际预约数量排序
+ok 75 - 分类、型号/用途搜索、场景与维护过滤一致；热门只用实际预约数量排序
   ---
-  duration_ms: 1.8462
+  duration_ms: 0.9388
   ...
 # Subtest: 扩充后台台账用于AI查询与六节周报，替代设备来自实际同用途设备而非旧ID硬判断
-ok 75 - 扩充后台台账用于AI查询与六节周报，替代设备来自实际同用途设备而非旧ID硬判断
+ok 76 - 扩充后台台账用于AI查询与六节周报，替代设备来自实际同用途设备而非旧ID硬判断
   ---
-  duration_ms: 3.9185
+  duration_ms: 2.1403
   ...
 # Subtest: 28件查询上下文保留真实台账/匿名预约/时段，避免重复周报长文本；周报仍保留完整依据
-ok 76 - 28件查询上下文保留真实台账/匿名预约/时段，避免重复周报长文本；周报仍保留完整依据
+ok 77 - 28件查询上下文保留真实台账/匿名预约/时段，避免重复周报长文本；周报仍保留完整依据
   ---
-  duration_ms: 0.4705
+  duration_ms: 0.3705
   ...
 # Subtest: 轮播自动切换、边界循环；手动选择持久暂停，不在用户操作后抢画面
-ok 77 - 轮播自动切换、边界循环；手动选择持久暂停，不在用户操作后抢画面
+ok 78 - 轮播自动切换、边界循环；手动选择持久暂停，不在用户操作后抢画面
   ---
-  duration_ms: 0.4061
+  duration_ms: 0.3179
   ...
 # Subtest: 轮播焦点、悬停、隐藏与减弱动画暂停独立，解除一个原因不能强行恢复
-ok 78 - 轮播焦点、悬停、隐藏与减弱动画暂停独立，解除一个原因不能强行恢复
+ok 79 - 轮播焦点、悬停、隐藏与减弱动画暂停独立，解除一个原因不能强行恢复
   ---
-  duration_ms: 0.2059
+  duration_ms: 0.1692
   ...
 # Subtest: 预约按钮只在保存成功后进入success，并发点击不重复保存；失败返回idle可修正重试
-ok 79 - 预约按钮只在保存成功后进入success，并发点击不重复保存；失败返回idle可修正重试
+ok 80 - 预约按钮只在保存成功后进入success，并发点击不重复保存；失败返回idle可修正重试
   ---
-  duration_ms: 0.3424
+  duration_ms: 0.2929
   ...
 # Subtest: 字号/动效偏好保存并恢复，损坏或不可用的localStorage不阻断页面且不谎报已保存
-ok 80 - 字号/动效偏好保存并恢复，损坏或不可用的localStorage不阻断页面且不谎报已保存
+ok 81 - 字号/动效偏好保存并恢复，损坏或不可用的localStorage不阻断页面且不谎报已保存
   ---
-  duration_ms: 0.9881
+  duration_ms: 0.4134
   ...
 # Subtest: 本机HTTP提供统一28件设备与所有模块资源，后端与.env仍不可访问
-ok 81 - 本机HTTP提供统一28件设备与所有模块资源，后端与.env仍不可访问
+ok 82 - 本机HTTP提供统一28件设备与所有模块资源，后端与.env仍不可访问
   ---
-  duration_ms: 84.9029
+  duration_ms: 56.0818
   ...
-# (node:56152) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:77012) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: 过期方案保留历史而不会使个人空间失败，重新准备仍必须用有效未来日期
-ok 82 - 过期方案保留历史而不会使个人空间失败，重新准备仍必须用有效未来日期
+ok 83 - 过期方案保留历史而不会使个人空间失败，重新准备仍必须用有效未来日期
   ---
-  duration_ms: 74.3614
+  duration_ms: 62.1713
   ...
 # Subtest: 本地API拒绝跨站写入和未指定归属的取消，合法本机来源保留业务
-ok 83 - 本地API拒绝跨站写入和未指定归属的取消，合法本机来源保留业务
+ok 84 - 本地API拒绝跨站写入和未指定归属的取消，合法本机来源保留业务
   ---
-  duration_ms: 59.7084
+  duration_ms: 41.86
   ...
 # Subtest: 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
-ok 84 - 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
+ok 85 - 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
   ---
-  duration_ms: 1.0437
+  duration_ms: 1.1931
   ...
 # Subtest: 到期页面标记：过去日期、时段结束边界、使用中与未来日期
-ok 85 - 到期页面标记：过去日期、时段结束边界、使用中与未来日期
+ok 86 - 到期页面标记：过去日期、时段结束边界、使用中与未来日期
   ---
-  duration_ms: 1.6402
+  duration_ms: 1.062
   ...
-1..85
-# tests 85
+1..86
+# tests 86
 # suites 0
-# pass 85
+# pass 86
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 439.0572
+# duration_ms 360.2824

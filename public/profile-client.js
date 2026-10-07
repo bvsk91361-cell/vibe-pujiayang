@@ -12,3 +12,7 @@ export function createPreferenceQueue(save){
  let pending=Promise.resolve();
  return (id,value)=>{const operation=pending.catch(()=>{}).then(()=>save(id,value));pending=operation;return operation;};
 }
+
+export function accountPreferences(prefs={}){
+ return {font:['standard','large','xlarge'].includes(prefs.font)?prefs.font:'standard',theme:['auto','light','dark'].includes(prefs.theme)?prefs.theme:'auto',reduceMotion:prefs.reduceMotion===true};
+}
