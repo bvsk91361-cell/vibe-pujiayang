@@ -1,0 +1,10 @@
+{
+  "capturedAt": "2026-10-07T10:32:30.265Z",
+  "configured": true,
+  "model": "deepseek-v4-flash",
+  "calls": 3,
+  "promptTokens": 7522,
+  "completionTokens": 4513,
+  "scope": "当前服务进程，重启后计数清零",
+  "note": "进程重启过；仅当前进程统计，不作为本轮总调用数。前一进程创作推荐已在页面验证并保存正文。"
+}

@@ -1,0 +1,10 @@
+{
+  "capturedAt": "2026-10-07T10:50:44.030Z",
+  "removedQaAccounts": 2,
+  "otherRecordsPreserved": true,
+  "originalRecordsPreserved": true,
+  "remainingActive": 5,
+  "remainingUsers": 4,
+  "backup": "data/borrow-lab-before-qa-cleanup-20261007.sqlite",
+  "scope": "只清理本轮创建的两个专用验收账号，不删除其他账号的新记录。"
+}

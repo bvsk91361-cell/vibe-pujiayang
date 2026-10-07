@@ -1,0 +1,29 @@
+{
+  "replaceBefore": {
+    "count": 4,
+    "y": 1339.93994140625
+  },
+  "replaceAfter": {
+    "count": 4,
+    "modal": false,
+    "names": [
+      "视频相机",
+      "无线麦克风套装",
+      "便携补光灯",
+      "轻便三脚架"
+    ],
+    "view": "plans",
+    "y": 1339.93994140625
+  },
+  "addBefore": {
+    "count": 4,
+    "y": 1675.6756591796875
+  },
+  "addAfter": {
+    "columns": "536.928px 536.928px",
+    "count": 5,
+    "modal": false,
+    "view": "plans",
+    "y": 1675.6756591796875
+  }
+}

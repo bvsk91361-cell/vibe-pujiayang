@@ -11,10 +11,31 @@ const bodies={
  support:'<path d="M243 93v120m0-31-81 109m81-109 78 109m-78-109 7 111" stroke="url(#METAL)" stroke-width="14" stroke-linecap="round"/><rect x="203" y="63" width="77" height="32" rx="8" fill="url(#BODY)"/><path d="M268 78h65" stroke="#475f77" stroke-width="10" stroke-linecap="round"/><circle cx="244" cy="144" r="16" fill="#162c43"/>',
  capture:'<path d="m126 116 42-24h180l29 30v107l-30 29H143l-17-30Z" fill="url(#METAL)"/><rect x="106" y="118" width="247" height="112" rx="18" fill="url(#BODY)"/><rect x="126" y="160" width="49" height="25" rx="4" fill="#8da2b6"/><rect x="199" y="158" width="75" height="27" rx="4" fill="#142b40" stroke="#728ca6" stroke-width="3"/><circle cx="315" cy="171" r="7" fill="#76c3b5"/><path d="M373 169q49 0 49-36V68" fill="none" stroke="#7690aa" stroke-width="9" stroke-linecap="round"/>'
 };
-export function deviceSvg(item,instance='card'){
+const variants={
+ 'capture-s2':'<path d="M188 238h108l22 28H166Z" fill="url(#METAL)"/><path d="M242 195v48" stroke="#647e98" stroke-width="13"/><rect x="130" y="97" width="226" height="111" rx="42" fill="url(#BODY)"/><circle cx="243" cy="151" r="47" fill="url(#METAL)"/><circle cx="243" cy="151" r="34" fill="url(#LENS)" stroke="#152d44" stroke-width="6"/><ellipse cx="231" cy="137" rx="15" ry="8" fill="#c5f3ff" opacity=".35"/><circle cx="321" cy="139" r="5" fill="#8cdbc4"/>',
+ 'capture-s3':'<path d="M97 143 139 94h209l37 61v97H98Z" fill="url(#BODY)"/><path d="M139 97h208l27 48H110Z" fill="url(#METAL)"/><rect x="150" y="111" width="175" height="26" rx="5" fill="#24435e"/><path d="M161 117h60m11 0h25m11 0h47" stroke="#8fcae0" stroke-width="4"/><g fill="#bbcde0"><rect x="122" y="168" width="31" height="22" rx="4"/><rect x="165" y="168" width="31" height="22" rx="4"/><rect x="208" y="168" width="31" height="22" rx="4"/><rect x="251" y="168" width="31" height="22" rx="4"/></g><rect x="300" y="168" width="54" height="23" rx="5" fill="#688aed"/><path d="M121 218h231" stroke="#7089a0" stroke-width="3"/>'
+};
+function baseDeviceSvg(item,instance='card'){
  const family=typeof item==='string'?item:item.category;
  const id=((typeof item==='string'?item:item.id)+'-'+instance).replace(/[^a-zA-Z0-9-]/g,'');
- const shape=(bodies[family]||bodies.camera).replaceAll('BODY',id+'-body').replaceAll('METAL',id+'-metal').replaceAll('LENS',id+'-lens').replaceAll('WHITE',id+'-white');
+ const shape=(variants[item.id]||bodies[family]||bodies.camera).replaceAll('BODY',id+'-body').replaceAll('METAL',id+'-metal').replaceAll('LENS',id+'-lens').replaceAll('WHITE',id+'-white');
  const variant=typeof item==='string'?0:parseInt(item.model.replace(/\D/g,''),10)||1;
  return '<svg viewBox="0 0 480 330" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="'+id+'-body" x2=".8" y2="1"><stop stop-color="#6d879e"/><stop offset=".4" stop-color="#2b4258"/><stop offset="1" stop-color="#102338"/></linearGradient><linearGradient id="'+id+'-metal" x2=".7" y2="1"><stop stop-color="#e6eef5"/><stop offset=".4" stop-color="#92a8bc"/><stop offset="1" stop-color="#425d77"/></linearGradient><radialGradient id="'+id+'-lens" cx=".3" cy=".25"><stop stop-color="#9be2e3"/><stop offset=".3" stop-color="#346e94"/><stop offset=".7" stop-color="#112d48"/><stop offset="1" stop-color="#050e1c"/></radialGradient><linearGradient id="'+id+'-white" x2=".7" y2="1"><stop stop-color="#fff"/><stop offset=".7" stop-color="#dce6ee"/><stop offset="1" stop-color="#a8bccc"/></linearGradient></defs><ellipse cx="242" cy="295" rx="130" ry="9" fill="#102f4c" opacity=".12"/><g transform="translate(0 '+(variant%3-1)*2+')">'+shape+'</g></svg>';
+}
+export function deviceSvg(item,instance='card'){
+ const images={camera:'camera','gimbal-g1':'pocket','drone-a1':'air','microphone-m1':'mic',projector:'beam'};
+ if(typeof item!=='string'&&images[item.id]&&instance==='detail')return `<img src="/assets/${images[item.id]}.webp" alt="" width="1280" height="1280" decoding="async" ${instance==='hero'?'fetchpriority="high"':'loading="lazy"'}>`;
+ const family=typeof item==='string'?item:item.category;
+ const id=((typeof item==='string'?item:item.id)+'-'+instance).replace(/[^a-zA-Z0-9-]/g,'');
+ let svg=baseDeviceSvg(item,instance).replace('<svg viewBox','<svg class="equipment-render" viewBox');
+ const polished=instance==='hero'||instance==='detail';
+ const extra=`<linearGradient id="${id}-gloss" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d1f4ff" stop-opacity=".7"/><stop offset=".3" stop-color="#9bafff" stop-opacity=".04"/><stop offset=".7" stop-color="#16405e" stop-opacity=".05"/><stop offset="1" stop-color="#b29bff" stop-opacity=".3"/></linearGradient><radialGradient id="${id}-optic"><stop stop-color="#a4ecff" stop-opacity=".5"/><stop offset=".45" stop-color="#7d70ff" stop-opacity=".08"/><stop offset="1" stop-color="#c8eaff" stop-opacity=".28"/></radialGradient>`;
+ svg=svg.replace('</defs>',extra+'</defs>');
+ let finish='';
+ if(family==='camera')finish=`<path d="M100 136q2-13 15-13h69l18-26h76" stroke="url(#${id}-gloss)" stroke-width="2.5" fill="none"/><path d="M104 250h82m134 0h37q14 0 16-15" stroke="#152439" stroke-width="9" fill="none"/><circle cx="265" cy="191" r="72" stroke="url(#${id}-gloss)" stroke-width="2" fill="none"/><circle cx="265" cy="191" r="44" fill="url(#${id}-optic)"/><ellipse cx="251" cy="167" rx="23" ry="10" transform="rotate(-32 251 167)" fill="#c9f0ff" opacity=".18"/><path d="M233 185q8-29 36-28" stroke="#a5e8ff" opacity=".45" fill="none"/><path d="M280 229q18-12 22-34" stroke="#a697fc" opacity=".4" fill="none"/>`;
+ else if(family==='projector')finish=`<path d="M107 123h245q15 0 20 17M103 219q3 15 20 16h237" stroke="url(#${id}-gloss)" stroke-width="3" fill="none"/><ellipse cx="308" cy="175" rx="30" ry="31" fill="url(#${id}-optic)"/>`;
+ else if(family==='gimbal')finish=`<path d="M220 174v86q0 14 10 16M186 49h57" stroke="url(#${id}-gloss)" stroke-width="3" fill="none"/><circle cx="216" cy="74" r="21" fill="url(#${id}-optic)"/>`;
+ else finish=`<path d="M160 103h165" stroke="url(#${id}-gloss)" stroke-width="2"/><ellipse cx="240" cy="170" rx="150" ry="112" fill="none" stroke="url(#${id}-gloss)" stroke-width=".5" opacity=".2"/>`;
+ if(polished)finish+=`<path d="m103 291 271-4" stroke="url(#${id}-gloss)" stroke-width="1" opacity=".25"/>`;
+ return svg.replace('</svg>',finish+'</svg>');
 }

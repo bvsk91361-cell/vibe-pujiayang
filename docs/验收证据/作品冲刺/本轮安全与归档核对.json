@@ -1,0 +1,20 @@
+{
+  "scannedTextFiles": 142,
+  "suspiciousLiteralCount": 0,
+  "files": [],
+  "day1To6Unchanged": true,
+  "archivedPathDiffEmpty": true,
+  "ignoredPrivateFiles": [
+    ".env",
+    "data/borrow-lab.sqlite"
+  ],
+  "branch": "feat/glass-review-workspace",
+  "realAi": {
+    "configured": true,
+    "model": "deepseek-v4-flash",
+    "calls": 1,
+    "promptTokens": 2355,
+    "completionTokens": 369,
+    "scope": "当前服务进程，重启后计数清零"
+  }
+}

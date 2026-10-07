@@ -1,0 +1,74 @@
+[
+  {
+    "overflow": false,
+    "planColumns": null,
+    "view": "equipment",
+    "width": 1366
+  },
+  {
+    "overflow": false,
+    "planColumns": "576.426px 576.426px",
+    "view": "plans",
+    "width": 1366
+  },
+  {
+    "overflow": false,
+    "planColumns": null,
+    "view": "advisor",
+    "width": 1366
+  },
+  {
+    "overflow": false,
+    "planColumns": null,
+    "view": "equipment",
+    "width": 1440
+  },
+  {
+    "overflow": false,
+    "planColumns": "610.417px 610.417px",
+    "view": "plans",
+    "width": 1440
+  },
+  {
+    "overflow": false,
+    "planColumns": null,
+    "view": "advisor",
+    "width": 1440
+  },
+  {
+    "overflow": false,
+    "planColumns": null,
+    "view": "equipment",
+    "width": 1600
+  },
+  {
+    "overflow": false,
+    "planColumns": "611.411px 611.411px",
+    "view": "plans",
+    "width": 1600
+  },
+  {
+    "overflow": false,
+    "planColumns": null,
+    "view": "advisor",
+    "width": 1600
+  },
+  {
+    "overflow": false,
+    "planColumns": null,
+    "view": "equipment",
+    "width": 1920
+  },
+  {
+    "overflow": false,
+    "planColumns": "611.411px 611.411px",
+    "view": "plans",
+    "width": 1920
+  },
+  {
+    "overflow": false,
+    "planColumns": null,
+    "view": "advisor",
+    "width": 1920
+  }
+]

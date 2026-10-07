@@ -1,0 +1,37 @@
+[
+  {
+    "art": "/assets/hero-presentation.webp",
+    "gap": 27.99359893798828,
+    "overflow": false,
+    "theme": "灵感演示",
+    "title": "让想法，\n亮起来。"
+  },
+  {
+    "art": "/assets/hero-cinema.webp",
+    "gap": 83.42456817626953,
+    "overflow": false,
+    "theme": "影视创作",
+    "title": "灵感，\n即刻就位。"
+  },
+  {
+    "art": "/assets/hero-vlog.webp",
+    "gap": 83.39948272705078,
+    "overflow": false,
+    "theme": "轻便 Vlog",
+    "title": "轻装，\n也能出彩。"
+  },
+  {
+    "art": "/assets/hero-outdoor.webp",
+    "gap": 85.03003692626953,
+    "overflow": false,
+    "theme": "户外视角",
+    "title": "视野，\n再打开一点。"
+  },
+  {
+    "art": "/assets/hero-voice.webp",
+    "gap": 82.30756378173828,
+    "overflow": false,
+    "theme": "清晰表达",
+    "title": "好故事，\n值得听清。"
+  }
+]

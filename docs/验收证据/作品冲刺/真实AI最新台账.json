@@ -1,0 +1,78 @@
+{
+  "capturedAt": "2026-10-07T10:51:45.289Z",
+  "httpStatus": 200,
+  "question": "我明天下午要拍校园采访，请从设备库为我配一套相机、收音与补光装备，避开已有预约。",
+  "model": "deepseek-v4-flash",
+  "attempts": 1,
+  "finishReason": "stop",
+  "usage": {
+    "prompt_tokens": 2363,
+    "completion_tokens": 1415
+  },
+  "date": "2026-10-08",
+  "slot": "14:00–16:00",
+  "equipmentIds": [
+    "camera-c2",
+    "microphone-m1",
+    "light-f1",
+    "support-t2"
+  ],
+  "readiness": 100,
+  "items": [
+    {
+      "id": "camera-c2",
+      "name": "视频相机",
+      "available": true,
+      "reason": "这个时段可用",
+      "alternatives": []
+    },
+    {
+      "id": "microphone-m1",
+      "name": "无线麦克风套装",
+      "available": true,
+      "reason": "这个时段可用",
+      "alternatives": []
+    },
+    {
+      "id": "light-f1",
+      "name": "便携补光灯",
+      "available": true,
+      "reason": "这个时段可用",
+      "alternatives": []
+    },
+    {
+      "id": "support-t2",
+      "name": "轻便三脚架",
+      "available": true,
+      "reason": "这个时段可用",
+      "alternatives": []
+    }
+  ],
+  "reservations": [
+    {
+      "equipmentId": "camera",
+      "date": "2026-10-07",
+      "slot": "14:00–16:00"
+    },
+    {
+      "equipmentId": "camera",
+      "date": "2026-10-08",
+      "slot": "14:00–16:00"
+    },
+    {
+      "equipmentId": "camera",
+      "date": "2026-10-12",
+      "slot": "14:00–16:00"
+    },
+    {
+      "equipmentId": "recorder",
+      "date": "2026-10-07",
+      "slot": "19:00–21:00"
+    },
+    {
+      "equipmentId": "recorder-r2",
+      "date": "2026-10-07",
+      "slot": "19:00–21:00"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "configured": true,
+  "model": "deepseek-v4-flash",
+  "calls": 1,
+  "promptTokens": 2355,
+  "completionTokens": 369,
+  "scope": "当前服务进程，重启后计数清零"
+}

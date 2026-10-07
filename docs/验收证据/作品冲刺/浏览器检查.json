@@ -1,0 +1,140 @@
+[
+  {
+    "font": "xlarge",
+    "motion": "reduce",
+    "scrollWidth": 375,
+    "view": "equipment",
+    "viewport": 390,
+    "width": 375
+  },
+  {
+    "font": "xlarge",
+    "motion": "reduce",
+    "scrollWidth": 375,
+    "view": "booking",
+    "viewport": 390,
+    "width": 375
+  },
+  {
+    "font": "xlarge",
+    "motion": "reduce",
+    "scrollWidth": 375,
+    "view": "advisor",
+    "viewport": 390,
+    "width": 375
+  },
+  {
+    "font": "xlarge",
+    "motion": "reduce",
+    "scrollWidth": 375,
+    "view": "space",
+    "viewport": 390,
+    "width": 375
+  },
+  {
+    "font": "xlarge",
+    "motion": "reduce",
+    "scrollWidth": 375,
+    "view": "discover",
+    "viewport": 390,
+    "width": 375
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 753,
+    "view": "equipment",
+    "viewport": 768,
+    "width": 753
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 753,
+    "view": "booking",
+    "viewport": 768,
+    "width": 753
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 753,
+    "view": "advisor",
+    "viewport": 768,
+    "width": 753
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 753,
+    "view": "space",
+    "viewport": 768,
+    "width": 753
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1009,
+    "view": "equipment",
+    "viewport": 1024,
+    "width": 1009
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1009,
+    "view": "booking",
+    "viewport": 1024,
+    "width": 1009
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1024,
+    "view": "plans",
+    "viewport": 1024,
+    "width": 1024
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1009,
+    "view": "advisor",
+    "viewport": 1024,
+    "width": 1009
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1009,
+    "view": "discover",
+    "viewport": 1024,
+    "width": 1009
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1425,
+    "view": "equipment",
+    "viewport": 1440,
+    "width": 1425
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1425,
+    "view": "booking",
+    "viewport": 1440,
+    "width": 1425
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1440,
+    "view": "plans",
+    "viewport": 1440,
+    "width": 1440
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1425,
+    "view": "advisor",
+    "viewport": 1440,
+    "width": 1425
+  },
+  {
+    "font": "standard",
+    "scrollWidth": 1425,
+    "view": "discover",
+    "viewport": 1440,
+    "width": 1425
+  }
+]

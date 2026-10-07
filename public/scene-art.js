@@ -1,0 +1,17 @@
+// Original Borrow Lab scene illustrations; each silhouette describes a distinct creative task.
+const scenes={
+ interview:'<path d="M88 206q0-65 55-65t55 65M270 206q0-65 55-65t55 65"/><circle cx="143" cy="96" r="29"/><circle cx="325" cy="96" r="29"/><path d="m168 154 64-42 78 17"/><rect x="233" y="96" width="46" height="18" rx="9"/><path d="M238 217v-59m-28 59h56"/>',
+ vlog:'<rect x="117" y="49" width="120" height="190" rx="24"/><rect x="133" y="70" width="88" height="110" rx="14"/><circle cx="177" cy="207" r="11"/><rect x="304" y="129" width="36" height="113" rx="16"/><path d="M322 130V78h-20"/><rect x="276" y="53" width="73" height="50" rx="14"/><circle cx="313" cy="78" r="15"/>',
+ podcast:'<rect x="128" y="68" width="47" height="113" rx="22"/><rect x="302" y="68" width="47" height="113" rx="22"/><path d="M109 148v21q0 46 43 46t43-46v-21m-43 67v34m-31 0h62M283 148v21q0 46 43 46t43-46v-21m-43 67v34m-31 0h62M221 111v64m18-79v94m18-73v57"/>',
+ outdoor:'<path d="m40 239 100-88 58 54 100-117 141 151H40Z"/><path d="m259 134 37 33 32-45"/><path d="m203 63-62-23m99 23 63-23m-97 32-65 23m98-23 65 23"/><ellipse cx="139" cy="36" rx="33" ry="5"/><ellipse cx="306" cy="36" rx="33" ry="5"/><rect x="202" y="51" width="43" height="30" rx="12"/>',
+ shortfilm:'<path d="m202 139 37-22 46 22v64l-43 22-40-23v-63Zm0 0 42 23 41-23m-41 23v63"/><rect x="82" y="59" width="55" height="76" rx="9"/><rect x="340" y="59" width="55" height="76" rx="9"/><path d="M110 135v119m-24 0h48M367 135v119m-24 0h48m-204-2h94"/><path d="m139 87 46 44m154-44-45 44"/>',
+ live:'<rect x="91" y="57" width="294" height="171" rx="18"/><path d="M213 228v23m-55 0h114"/><rect x="116" y="82" width="137" height="87" rx="12"/><circle cx="172" cy="113" r="18"/><path d="M144 155q29-38 55 0m91-60h65m-65 29h47m-47 29h59"/><circle cx="355" cy="197" r="8"/>',
+ speech:'<path d="M118 212V59h226v125"/><path d="M143 86h101m-101 23h150"/><path d="m252 243 10-67h86l13 67Z"/><circle cx="302" cy="145" r="24"/><path d="M302 120v-22h18m-99 145h166"/>',
+ event:'<path d="M81 231V99l28-32h264l28 32v132M99 115h284"/><circle cx="144" cy="94" r="8"/><circle cx="241" cy="94" r="8"/><circle cx="338" cy="94" r="8"/><path d="m142 108-42 97m143-97-19 71m117-71 39 97"/><rect x="166" y="173" width="143" height="76" rx="18"/><circle cx="241" cy="210" r="28"/>',
+ night:'<path d="M328 58a40 40 0 1 0 48 44 39 39 0 0 1-48-44Z"/><path d="M94 240v-72h48v72m6 0v-108h51v108m117 0v-71h48v71"/><rect x="216" y="125" width="69" height="44" rx="10"/><circle cx="251" cy="147" r="14"/><path d="m251 169-31 74m31-74 33 74m-33-74v82m-79-152h2m33-30h2"/>',
+ mobile:'<path d="M145 112V88q0-25 24-25h46q24 0 24 25v24"/><rect x="114" y="109" width="155" height="143" rx="28"/><rect x="292" y="131" width="65" height="119" rx="17"/><path d="M309 222h30m-12-129 33-22m-50 11 2-27m35 53 33-1"/><circle cx="190" cy="164" r="31"/>'
+};
+export function sceneIllustration(scene,instance='scene'){
+ const id=(scene.id+'-'+instance).replace(/[^a-zA-Z0-9-]/g,'');
+ return `<svg class="scene-illustration" viewBox="0 0 480 290" aria-hidden="true"><defs><linearGradient id="${id}" x2="1" y2="1"><stop stop-color="#d7edff"/><stop offset=".5" stop-color="#8f9fdf"/><stop offset="1" stop-color="#588ba9"/></linearGradient></defs><ellipse cx="240" cy="265" rx="140" ry="10" fill="#040b1b" opacity=".2"/><g fill="#112139" fill-opacity=".7" stroke="url(#${id})" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">${scenes[scene.id]||scenes.vlog}</g></svg>`;
+}

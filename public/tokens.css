@@ -110,3 +110,19 @@
     --font-display:2.5rem
   }
 }
+
+/* Borrow Lab product system */
+:root{--accent:#5867ed;--color-accent:var(--accent);--motion-fast:150ms;--motion-standard:280ms;--motion-expressive:600ms;--motion-hero:900ms;--motion-page:420ms;--ease-settle:cubic-bezier(.16,1,.3,1);--font-product-display:clamp(64px,8vw,128px);--press-scale:.97;--depth-shadow:0 35px 100px #07122935}
+:root[data-theme=dark]{--color-paper:#0b1120;--color-surface:#121b2d;--color-mist:#1a2840;--color-ink:#eff4ff;--color-muted:#afbbd0;--color-line:#293952;--color-glass:#111b2ee8;--color-success-bg:#102e2e;--color-success:#68dfbf;--color-error-bg:#3a1b2d;--color-error:#ffacbd;--color-lavender:#27253d;--color-silver:#2c374b}
+:root{--radius-product:28px;--radius-control:18px;--radius-inset:26px;--radius-sheet:24px;--radius-stage:40px}
+
+/* Desktop product polish: shared layout and card weights. */
+:root{
+ --page-width:1440px;
+ --page-gutter:clamp(40px,4vw,64px);
+ --hero-heading:clamp(64px,6.6vw,104px);
+ --card-illustration-height:200px;
+ --scene-tab-bg:#202e47;
+ --scene-tab-ink:#dce7ff;
+ --scene-tab-line:#526388;
+}

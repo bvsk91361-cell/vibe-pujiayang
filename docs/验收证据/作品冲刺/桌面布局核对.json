@@ -1,0 +1,159 @@
+{
+  "hero": [
+    {
+      "ctaBottom": 597.2237434387207,
+      "gap": 68.97260284423828,
+      "height": 768,
+      "loaded": true,
+      "navTop": 665.923828125,
+      "overflow": false,
+      "titleTop": 251.43731689453125,
+      "width": 1366
+    },
+    {
+      "ctaBottom": 719.7275276184082,
+      "gap": 77.69186019897461,
+      "height": 1000,
+      "loaded": true,
+      "navTop": 898.994384765625,
+      "overflow": false,
+      "titleTop": 363.2428588867187,
+      "width": 1440
+    },
+    {
+      "ctaBottom": 726.370777130127,
+      "gap": 83.76174926757812,
+      "height": 1000,
+      "loaded": true,
+      "navTop": 895.79345703125,
+      "overflow": false,
+      "titleTop": 350.03338623046875,
+      "width": 1600
+    },
+    {
+      "ctaBottom": 728.3626594543457,
+      "gap": 86.50711059570312,
+      "height": 1000,
+      "loaded": true,
+      "navTop": 897.7853393554688,
+      "overflow": false,
+      "titleTop": 352.18963623046875,
+      "width": 1920
+    }
+  ],
+  "pages": [
+    {
+      "contentLeft": 0,
+      "heading": "找到，让你心动的那件。",
+      "navRight": 1327.3507823944092,
+      "overflow": false,
+      "view": "equipment",
+      "width": 1366
+    },
+    {
+      "contentLeft": 0,
+      "heading": "我的创作方案。",
+      "navRight": 1327.3507823944092,
+      "overflow": false,
+      "view": "plans",
+      "width": 1366
+    },
+    {
+      "contentLeft": 0,
+      "heading": "想做什么？\n一起把装备配好。",
+      "navRight": 1327.3507823944092,
+      "overflow": false,
+      "view": "advisor",
+      "width": 1366
+    },
+    {
+      "contentLeft": 0,
+      "heading": "找到，让你心动的那件。",
+      "navRight": 1401.224683761597,
+      "overflow": false,
+      "view": "equipment",
+      "width": 1440
+    },
+    {
+      "contentLeft": 0,
+      "heading": "我的创作方案。",
+      "navRight": 1401.224683761597,
+      "overflow": false,
+      "view": "plans",
+      "width": 1440
+    },
+    {
+      "contentLeft": 0,
+      "heading": "想做什么？\n一起把装备配好。",
+      "navRight": 1401.224683761597,
+      "overflow": false,
+      "view": "advisor",
+      "width": 1440
+    },
+    {
+      "contentLeft": 0,
+      "heading": "找到，让你心动的那件。",
+      "navRight": 1512.4905853271484,
+      "overflow": false,
+      "view": "equipment",
+      "width": 1600
+    },
+    {
+      "contentLeft": 0,
+      "heading": "我的创作方案。",
+      "navRight": 1512.4905853271484,
+      "overflow": false,
+      "view": "plans",
+      "width": 1600
+    },
+    {
+      "contentLeft": 0,
+      "heading": "想做什么？\n一起把装备配好。",
+      "navRight": 1512.4905853271484,
+      "overflow": false,
+      "view": "advisor",
+      "width": 1600
+    },
+    {
+      "contentLeft": 0,
+      "heading": "找到，让你心动的那件。",
+      "navRight": 1672.5506439208984,
+      "overflow": false,
+      "view": "equipment",
+      "width": 1920
+    },
+    {
+      "contentLeft": 0,
+      "heading": "我的创作方案。",
+      "navRight": 1672.5506439208984,
+      "overflow": false,
+      "view": "plans",
+      "width": 1920
+    },
+    {
+      "contentLeft": 0,
+      "heading": "想做什么？\n一起把装备配好。",
+      "navRight": 1672.5506439208984,
+      "overflow": false,
+      "view": "advisor",
+      "width": 1920
+    }
+  ],
+  "addBefore": {
+    "items": 4,
+    "name": "校园采访",
+    "y": 1612.6126708984375
+  },
+  "addAfter": {
+    "y": 1612.6126708984375,
+    "items": 5,
+    "name": "校园采访",
+    "modal": false,
+    "view": "plans"
+  },
+  "interest": {
+    "scene": "轻量 Vlog",
+    "route": "advisor",
+    "skipInput": ""
+  }
+}
