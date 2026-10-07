@@ -1,5 +1,16 @@
 ## 今日评分证据摘要
 
+## AI评分证据摘要
+
+- 具体问题：Gitee HTTPS 推送失败，原始报错包括 `error: failed to execute prompt script (exit code 1)` 和 `fatal: could not read Password for 'https://pujiayang-vibe@gitee.com'`。
+- 真实修复：浏览器登录不能替代 Git 认证；我把真实报错回贴给 AI，最终改用 SSH 公钥完成真实认证和推送。
+- 具体代码问题：审计还真实发现 `server.js` 的 HTTP 中文分块乱码，先增加失败用例，再修改为拼接原始 Buffer 后统一 UTF-8 解码。
+- 急救演练：在隔离分支故意关闭重复预约校验，真实出现测试失败，通过 Git 定位问题提交并 revert 后恢复全绿；演练和自然发生的乱码缺陷分开记录。
+- 验证结果：项目最新 13 组自动化测试全部通过，GitHub Course CI 成功，day1～day6 官方自查退出码均为 0。
+- 版本证据：中文分块修复提交 `0cdf868`；day6 封卷提交 `48cb58f`；day6 标签已真实推送。
+- 下一步：本人亲自完成一次“预约→我的预约→取消”人工验收，第7天再接入真实 AI 功能，不继续增加无关需求。
+
+
 - 具体问题：Gitee HTTPS 推送失败，原始报错为
   `fatal: could not read Password for 'https://pujiayang-vibe@gitee.com'`，
   后改用 SSH 完成真实推送。
