@@ -1,5 +1,13 @@
 # 蒲嘉洋的 Vibe Coding 课程实践
 
+## 正式课程进度与当前候选版
+
+实际课程Day1为2026-10-07。前面的day2～day6快照属于提前开发材料；每天仍记录当天真实操作，不能把未来课堂经历写成完成。
+[十天交付与验收路线](docs/十天交付与验收路线.md) · [界面检查表](docs/界面设计与验收.md) · [AI接入与成本](docs/AI接入与成本.md)
+
+本分支feat/glass-review-workspace是待本人检查的界面/AI候选版，localhost:3004本地预览；未合入主干或替换公开部署。
+2026-10-07本地20组测试通过，包括AI模拟异常；真实模型调用仍待用户指定平台并本机填写.env。可以运行根目录配置AI.ps1隐藏输入Key；配置后重启预览再验收。只读MCP练习与路演草稿已备妥，教师审批/互评/录像未发生。
+
 [![Course CI](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/workflows/ci.yml)
 
 [在线器材预约演示](https://bvsk91361-cell.github.io/vibe-pujiayang/) · [GitHub 镜像](https://github.com/bvsk91361-cell/vibe-pujiayang)
