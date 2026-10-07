@@ -22,5 +22,7 @@ jobs:
           python-version: '3.12'
       - name: Business rules and API tests
         run: npm test
+      - name: Read-only MCP protocol check
+        run: node scripts/check-mcp.js
       - name: Coursework evidence gate
         run: python ci_check.py --through-day 6 --name 蒲嘉洋

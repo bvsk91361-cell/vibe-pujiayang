@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { createStore } from './src/store.js';
 import { equipment, slots, BookingError } from './src/booking.js';
+import { createAiAssistant } from './src/ai.js';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 const assets = new Map([
@@ -13,16 +14,30 @@ const assets = new Map([
   ['/booking.js', ['src/booking.js', 'text/javascript; charset=utf-8']],
   ['/export-csv.js', ['public/export-csv.js', 'text/javascript; charset=utf-8']],
   ['/reservation-view.js', ['public/reservation-view.js', 'text/javascript; charset=utf-8']],
+  ['/planning.js', ['src/planning.js', 'text/javascript; charset=utf-8']],
+  ['/device-art.js', ['public/device-art.js', 'text/javascript; charset=utf-8']],
   ['/vendor/papaparse.min.js', ['public/vendor/papaparse.min.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']]
 ]);
-export function createApp(store = createStore(resolve(root, 'data/reservations.json'))) {
+export function createApp(store = createStore(resolve(root, 'data/reservations.json')), assistant = createAiAssistant()) {
   return createServer(async (req, res) => {
     function json(status, value) { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(value)); }
     try {
       const path = new URL(req.url, 'http://localhost').pathname;
       if (req.method === 'GET' && path === '/api/equipment') return json(200, { equipment, slots });
       if (req.method === 'GET' && path === '/api/reservations') return json(200, await store.list());
+      if (req.method === 'GET' && path === '/api/ai/status') return json(200, assistant.status());
+      if (req.method === 'POST' && path === '/api/ai/assist') {
+        const parts = []; let length = 0;
+        for await (const part of req) {
+          length += part.length;
+          if (length > 4096) throw new BookingError('问题内容过长。', 413);
+          parts.push(part);
+        }
+        let input;
+        try { input = JSON.parse(Buffer.concat(parts).toString('utf8')); } catch { throw new BookingError('问题格式错误。', 400); }
+        return json(200, await assistant.assist(input, await store.list()));
+      }
       if (req.method === 'POST' && path === '/api/reservations') {
         const chunks = []; let bytes = 0;
         for await (const chunk of req) {
@@ -53,6 +68,7 @@ export function createApp(store = createStore(resolve(root, 'data/reservations.j
   });
 }
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {
+  try { process.loadEnvFile(resolve(root, '.env')); } catch (error) { if (error.code !== 'ENOENT') throw error; }
   const port = Number(process.env.PORT || 3000);
   createApp().listen(port, '127.0.0.1', () => console.log(`器材预约已启动：http://localhost:${port}`));
 }

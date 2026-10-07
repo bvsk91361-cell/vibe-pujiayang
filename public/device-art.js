@@ -1,0 +1,8 @@
+export function deviceSvg(id) {
+  const shapes = {
+    camera: '<rect x="32" y="36" width="94" height="66" rx="14" fill="#354859"/><path d="M53 36v-8h27v8" fill="#65788a"/><circle cx="88" cy="72" r="30" fill="#61788d"/><circle cx="88" cy="72" r="23" fill="#1f354d"/><circle cx="88" cy="72" r="15" fill="#315978"/><circle cx="83" cy="65" r="6" fill="#84babc" opacity=".8"/><rect x="40" y="46" width="17" height="6" rx="2" fill="#a3b5c6"/><circle cx="43" cy="89" r="2" fill="#b9d5c4"/>',
+    projector: '<rect x="25" y="51" width="105" height="44" rx="12" fill="#d0d6e8"/><rect x="25" y="46" width="105" height="38" rx="12" fill="#f7f8ff"/><path d="M36 63h32M36 68h32M36 73h32" stroke="#aeb9d0" stroke-width="3" stroke-linecap="round"/><circle cx="104" cy="67" r="14" fill="#6b7b9b"/><circle cx="104" cy="67" r="10" fill="#2b405e"/><circle cx="101" cy="63" r="4" fill="#7696bd"/><rect x="45" y="91" width="10" height="7" rx="2" fill="#7787a3"/><rect x="108" y="91" width="10" height="7" rx="2" fill="#7787a3"/>',
+    recorder: '<rect x="58" y="20" width="46" height="91" rx="11" fill="#657f7c"/><rect x="58" y="16" width="46" height="90" rx="11" fill="#8ba7a3"/><path d="M68 25h26M68 30h26M68 35h26" stroke="#5b7977" stroke-width="3" stroke-linecap="round"/><rect x="65" y="43" width="32" height="20" rx="4" fill="#ddede7"/><path d="M69 54h4l3-5 4 9 3-5h10" stroke="#7d9b92" fill="none"/><circle cx="81" cy="79" r="10" fill="#d2e0dc"/><circle cx="81" cy="79" r="4" fill="#688880"/><circle cx="71" cy="95" r="2" fill="#dae7e0"/><circle cx="91" cy="95" r="2" fill="#dae7e0"/>'
+  };
+  return `<svg viewBox="0 0 160 130" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">${shapes[id] || shapes.camera}</svg>`;
+}

@@ -31,7 +31,7 @@ test('业务规则5：过去日期、不存在的日期和错误日期格式必�
   for (const date of ['2026-10-06', '2099-02-30', '2099-13-01', '2099-1-1', 'not-a-date']) {
     assert.throws(() => validateBooking({ ...example, date }, [], today), BookingError);
   }
-  assert.doesNotThrow(() => validateBooking({ ...example, date: today }, [], today));
+  assert.doesNotThrow(() => validateBooking({ ...example, date: today }, [], today, new Date('2026-10-07T08:00:00')));
 });
 test('接口闭环：预约保存、重建存储后读取、重复拒绝、取消后重新预约', async t => {
   const directory = await mkdtemp(join(tmpdir(), 'vibe-pjy-test-'));

@@ -10,7 +10,7 @@ export function localDate(date = new Date()) {
 export class BookingError extends Error {
   constructor(message, status = 422) { super(message); this.status = status; }
 }
-export function validateBooking(input, records, today = localDate()) {
+export function validateBooking(input, records, today = localDate(), now = new Date()) {
   if (!input || typeof input !== 'object') throw new BookingError('请填写预约信息。');
   const { equipmentId, date, slot } = input;
   const name = typeof input.name === 'string' ? input.name.trim() : '';
@@ -20,6 +20,10 @@ export function validateBooking(input, records, today = localDate()) {
   const parsed = new Date(`${date}T12:00:00`);
   if (Number.isNaN(parsed.getTime()) || localDate(parsed) !== date || date < today) throw new BookingError('请选择今天或以后的有效日期。');
   if (!slots.includes(slot)) throw new BookingError('请选择有效时段。');
+  if (date === localDate(now)) {
+    const [hour, minute] = slot.slice(-5).split(':').map(Number);
+    if (now.getHours() * 60 + now.getMinutes() >= hour * 60 + minute) throw new BookingError('这个时段已经结束，请选择后续时段。');
+  }
   if (records.some(item => item.equipmentId === equipmentId && item.date === date && item.slot === slot)) {
     throw new BookingError('这个器材在该时段已被预约，请换一个时段。', 409);
   }
