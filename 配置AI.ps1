@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $taskRoot = $PSScriptRoot
-$taskBase = Read-Host 'Model API base URL (HTTPS, usually ends with /v1)'
-$taskModel = Read-Host 'Exact model name from your provider'
+$taskBase = 'https://api.yoshub.com/v1'
+$taskModel = 'deepseek-v4-flash'
 if ($taskBase -notmatch '^https://[^\s]+$') { throw 'Use your provider official HTTPS base URL.' }
 if ([string]::IsNullOrWhiteSpace($taskModel)) { throw 'Model name is required.' }
 $taskSecure = Read-Host 'API Key (hidden; enter only here)' -AsSecureString
@@ -11,9 +11,9 @@ try {
  foreach ($taskValue in @($taskBase,$taskModel,$taskKey)) { if ($taskValue -match '[\r\n"]') { throw 'Multiline values and quote characters are not supported.' } }
  if ([string]::IsNullOrWhiteSpace($taskKey)) { throw 'API Key is required.' }
  $taskLines = @(
-  ('AI_BASE_URL="' + $taskBase.TrimEnd('/') + '"')
-  ('AI_MODEL="' + $taskModel + '"')
-  ('AI_API_KEY="' + $taskKey + '"')
+  ('YOSHUB_BASE_URL="' + $taskBase.TrimEnd('/') + '"')
+  ('YOSHUB_MODEL="' + $taskModel + '"')
+  ('YOSHUB_API_KEY="' + $taskKey + '"')
   'PORT=3004'
  )
  [IO.File]::WriteAllLines((Join-Path $taskRoot '.env'),$taskLines,[Text.UTF8Encoding]::new($false))
@@ -24,4 +24,3 @@ try {
  $taskKey = $null
  $taskLines = $null
 }
-

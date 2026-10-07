@@ -2,7 +2,11 @@ import { equipment, slots, localDate, BookingError } from './booking.js';
 import { addDays, freeSlots, planSummary } from './planning.js';
 
 export function createAiAssistant({ config = process.env, fetchImpl = fetch, timeoutMs = 15000 } = {}) {
- const settings = { key: config.AI_API_KEY || '', base: config.AI_BASE_URL || '', model: config.AI_MODEL || '' };
+ const settings = {
+  key: config.YOSHUB_API_KEY || '',
+  base: config.YOSHUB_BASE_URL || 'https://api.yoshub.com/v1',
+  model: config.YOSHUB_MODEL || 'deepseek-v4-flash'
+ };
  let calls = 0, promptTokens = 0, completionTokens = 0, day = localDate(), busy = false;
  function status() { return { configured: !!(settings.key && settings.base && settings.model), model: settings.model || null, calls, promptTokens, completionTokens, scope: '当前服务进程，重启后计数清零' }; }
  function parsedJson(content) {
@@ -12,7 +16,7 @@ export function createAiAssistant({ config = process.env, fetchImpl = fetch, tim
  async function assist(input, records) {
   if (!input || !['report','availability'].includes(input.mode)) throw new BookingError('请选择报告或空闲查询。',422);
   if (input.mode === 'availability' && (typeof input.question !== 'string' || !input.question.trim() || input.question.length > 300)) throw new BookingError('问题需为1～300个字符。',422);
-  if (!status().configured) throw new BookingError('助手尚未配置，普通预约仍可使用。请在本机.env设置模型信息。',503);
+  if (!status().configured) throw new BookingError('助手尚未配置，普通预约仍可使用。请为后端设置YOSHUB_API_KEY环境变量。',503);
   let base; try { base=new URL(settings.base); } catch { throw new BookingError('模型服务地址配置无效。',503); }
   if (base.protocol !== 'https:' || base.username || base.password || base.search || base.hash) throw new BookingError('模型地址必须为不含凭据和查询参数的HTTPS地址。',503);
   if (day !== localDate()) { day=localDate();calls=0;promptTokens=0;completionTokens=0; }

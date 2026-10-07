@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createAiAssistant } from '../src/ai.js';
 import { addDays, freeSlots, planSummary } from '../src/planning.js';
 import { validateBooking, localDate } from '../src/booking.js';
-const config={AI_API_KEY:'unit-test-secret',AI_BASE_URL:'https://unit-test.example/v1',AI_MODEL:'test-model'};
+const config={YOSHUB_API_KEY:'unit-test-secret',YOSHUB_BASE_URL:'https://unit-test.example/v1',YOSHUB_MODEL:'test-model'};
 const response=content=>({ok:true,json:async()=>({choices:[{message:{content}}],usage:{prompt_tokens:12,completion_tokens:8}})});
 
 test('规划统计由真实记录生成，七天容量、跨月日期和时间终点正确',()=>{
@@ -57,6 +57,19 @@ test('模型每日调用上限阻止重复消耗，HTTPS地址必须有效',asyn
  const ai=createAiAssistant({config,fetchImpl:async()=>response('报告')});
  for(let index=0;index<20;index++)await ai.assist({mode:'report'},[]);
  await assert.rejects(ai.assist({mode:'report'},[]),error=>error.status===429);
- const invalid=createAiAssistant({config:{...config,AI_BASE_URL:'http://unit-test.example'},fetchImpl:async()=>{throw new Error('Should not call');}});
+ const invalid=createAiAssistant({config:{...config,YOSHUB_BASE_URL:'http://unit-test.example'},fetchImpl:async()=>{throw new Error('Should not call');}});
  await assert.rejects(invalid.assist({mode:'report'},[]),error=>error.status===503);
+});
+
+test('Yos Hub默认地址和模型生效，密钥只进入服务端Authorization，不进入返回状态',async()=>{
+ let request;
+ const ai=createAiAssistant({config:{YOSHUB_API_KEY:'server-only-fixture'},fetchImpl:async(url,options)=>{request={url,options};return response('仅供自动化测试的报告');}});
+ await ai.assist({mode:'report'},[]);
+ assert.equal(request.url,'https://api.yoshub.com/v1/chat/completions');
+ assert.equal(JSON.parse(request.options.body).model,'deepseek-v4-flash');
+ assert.equal(request.options.headers.Authorization,'Bearer server-only-fixture');
+ assert.equal(ai.status().model,'deepseek-v4-flash');
+ assert.equal(JSON.stringify(ai.status()).includes('server-only-fixture'),false);
+ const legacy=createAiAssistant({config:{AI_API_KEY:'unused-legacy-value'}});
+ assert.equal(legacy.status().configured,false);
 });

@@ -1,15 +1,15 @@
 # 服务端AI接入准备与成本
 
-2026-10-07。已实现接口与模拟测试，真实平台/模型待用户指定及本机配置，不声称真实AI已通过。
+2026-10-07。已实现接口与模拟测试，用户已指定Yos Hub平台和deepseek-v4-flash模型；后端进程尚无密钥配置，不声称真实AI已通过。
 
 ## 本机设置
 
 复制.env.example为.env（已被Git忽略），在本机编辑：
-AI_BASE_URL为平台的/v1根地址；AI_MODEL为已开通模型名称；AI_API_KEY仅本机保存。
+后端只从YOSHUB_API_KEY读取密钥；YOSHUB_BASE_URL默认https://api.yoshub.com/v1；YOSHUB_MODEL默认deepseek-v4-flash。可以直接通过启动进程的环境变量配置，或用被Git忽略的本机.env加载至process.env。配置AI.ps1只在本机隐藏输入Key，不回显、不写入前端或Git。
 启动node server.js会读取.env。不要把Key发到聊天或Git。
 
 接口约定：HTTPS BASE_URL/chat/completions，Bearer认证，messages/max_tokens/usage。
-官方参考：https://docs.siliconflow.cn/docs/api/chat-completions-post 。具体平台需按其官方文档核对，不能默认所有模型支持所有参数。
+Yos Hub接口由用户明确提供：https://api.yoshub.com/v1/chat/completions 。用户报告其本机已获得HTTP 200及中文回答，这是用户既有验证，不冒充本项目端到端调用证据；本轮仍需检查周报和严格JSON查询。公开站点未提供可读取的参数文档，按用户指定的OpenAI兼容Chat Completions协议接入。
 
 POST /api/ai/assist，mode=report或availability；GET /api/ai/status只返回配置布尔、模型名、服务进程累计调用与tokens，不返回Key。
 日报告发送匿名汇总，不包含预约人姓名。自然语言问题发送给用户选择的模型平台；解析出的日期、设备和时段经代码校验，再从真实记录查询，模型不能直接决定空闲。
@@ -22,7 +22,7 @@ POST /api/ai/assist，mode=report或availability；GET /api/ai/status只返回�
 
 ## 月度估算表
 
-模型尚未确认，价格不虚构。公式：
+模型已指定deepseek-v4-flash，Yos Hub实际计费单价尚未提供，不虚构价格。公式：
 月成本 = 月调用数 × (平均输入tokens × 输入每百万token价格 + 平均输出tokens × 输出每百万token价格) / 1000000。
 规划例：20次/日×30日=600次；若平均输入1200、输出600，则月输入720000、输出360000；乘以实际平台公开单价。这两个平均数是预算假设，不是测量结果。
 实际usage由返回接口累计；上线前用至少10个实际请求计算平均数、95%响应耗时、正确解析率与费用。记录网络/无额度失败，不把失败输出当正确答案。
@@ -35,4 +35,3 @@ POST /api/ai/assist，mode=report或availability；GET /api/ai/status只返回�
 - [ ] 同义句、未知设备、过期日期、模糊问题不产生假空闲。
 - [ ] 实际断网/授权/额度演示与模拟故障证据分别记录。
 - [ ] 本人批准部署后，线上真实接口与数据持久化验证。
-
