@@ -1,0 +1,8 @@
+import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+await mkdir('dist', { recursive: true });
+await cp('public', 'dist', { recursive: true });
+await cp('src/booking.js', 'dist/booking.js');
+const html = await readFile('public/index.html', 'utf8');
+await writeFile('dist/index.html', html.replace('<head>', '<head><meta name="storage-mode" content="browser">'));
+await writeFile('dist/.nojekyll', '');
+console.log('Built static Pages demo in dist; browser-local data only.');

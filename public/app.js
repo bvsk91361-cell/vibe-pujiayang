@@ -1,3 +1,7 @@
+import { createBrowserApi } from './browser-api.js';
+import { exportCsv } from './export-csv.js';
+const staticMode = document.querySelector('meta[name="storage-mode"]')?.content === 'browser';
+const browserApi = staticMode ? createBrowserApi(localStorage) : null;
 const form = document.querySelector('#booking-form');
 const message = document.querySelector('#message');
 let equipment = [];
@@ -6,6 +10,7 @@ function dateToday() {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 }
 async function api(path, options) {
+  if (staticMode) return browserApi(path, options);
   const response = await fetch(path, options);
   const result = await response.json();
   if (!response.ok) throw new Error(result.error || '请求失败，请稍后再试。');
@@ -50,7 +55,16 @@ form.addEventListener('submit', async event => {
 });
 form.elements.equipmentId.addEventListener('change', () => selectEquipment(form.elements.equipmentId.value));
 document.querySelector('#refresh').addEventListener('click', () => refresh().catch(error => notify(error.message, true)));
+document.querySelector('#export').addEventListener('click', async () => {
+  try {
+    const csv = exportCsv(await api('/api/reservations'), equipment);
+    const url = URL.createObjectURL(new Blob(['\uFEFF', csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a'); link.href = url; link.download = '器材预约.csv'; link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000); notify('预约记录已导出为 CSV。');
+  } catch (error) { notify(error.message, true); }
+});
 async function initialize() {
+  if (staticMode) document.querySelector('footer span').textContent = '在线演示 · 预约保存在当前浏览器，设备之间不共享；请用测试姓名';
   const catalog = await api('/api/equipment'); equipment = catalog.equipment;
   for (const item of equipment) {
     form.elements.equipmentId.add(new Option(item.name, item.id));

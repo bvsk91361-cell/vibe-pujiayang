@@ -9,6 +9,10 @@ const root = fileURLToPath(new URL('.', import.meta.url));
 const assets = new Map([
   ['/', ['public/index.html', 'text/html; charset=utf-8']],
   ['/app.js', ['public/app.js', 'text/javascript; charset=utf-8']],
+  ['/browser-api.js', ['public/browser-api.js', 'text/javascript; charset=utf-8']],
+  ['/booking.js', ['src/booking.js', 'text/javascript; charset=utf-8']],
+  ['/export-csv.js', ['public/export-csv.js', 'text/javascript; charset=utf-8']],
+  ['/vendor/papaparse.min.js', ['public/vendor/papaparse.min.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']]
 ]);
 export function createApp(store = createStore(resolve(root, 'data/reservations.json'))) {
