@@ -6,6 +6,8 @@ import { join } from 'node:path';
 import { createApp } from '../server.js';
 import { createStore } from '../src/store.js';
 import { validateBooking, BookingError } from '../src/booking.js';
+import { request } from 'node:http';
+import { setTimeout as delay } from 'node:timers/promises';
 
 const today = '2026-10-07';
 const example = { name: '蒲嘉洋', equipmentId: 'camera', date: '2099-10-07', slot: '09:00–11:00' };
@@ -72,4 +74,22 @@ test('并发护栏：同时提交两个重复预约，只允许一个写入', as
   assert.equal(results.filter(result => result.status === 'fulfilled').length, 1);
   assert.equal(results.filter(result => result.status === 'rejected' && result.reason.status === 409).length, 1);
   assert.equal((await store.list()).length, 1);
+});
+
+test('HTTP分块UTF-8：中文姓名跨数据块时必须原样保存', async t => {
+  const app = createApp({ add: async input => input });
+  await new Promise(resolve => app.listen(0, '127.0.0.1', resolve));
+  t.after(() => new Promise(resolve => app.close(resolve)));
+  const body = Buffer.from(JSON.stringify(example));
+  const split = body.indexOf(Buffer.from('蒲')) + 1;
+  const result = await new Promise((resolve, reject) => {
+    const req = request({ host: '127.0.0.1', port: app.address().port, path: '/api/reservations', method: 'POST', headers: { 'Content-Type': 'application/json' } }, res => {
+      const parts = []; res.on('data', part => parts.push(part));
+      res.on('end', () => resolve({ status: res.statusCode, body: JSON.parse(Buffer.concat(parts).toString('utf8')) }));
+    });
+    req.on('error', reject); req.write(body.subarray(0, split));
+    delay(20).then(() => req.end(body.subarray(split)));
+  });
+  assert.equal(result.status, 201);
+  assert.equal(result.body.name, '蒲嘉洋');
 });

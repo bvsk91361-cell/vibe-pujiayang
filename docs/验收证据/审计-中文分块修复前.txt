@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: HTTP分块UTF-8：中文姓名跨数据块时必须原样保存
+not ok 1 - HTTP分块UTF-8：中文姓名跨数据块时必须原样保存
+  ---
+  duration_ms: 58.052
+  location: 'E:\\桌面\\vibecode\\vibe-pujiayang\\test\\booking.test.js:79:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    '���嘉洋' !== '蒲嘉洋'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '蒲嘉洋'
+  actual: '���嘉洋'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang/test/booking.test.js:94:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 164.3004

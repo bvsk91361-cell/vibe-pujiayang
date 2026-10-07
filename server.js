@@ -23,8 +23,13 @@ export function createApp(store = createStore(resolve(root, 'data/reservations.j
       if (req.method === 'GET' && path === '/api/equipment') return json(200, { equipment, slots });
       if (req.method === 'GET' && path === '/api/reservations') return json(200, await store.list());
       if (req.method === 'POST' && path === '/api/reservations') {
-        let body = '';
-        for await (const chunk of req) { body += chunk; if (Buffer.byteLength(body) > 8192) throw new BookingError('预约信息过长。', 413); }
+        const chunks = []; let bytes = 0;
+        for await (const chunk of req) {
+          bytes += chunk.length;
+          if (bytes > 8192) throw new BookingError('预约信息过长。', 413);
+          chunks.push(chunk);
+        }
+        const body = Buffer.concat(chunks).toString('utf8');
         let input;
         try { input = JSON.parse(body); } catch { throw new BookingError('预约信息格式错误。', 400); }
         return json(201, await store.add(input));
