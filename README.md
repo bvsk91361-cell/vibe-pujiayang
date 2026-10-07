@@ -47,11 +47,17 @@ npm test
 | 3 | [两组真实闭环摘要](docs/反思录/对话/day3-两组真实闭环.md) | [day3](docs/反思录/蒲嘉洋/day3.md) |
 | 4 | [外部组件](docs/外部组件接入.md) · [部署](docs/部署手册.md) | [day4](docs/反思录/蒲嘉洋/day4.md) |
 | 5 | [代码审计与整改](docs/第5天代码审计.md) | [day5](docs/反思录/蒲嘉洋/day5.md) |
-| 6 | [急救演练](docs/急救演练.md) · [外仓检查](docs/交叉验收/吴晟.md) | [day6](docs/反思录/蒲嘉洋/day6.md) |
+| 6 | [急救演练](docs/急救演练.md) · [个人质量验收](docs/个人质量验收.md) | [day6](docs/反思录/蒲嘉洋/day6.md) |
 
 - 实际补做日期：2026-10-07；不伪造 2026-09-18 的提交。
 - 需求：[PRD](docs/PRD.md)；方案：[技术方案](docs/技术方案.md)；优先级：[任务看板](docs/任务看板.md)。
 - 反思与实际对话摘要：[day6](docs/反思录/蒲嘉洋/day6.md)。
-- 交叉验收：[吴晟仓库检查](docs/交叉验收/吴晟.md)，当前缺少可运行代码，待同学补充后复验。
+- 个人质量验收：[独立验收记录](docs/个人质量验收.md)。本人独立完成，使用个人黑盒验收、自动化测试、AI代码审计、CI和Git恢复演练作为质量验证。
 - CI：GitHub Actions 真实成功，README 为动态徽章；修复运行见 [37564369479](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/runs/37564369479)。
-- 完工报告：[第6天完工报告](https://gitee.com/pujiayang-vibe/vibe-pujiayang/issues/IKJT3S)；整改 issue：[吴晟仓库交叉验收](https://gitee.com/wusheng1108/vibe-wusheng/issues/IKJT3M)。[逐日交卷审计](docs/作业审计总表.md)列出全部报告、远程标签与自查结果；报告保留实际未完成的课堂互动事项。
+- 完工报告：[第6天完工报告](https://gitee.com/pujiayang-vibe/vibe-pujiayang/issues/IKJT3S)。当前流程按本人独立质量验证记录，不声称同学参与。
+
+## 第7至10天提前交付
+
+2026-10-08真实提前准备：day7～day10反思与标签已推送。第7～9天报告已发布，第10天正文已保存，因Gitee当日Issue上限由本人明天发布。
+
+本默认分支补齐巡查材料；完整产品与技术证据保留在feat/glass-review-workspace及day7～day10快照。[十天最终审计](https://gitee.com/pujiayang-vibe/vibe-pujiayang/blob/feat/glass-review-workspace/docs/十天交付最终审计.md)。不表示未来课堂或正式路演已经发生。
