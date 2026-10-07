@@ -25,4 +25,4 @@ jobs:
       - name: Read-only MCP protocol check
         run: node scripts/check-mcp.js
       - name: Coursework evidence gate
-        run: python ci_check.py --through-day 6 --name 蒲嘉洋
+        run: python ci_check.py --through-day 10 --name 蒲嘉洋

@@ -1,6 +1,6 @@
 # 接入真实 CI
 
-课程允许 Gitee Go 或 GitHub Actions。本仓库 `.github/workflows/ci.yml` 对 main/master、feat/**、docs/** 的 push、day* tag、PR 执行 `npm test` 与 `python ci_check.py --through-day 6 --name 蒲嘉洋`。闸门逐日核对 day1–day6 的反思、验收、对话摘要、被跟踪状态与最近署名作者。
+课程允许 Gitee Go 或 GitHub Actions。本仓库 `.github/workflows/ci.yml` 对 main/master、feat/**、docs/** 的 push、day* tag、PR 执行 `npm test` 与 `python ci_check.py --through-day 10 --name 蒲嘉洋`。当前归档闸门逐日核对 day1–day10 的反思、验收、对话摘要、被跟踪状态与最近署名作者。
 
 镜像仓库为 `bvsk91361-cell/vibe-pujiayang`。导入页返回错误后，使用本机 SSH 直接推送，完整历史已实际上传。Gitee 仍是课程登记与完工 issue 所在的个人仓库，Gitee master 与 GitHub main 同步相同提交。
 
@@ -10,6 +10,6 @@ GitHub 连接器登录账号与本人浏览器账号不同；本次使用本人�
 
 真实记录：修复分支 `0cdf868` 的运行 https://github.com/bvsk91361-cell/vibe-pujiayang/actions/runs/37564369479 为 success，测试和当时 day6 闸门均通过。逐日闸门扩展后的运行另在最终验收总表补充。徽章链接实时 main 工作流，不使用固定 passing 图。
 
-本地验证：`python ci_check.py --through-day 6 --name 蒲嘉洋` 六条 PASS；请求不存在的 day7 反思时明确失败，已确认漏交会被闸门拒绝。标签是否已远程推送、网页报告是否发布，由最终审计与官方自查分别核对。
+历史验证：扩展前六条PASS；当时不存在day7时闸门真实拒绝。2026-10-08新增day7～day10提前反思，当前十章闸门与云端结果见十天交付最终审计.md。标签是否已远程推送、网页报告是否发布，由最终审计与官方自查分别核对。
 
 不要使用固定 `passing` 图标替代 CI；不要把准备好配置写成已经跑绿。
