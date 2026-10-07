@@ -4,5 +4,5 @@
   "private": true,
   "type": "module",
   "scripts": { "start": "node server.js", "test": "node --test", "build:pages": "node scripts/build-pages.js", "preview:pages": "node scripts/preview-pages.js" },
-  "engines": { "node": ">=22" }
+  "engines": { "node": ">=22.14" }
 }

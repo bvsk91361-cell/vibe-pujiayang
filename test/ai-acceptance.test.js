@@ -77,7 +77,7 @@ test('查询先发送真实设备和匿名预约上下文，再按完整台账�
  const result=await ai.assist({mode:'availability',question:'明天下午有哪些设备？'},records);
  const sent=JSON.parse(body.messages[1].content);assert.equal(sent.context.catalog.length,3);assert.deepEqual(sent.context.reservations,[row()]);
  assert.equal(JSON.stringify(body).includes('不应出境的姓名'),false);assert.equal(JSON.stringify(body).includes('private-id'),false);
- assert.equal(body.max_tokens,1800);assert.equal(result.matches.find(item=>item.name==='便携投影仪').slots.length,0);
+ assert.equal(body.max_tokens,2400);assert.equal(result.matches.find(item=>item.name==='便携投影仪').slots.length,0);
  assert.equal(result.matches.find(item=>item.name==='录音笔').slots.length,1);
 });
 test('替代查询不把相机或录音笔冒充投影设备；最忙时段结论由实际记录计算',async()=>{
