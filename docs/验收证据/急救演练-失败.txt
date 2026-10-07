@@ -1,0 +1,95 @@
+
+> vibe-pujiayang@0.1.0 test
+> node --test
+
+TAP version 13
+# Subtest: 业务规则1：有效预约保留器材、日期、时段，并去掉姓名两端空格
+ok 1 - 业务规则1：有效预约保留器材、日期、时段，并去掉姓名两端空格
+  ---
+  duration_ms: 4.3484
+  ...
+# Subtest: 业务规则2：同器材、同日期、同时段的重复预约返回409
+not ok 2 - 业务规则2：同器材、同日期、同时段的重复预约返回409
+  ---
+  duration_ms: 2.4102
+  location: 'E:\\桌面\\vibecode\\vibe-pujiayang\\test\\booking.test.js:15:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected exception.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang/test/booking.test.js:16:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: 业务规则3：不同器材或日期或时段不会被误判为重复
+ok 3 - 业务规则3：不同器材或日期或时段不会被误判为重复
+  ---
+  duration_ms: 0.4651
+  ...
+# Subtest: 业务规则4：空姓名、未知器材和非法时段必须被拒绝
+ok 4 - 业务规则4：空姓名、未知器材和非法时段必须被拒绝
+  ---
+  duration_ms: 0.4194
+  ...
+# Subtest: 业务规则5：过去日期、不存在的日期和错误日期格式必须被拒绝
+ok 5 - 业务规则5：过去日期、不存在的日期和错误日期格式必须被拒绝
+  ---
+  duration_ms: 0.3106
+  ...
+# Subtest: 接口闭环：预约保存、重建存储后读取、重复拒绝、取消后重新预约
+not ok 6 - 接口闭环：预约保存、重建存储后读取、重复拒绝、取消后重新预约
+  ---
+  duration_ms: 88.9111
+  location: 'E:\\桌面\\vibecode\\vibe-pujiayang\\test\\booking.test.js:34:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    201 !== 409
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 409
+  actual: 201
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang/test/booking.test.js:56:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 并发护栏：同时提交两个重复预约，只允许一个写入
+not ok 7 - 并发护栏：同时提交两个重复预约，只允许一个写入
+  ---
+  duration_ms: 13.4764
+  location: 'E:\\桌面\\vibecode\\vibe-pujiayang\\test\\booking.test.js:67:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    2 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang/test/booking.test.js:72:10)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 4
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 247.0533

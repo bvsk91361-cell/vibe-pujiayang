@@ -1,0 +1,9 @@
+9252f6cf06fe19ce627ae812c5c975b7b1067629 is the first bad commit
+commit 9252f6cf06fe19ce627ae812c5c975b7b1067629
+Author: 蒲嘉洋 <369511780@qq.com>
+Date:   Wed Oct 7 10:28:18 2026 +0800
+
+    急救演练：故意关闭重复预约约束以验证护栏
+
+ src/booking.js | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)

@@ -1,4 +1,10 @@
 # Logs
+data/
+.env
+.env.*
+!.env.example
+__pycache__/
+.pytest_cache/
 logs
 *.log
 npm-debug.log*
