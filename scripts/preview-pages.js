@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-const paths = new Set(['index.html', 'app.js', 'booking.js', 'browser-api.js', 'export-csv.js', 'style.css', 'vendor/papaparse.min.js']);
+const paths = new Set(['index.html', 'app.js', 'booking.js', 'browser-api.js', 'export-csv.js', 'reservation-view.js', 'style.css', 'vendor/papaparse.min.js']);
 const types = { html: 'text/html', js: 'text/javascript', css: 'text/css' };
 createServer(async (req, res) => {
   const path = new URL(req.url, 'http://localhost').pathname.slice(1) || 'index.html';
