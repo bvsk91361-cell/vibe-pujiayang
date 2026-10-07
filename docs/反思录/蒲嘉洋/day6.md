@@ -27,6 +27,8 @@ fatal: could not read Password for 'https://pujiayang-vibe@gitee.com': No such f
 
 ## 交叉验收与剩余事项
 
+另外完成一次明确标注的隔离急救演练：Codex 在 `drill/day6-recovery` 分支故意关闭重复校验，7 组测试中 3 组真实失败；Git 定位 `9252f6c`，revert 为 `2dc51ec` 后重新 7 组全通过。完整日志和说明见 `docs/急救演练.md`。这是训练演练，不把故意引入的错误写成自然发生的事故。
+
 我提供吴晟的真实仓库地址。Codex clone 后，当前 master 只有两份 README，缺少项目代码与启动说明，无法运行。已形成必须修清单和 issue 正文，但尚待在他的仓库发出并等他补充后复验。我还没有收到同学对本项目的反馈，不能声称双向互测或所有必须修项清零。
 
 CI 配置会进入仓库，但只有真实流水线运行成功才写“CI 通过”。day6 标签和完工 issue 在最终检查后处理，不倒签日期。
