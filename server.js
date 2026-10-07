@@ -12,6 +12,7 @@ const assets = new Map([
   ['/browser-api.js', ['public/browser-api.js', 'text/javascript; charset=utf-8']],
   ['/booking.js', ['src/booking.js', 'text/javascript; charset=utf-8']],
   ['/export-csv.js', ['public/export-csv.js', 'text/javascript; charset=utf-8']],
+  ['/reservation-view.js', ['public/reservation-view.js', 'text/javascript; charset=utf-8']],
   ['/vendor/papaparse.min.js', ['public/vendor/papaparse.min.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']]
 ]);
