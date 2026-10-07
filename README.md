@@ -37,4 +37,4 @@ npm test
 - 反思与实际对话摘要：[day6](docs/反思录/蒲嘉洋/day6.md)。
 - 交叉验收：[吴晟仓库检查](docs/交叉验收/吴晟.md)，当前缺少可运行代码，待同学补充后复验。
 - CI：已准备 GitHub Actions 配置；待连接独立镜像仓库并真实运行后添加徽章。
-- `day6` 封卷与完工 issue：最终检查后执行；未完成事项会明确写入报告。
+- 完工报告：[第6天完工报告](https://gitee.com/pujiayang-vibe/vibe-pujiayang/issues/IKJT3S)；整改 issue：[吴晟仓库交叉验收](https://gitee.com/wusheng1108/vibe-wusheng/issues/IKJT3M)。`day6` 标签等待 CI 与最终检查；报告保留实际未完成事项。
