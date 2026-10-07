@@ -29,7 +29,7 @@ fatal: could not read Password for 'https://pujiayang-vibe@gitee.com': No such f
 
 另外完成一次明确标注的隔离急救演练：Codex 在 `drill/day6-recovery` 分支故意关闭重复校验，7 组测试中 3 组真实失败；Git 定位 `9252f6c`，revert 为 `2dc51ec` 后重新 7 组全通过。完整日志和说明见 `docs/急救演练.md`。这是训练演练，不把故意引入的错误写成自然发生的事故。
 
-我提供吴晟的真实仓库地址。Codex 首次 clone 时 master 只有两份 README；发布前复核最新 `ca9ae7f`，他已补充反思、对话、电梯稿与自查脚本。反思记载本机已有器材预约页面，但应用文件仍未入库，无法从仓库启动。已按最新版本填写整改 issue 并点击创建，Gitee 触发人机验证，尚未确认发布成功。我还没有收到同学对本项目的反馈，不能声称双向互测或所有必须修项清零。
+我提供吴晟的真实仓库地址。Codex 首次 clone 时 master 只有两份 README；发布前复核最新 `ca9ae7f`，他已补充反思、对话、电梯稿与自查脚本。反思记载本机已有器材预约页面，但应用文件仍未入库，无法从仓库启动。已按最新版本发布整改 issue：https://gitee.com/wusheng1108/vibe-wusheng/issues/IKJT3M 。期间 Gitee 触发人机验证，由我在网页完成。我的完工报告也已发布：https://gitee.com/pujiayang-vibe/vibe-pujiayang/issues/IKJT3S ，清楚列出待 CI 和互测复验事项。我还没有收到同学对本项目的反馈，不能声称双向互测或所有必须修项清零。
 
 CI 配置会进入仓库，但只有真实流水线运行成功才写“CI 通过”。day6 标签和完工 issue 在最终检查后处理，不倒签日期。
 
