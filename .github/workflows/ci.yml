@@ -1,7 +1,7 @@
 name: Course CI
 on:
   push:
-    branches: [master, main, 'feat/**']
+    branches: [master, main, 'feat/**', 'docs/**']
     tags: ['day*']
   pull_request:
   workflow_dispatch:
@@ -23,4 +23,4 @@ jobs:
       - name: Business rules and API tests
         run: npm test
       - name: Coursework evidence gate
-        run: python ci_check.py --day 6 --name 蒲嘉洋
+        run: python ci_check.py --through-day 6 --name 蒲嘉洋
