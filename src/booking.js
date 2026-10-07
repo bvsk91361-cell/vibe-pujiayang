@@ -20,7 +20,8 @@ export function validateBooking(input, records, today = localDate()) {
   const parsed = new Date(`${date}T12:00:00`);
   if (Number.isNaN(parsed.getTime()) || localDate(parsed) !== date || date < today) throw new BookingError('请选择今天或以后的有效日期。');
   if (!slots.includes(slot)) throw new BookingError('请选择有效时段。');
-  if (records.some(item => item.equipmentId === equipmentId && item.date === date && item.slot === slot)) {
+  // 仅用于隔离分支的急救演练：故意关闭重复约束，随后真实 revert。
+  if (false && records.some(item => item.equipmentId === equipmentId && item.date === date && item.slot === slot)) {
     throw new BookingError('这个器材在该时段已被预约，请换一个时段。', 409);
   }
   return { equipmentId, date, slot, name };
