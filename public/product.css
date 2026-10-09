@@ -959,18 +959,6 @@ body[data-view=discover]:not(.scrolled) .nav-link.active,body[data-view=discover
   border:var(--border);
   border-radius:var(--radius-product)
 }
-.saved-plan>div {
-  position:relative;
-  width:95px;
-  height:95px
-}
-.saved-plan>div strong {
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  font-size:1.375rem
-}
 .saved-plan h3 {
   font-size:1.5625rem;
   margin:20px 0 12px
@@ -1363,7 +1351,8 @@ body[data-view=discover]:not(.scrolled) .nav-link.active,body[data-view=discover
 .space-avatar {
   width:105px;
   height:105px;
-  border-radius:var(--radius-xl);
+  border-radius:50%;
+  padding:0;
   margin:auto;
   display:grid;
   place-items:center;
@@ -1386,9 +1375,12 @@ body[data-view=discover]:not(.scrolled) .nav-link.active,body[data-view=discover
   margin-top:30px
 }
 .avatar img,.space-avatar img {
+  display:block;
   width:100%;
   height:100%;
-  object-fit:cover
+  object-fit:cover;
+  object-position:center;
+  border-radius:inherit
 }
 .avatar-orbit {
   background:radial-gradient(at 25% 20%,#91d7ef,#646abe 65%,#35394f)!important;
@@ -1714,8 +1706,9 @@ dialog::backdrop {
   margin:10px 0
 }
 .filter-choice.active {
-  border-color:var(--accent);
-  color:var(--accent)
+  border-color:var(--color-focus);
+  color:var(--color-ink);
+  background:var(--color-surface-hover)
 }
 .calendar-days {
   display:grid;

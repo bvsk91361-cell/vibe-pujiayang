@@ -135,7 +135,7 @@
 .profile-avatar-button:hover::after,.profile-avatar-button:focus-visible::after{opacity:1;transform:none}
 .profile-identity .space-actions{justify-content:flex-start;gap:12px;margin-top:24px;flex-wrap:wrap}
 #avatar-dialog{width:min(600px,calc(100% - 48px));padding:32px}
-#avatar-preview{width:116px;height:116px;font-size:2.5rem;margin:28px auto;overflow:hidden;border-radius:var(--radius-xl)}
+#avatar-preview{width:116px;height:116px;font-size:2.5rem;margin:28px auto;overflow:hidden;border-radius:50%}
 .avatar-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
 #avatar-themes{justify-content:center;margin-top:26px}
 .avatar-file-help,#avatar-message{text-align:center;font-size:var(--font-caption);line-height:1.6;margin:22px 0 0;color:var(--color-muted)}
@@ -158,7 +158,7 @@
 .card-info>p,.mini-device p,.kit-item p,.picker-equipment p{font-size:1rem;line-height:1.6}
 .card-scenes,.availability,.kit-item>span,.picker-equipment span,.plan-device p,.plan-device span{font-size:.9375rem}
 .draft-status{font-size:.9375rem;padding:8px 12px;border-radius:var(--radius-pill);background:var(--color-mist);color:var(--color-muted);white-space:nowrap}
-.draft-status.changed{color:var(--accent)}
+.draft-status.changed{color:var(--color-link)}
 .editor-heading{flex-wrap:wrap;gap:14px}
 .editor-heading input{min-width:240px;flex:1}
 .plan-moments button{font-size:.9375rem;min-height:44px}

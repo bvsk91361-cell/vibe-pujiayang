@@ -7,7 +7,7 @@ import { bookingContext } from '../src/ai-context.js';
 import { localDate } from '../src/booking.js';
 import { addDays } from '../src/planning.js';
 const config={YOSHUB_API_KEY:'mock-only-credential',YOSHUB_BASE_URL:'https://mock.example/v1'};
-const selection={sections:{overview:['window','count','sample'],popular:['popular'],peak:['peak'],anomalies:['anomalies'],utilization:['utilization']},suggestions:['collect-samples','review-plan']};
+const selection={sections:{overview:['window','count','sample'],popular:['popular'],peak:['peak'],lowBooking:['lowBooking'],occupancy:['utilization']},suggestions:['collect-samples','review-plan']};
 const content=JSON.stringify(selection);
 const reply=(text=content,reason='stop')=>({ok:true,json:async()=>({choices:[{finish_reason:reason,message:{content:text}}],usage:{prompt_tokens:10,completion_tokens:20}})});
 const tomorrow=()=>addDays(localDate(),1);
@@ -22,7 +22,7 @@ test('空台账周报完整六节、两条建议，明确样本不足和无法�
  assert.equal(result.attempts,1);assert.equal(result.finishReason,'stop');
 });
 test('有预约周报准确计数、热门设备、高峰和异常，重复或非法记录不虚增占用',async()=>{
- const date=tomorrow();const records=[row(),row('camera'),row('camera',date,'19:00–21:00'),row(),row('nonexistent')];
+ const date=localDate();const records=[row('projector',date),row('camera',date),row('camera',date,'19:00–21:00'),row('projector',date),row('nonexistent',date)];
  const ai=createAiAssistant({config,fetchImpl:async()=>reply()});
  const result=await ai.assist({mode:'report'},records);
  assert.equal(result.source.total,3);assert.equal(result.source.capacity,63);
@@ -71,10 +71,10 @@ test('HTTP非JSON响应不自动重试；模型非法JSON重试一次后停止',
  let malformedCalls=0;const malformed=createAiAssistant({config,fetchImpl:async()=>{malformedCalls++;return reply('x'.repeat(200));}});
  await assert.rejects(malformed.assist({mode:'report'},[]),/已尝试2次.*有效JSON/);assert.equal(malformedCalls,2);
 });
-test('查询先发送真实设备和匿名预约上下文，再按完整台账核对占用；输出token受限',async()=>{
+test('复杂日期查询先发送真实设备和匿名预约上下文，再按完整台账核对占用；输出token受限',async()=>{
  let body;const date=tomorrow();const records=[{...row(),name:'不应出境的姓名',id:'private-id'}];
  const ai=createAiAssistant({config,fetchImpl:async(url,options)=>{body=JSON.parse(options.body);return reply(JSON.stringify({intent:'availability',date,equipmentId:null,slot:'14:00–16:00'}));}});
- const result=await ai.assist({mode:'availability',question:'明天下午有哪些设备？'},records);
+ const result=await ai.assist({mode:'availability',question:'明天到后天之间有哪些设备？'},records);
  const sent=JSON.parse(body.messages[1].content);assert.equal(sent.context.catalog.length,3);assert.deepEqual(sent.context.reservations,[row()]);
  assert.equal(JSON.stringify(body).includes('不应出境的姓名'),false);assert.equal(JSON.stringify(body).includes('private-id'),false);
  assert.equal(body.max_tokens,2400);assert.equal(result.matches.find(item=>item.name==='便携投影仪').slots.length,0);

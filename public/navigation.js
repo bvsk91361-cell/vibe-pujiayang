@@ -1,5 +1,26 @@
 const pages={discover:'workspace',equipment:'equipment-title',booking:'booking-title',plans:'plans',advisor:'advisor',space:'space',reservations:'reservations-title'};
 const names={discover:'发现',equipment:'设备中心',booking:'预约',plans:'创作方案',advisor:'智能推荐',space:'个人空间',reservations:'我的预约'};
+const closingDialogs=new WeakMap(),boundDialogs=new WeakSet();
+const dialogContexts=new WeakMap(),openDialogs=new Set();let previousOverflow='',backgroundContext=null;
+function captureTrigger(){const trigger=document.activeElement;return {trigger,id:trigger?.id,label:trigger?.getAttribute('aria-label')};}
+function visibleTrigger(context){
+ if(!context)return null;
+ const candidates=[context.trigger,context.id?document.getElementById(context.id):null,...(context.label?[...document.querySelectorAll('[aria-label]')].filter(el=>el.getAttribute('aria-label')===context.label):[])];
+ return candidates.find(el=>el?.isConnected&&el.getClientRects().length&&!el.closest('dialog:not([open])'))||null;
+}
+function bindContext(dialog){
+ if(typeof document==='undefined')return;
+ if(!openDialogs.size){previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';backgroundContext={...captureTrigger(),position:scrollY,view:document.body.dataset.view};}
+ dialogContexts.set(dialog,{...captureTrigger(),position:scrollY,view:document.body.dataset.view,fallback:backgroundContext});openDialogs.add(dialog);
+}
+function restoreContext(dialog){
+ if(typeof document==='undefined')return;
+ openDialogs.delete(dialog);if(openDialogs.size)return;document.body.style.overflow=previousOverflow;
+ const context=dialogContexts.get(dialog);if(context&&document.body.dataset.view===context.view){window.scrollTo({top:context.position,behavior:'instant'});(visibleTrigger(context)||visibleTrigger(context.fallback))?.focus({preventScroll:true});}backgroundContext=null;
+}
+function cancelClosing(dialog){const timer=closingDialogs.get(dialog);if(timer!==undefined)clearTimeout(timer);closingDialogs.delete(dialog);dialog.classList.remove('closing');}
+export function openDialog(dialog){cancelClosing(dialog);if(!boundDialogs.has(dialog)){dialog.addEventListener('close',()=>{cancelClosing(dialog);restoreContext(dialog);});boundDialogs.add(dialog);}if(!dialog.open){bindContext(dialog);dialog.showModal();}}
+export function closeDialog(dialog,{reduce=false,duration=220}={}){if(!dialog.open)return;if(reduce){cancelClosing(dialog);dialog.close();return;}if(closingDialogs.has(dialog))return;dialog.classList.add('closing');closingDialogs.set(dialog,setTimeout(()=>{closingDialogs.delete(dialog);dialog.classList.remove('closing');dialog.close();},duration));}
 export function createRouteMemory(initial='discover'){
  const positions=new Map(),trail=[initial];let index=0;
  const state=()=>({view:trail[index],index,back:trail[index-1]||null});
@@ -7,6 +28,7 @@ export function createRouteMemory(initial='discover'){
 }
 let memory=null;
 export function currentView(){return document.body.dataset.view;}
+export function backView(fallback='equipment',position=null){if(memory?.state().back)history.back();else{goView(fallback,{replace:true});if(Number.isFinite(position))window.scrollTo({top:position,behavior:'instant'});}}
 function render(route){
  for(const page of document.querySelectorAll('[data-page]'))page.hidden=page.dataset.page!==route.view;
  document.body.dataset.view=route.view;

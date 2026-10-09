@@ -129,3 +129,10 @@
 
 /* One desktop content ruler; the width excludes decorative outer gutters. */
 :root{--page-max-width:1440px;--page-padding-desktop:clamp(48px,4vw,72px);--desktop-column-gap:32px;--desktop-section-gap:72px;--font-caption:.875rem;--scene-card-height:480px;--scene-status-ink:#c9f1e7;--scene-status-bg:#6ed8bb14;--scene-status-line:#86d8bc40}
+
+/* Desktop workspace scale: visuals have a bounded stage, actions have a fixed hierarchy. */
+:root{--page-padding-desktop:clamp(40px,4vw,72px);--desktop-column-gap:24px;--desktop-section-gap:64px;--modal-small:560px;--modal-medium:840px;--modal-detail:1280px;--modal-workspace:1380px;--modal-padding:28px;--detail-visual-height:400px;--detail-visual-scale:.84;--scene-card-height:266px;--scene-illustration-height:186px;--card-illustration-height:174px;--composer-rail-width:280px;--workspace-gap:24px;--workspace-inset:24px;--motion-fast:140ms;--motion-standard:240ms;--motion-expressive:450ms;--motion-hero:700ms;--press-scale:.98}
+
+/* Shared interaction semantics; existing ink / muted / surface tokens stay canonical. */
+:root{--color-icon-primary:var(--color-ink);--color-icon-secondary:var(--color-muted);--color-surface-elevated:var(--color-surface);--color-surface-hover:var(--color-mist);--color-border-interactive:#8795ac;--color-on-accent:#fff;--color-link:#3745ba;--color-focus:#4056da;--color-accent-hover:#4654cf;--color-disabled-bg:#e0e6f0;--color-disabled-text:#526176;--color-warning:#925b16;--color-warning-bg:#fff4da;--color-nav-icon:#e7edff;--color-nav-hover:#adbcff}
+:root[data-theme=dark]{--color-surface-elevated:#18253a;--color-surface-hover:#22324d;--color-border-interactive:#6e809e;--color-link:#b6c2ff;--color-focus:#bac8ff;--color-disabled-bg:#27364e;--color-disabled-text:#c0cbde;--color-warning:#f4d39d;--color-warning-bg:#382d20}

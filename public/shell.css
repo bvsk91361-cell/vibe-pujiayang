@@ -72,6 +72,8 @@
   color:var(--color-ink)
 }
 .avatar {
+  position:relative;
+  overflow:hidden;
   display:grid;
   place-items:center;
   width:var(--tap);

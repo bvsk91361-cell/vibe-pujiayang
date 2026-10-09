@@ -344,10 +344,11 @@ input:focus,select:focus {
   gap:var(--space-3);
   margin-top:var(--space-4)
 }
-#ai-form button {
-  background:var(--color-ink);
-  color:var(--color-light)
+#ai-form button:not(:disabled) {
+  background:var(--color-accent);
+  color:var(--color-on-accent)
 }
+#ai-form button:hover:not(:disabled){background:var(--color-accent-hover)}
 #ai-message {
   min-height:1.6em;
   margin-top:var(--space-4);

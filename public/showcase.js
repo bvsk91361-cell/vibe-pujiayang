@@ -1,14 +1,14 @@
 import {heroSlides} from './catalog.js';
-import {deviceSvg} from './device-art.js';
 import {createCarousel} from './carousel.js';
 import {loadPreferences,savePreferences} from './preferences.js';
 import {icon,brandSymbol} from './icons.js';
-import {specLabel} from './creative-client.js';
-import {goView} from './navigation.js';
+import {goView,openDialog,closeDialog as closeSurface} from './navigation.js';
+import {renderDetail} from './detail-view.js';
 const $=selector=>document.querySelector(selector);
-export function mountShowcase({equipment,onSelect,onPlans}){
+export function mountShowcase({equipment,onSelect,onPlans,getRecords=()=>[],getDate=()=>''}){
  let storage;try{storage=localStorage;}catch{}
  let preferences=loadPreferences(storage),detail=null,detailContext=null;const media=matchMedia('(prefers-reduced-motion: reduce)'),colorMedia=matchMedia('(prefers-color-scheme: dark)');
+ const detailTitle=$('#detail-title'),detailExtra=$('#detail-extra');
  const reduced=()=>media.matches||preferences.reduceMotion;
  const capable=!(navigator.connection?.saveData||(navigator.deviceMemory&&navigator.deviceMemory<=4)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4));
  document.documentElement.dataset.effects=capable?'full':'quiet';
@@ -41,10 +41,10 @@ export function mountShowcase({equipment,onSelect,onPlans}){
  document.addEventListener('visibilitychange',()=>controller.pause('hidden',document.hidden));media.addEventListener('change',applyPreferences);colorMedia.addEventListener('change',applyPreferences);document.addEventListener('borrow:view',event=>controller.pause('view',event.detail!=='discover'));window.addEventListener('pagehide',()=>controller.dispose());
  $('#hero').addEventListener('keydown',event=>{if(event.key==='ArrowRight'){event.preventDefault();controller.next();}if(event.key==='ArrowLeft'){event.preventDefault();controller.previous();}});$('#hero-book').addEventListener('click',()=>goView('equipment'));
  for(const button of $('#font-options').children)button.addEventListener('click',()=>updatePreferences({font:button.dataset.font}));$('#motion-reduce').addEventListener('change',()=>updatePreferences({reduceMotion:$('#motion-reduce').checked}));
- function closeDialog(dialog){if(reduced()){dialog.close();return;}dialog.classList.add('closing');setTimeout(()=>{dialog.close();dialog.classList.remove('closing');},220);}
+ function closeDialog(dialog){closeSurface(dialog,{reduce:reduced()});}
  for(const button of document.querySelectorAll('[data-close]'))button.addEventListener('click',()=>closeDialog($('#'+button.dataset.close)));
- for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('cancel',event=>{event.preventDefault();closeDialog(dialog);});let y=null;const handle=dialog.querySelector('.sheet-handle');handle?.addEventListener('pointerdown',event=>{y=event.clientY;handle.setPointerCapture(event.pointerId);});handle?.addEventListener('pointerup',event=>{if(y!==null&&event.clientY-y>50)closeDialog(dialog);y=null;});}
- $('#profile-plans').addEventListener('click',()=>{closeDialog($('#profile-dialog'));onPlans();});$('#detail-book').addEventListener('click',()=>{if(detail&&detail.operationalStatus!=='maintenance'){closeDialog($('#detail-dialog'));onSelect(detail.id);}});
+ for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('cancel',event=>{event.preventDefault();closeDialog(dialog);});let y=null,outside=false;const isOutside=event=>{const box=dialog.getBoundingClientRect();return event.target===dialog&&(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom);};dialog.addEventListener('pointerdown',event=>{outside=isOutside(event);});dialog.addEventListener('click',event=>{if(outside&&isOutside(event))closeDialog(dialog);outside=false;});const handle=dialog.querySelector('.sheet-handle');handle?.addEventListener('pointerdown',event=>{y=event.clientY;handle.setPointerCapture(event.pointerId);});handle?.addEventListener('pointerup',event=>{if(y!==null&&event.clientY-y>50)closeDialog(dialog);y=null;});}
+ $('#detail-book').addEventListener('click',()=>{if(detail&&detail.operationalStatus!=='maintenance'){closeDialog($('#detail-dialog'));onSelect(detail.id);}});
  $('#detail-dialog').addEventListener('close',()=>{const context=detailContext;requestAnimationFrame(()=>{if(context&&document.body.dataset.view===context.view)window.scrollTo({top:context.y,behavior:'instant'});});});
- return {openDetail(item){detailContext={view:document.body.dataset.view,y:scrollY};detail=item;const heading=$('#detail-title');heading.textContent=item.name;const content=$('#detail-content');content.replaceChildren();const art=document.createElement('div');art.className='detail-art';art.innerHTML=deviceSvg(item,'detail');const label=document.createElement('p');label.className='detail-family';label.textContent=item.productName||item.name;const description=document.createElement('p');description.className='detail-intro';description.textContent=item.description;const specs=document.createElement('div');specs.className='detail-grid';for(const value of item.specs){const card=document.createElement('div');card.className='visual-spec';const number=document.createElement('strong');number.textContent=specLabel(value);const copy=document.createElement('span');copy.textContent=value;card.append(number,copy);specs.append(card);}content.append(art,heading,label,description,specs);$('#detail-book').disabled=item.operationalStatus==='maintenance';$('#detail-book').textContent=item.operationalStatus==='maintenance'?'维护中':'查看可用时间';$('#detail-dialog').showModal();document.dispatchEvent(new CustomEvent('borrow:detail',{detail:item}));}};
+ return {openDetail(item){detailContext={view:document.body.dataset.view,y:scrollY};detail=item;renderDetail({content:$('#detail-content'),title:detailTitle,extra:detailExtra,item,date:getDate(),records:getRecords()});$('#detail-book').disabled=item.operationalStatus==='maintenance';$('#detail-book').textContent=item.operationalStatus==='maintenance'?'维护中':'预约此设备';openDialog($('#detail-dialog'));document.dispatchEvent(new CustomEvent('borrow:detail',{detail:item}));}};
 }

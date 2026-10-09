@@ -1,5 +1,6 @@
-import { equipment, slots, BookingError, localDate } from './booking.js';
+import { equipment, slots, BookingError, localDate, isBusinessDate, businessMoment } from './booking.js';
 import { freeSlots, addDays } from './planning.js';
+import {derivePlanState} from './plan-state.js';
 
 export const creativeScenes = [
  ['interview','校园采访','把人物的故事，收进镜头。','声画同行','violet',['gimbal-g1','microphone-m1','light-f1','support-t2'],20],
@@ -15,21 +16,25 @@ export const creativeScenes = [
 ].map(([id,name,description,tag,tone,ids,minutes])=>({id,name,description,tag,tone,ids,minutes}));
 
 export function checkMoment(date,slot,{allowPast=false}={}){
- const parsed=new Date(`${date}T12:00:00`);
- if(typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number.isNaN(parsed.getTime())||localDate(parsed)!==date||(!allowPast&&date<localDate())||date>addDays(localDate(),365)||!slots.includes(slot))throw new BookingError('请选择未来一年内的有效日期与时段。');
+ if(!isBusinessDate(date)||(!allowPast&&date<localDate())||date>addDays(localDate(),365)||!slots.includes(slot))throw new BookingError('请选择未来一年内的有效日期与时段。');
 }
 export function replacements(id,date,slot,records,catalog=equipment,excluded=[]){
  const original=catalog.find(item=>item.id===id);if(!original)return [];
  return catalog.filter(item=>item.id!==id&&!excluded.includes(item.id)&&item.capability===original.capability&&item.operationalStatus!=='maintenance'&&freeSlots(records,date,item.id).includes(slot)).map(item=>({...item,fit:item.category===original.category?100:75,reason:item.category===original.category?'同类能力与目标时段均匹配':'同用途能力匹配；请核对附件接口'})).sort((a,b)=>b.fit-a.fit).slice(0,3);
 }
 export function inspectPlan(plan,records,catalog=equipment,{allowPast=false}={}){
- checkMoment(plan.date,plan.slot,{allowPast});
+ const timed=!!plan.date&&!!plan.slot;
+ if(timed)checkMoment(plan.date,plan.slot,{allowPast});
+ else{if(plan.date)checkMoment(plan.date,slots[0],{allowPast});if(plan.slot&&!slots.includes(plan.slot))throw new BookingError('请选择有效时段。');}
  const ids=plan.equipmentIds;
- if(!Array.isArray(ids)||!ids.length||ids.length>8||new Set(ids).size!==ids.length||ids.some(id=>!catalog.some(item=>item.id===id)))throw new BookingError('请选择1～8件不同的有效设备。');
- const expired=plan.date<localDate()||(plan.date===localDate()&&new Date(`${plan.date}T${plan.slot.slice(-5)}:00`)<=new Date());
- const items=ids.map(id=>{const item=catalog.find(item=>item.id===id);const secured=!expired&&!!plan.userId&&records.some(row=>row.userId===plan.userId&&row.equipmentId===id&&row.date===plan.date&&row.slot===plan.slot);const available=!expired&&item.operationalStatus!=='maintenance'&&(secured||freeSlots(records,plan.date,id).includes(plan.slot));return {...item,available,secured,reason:expired?'这次计划已结束':item.operationalStatus==='maintenance'?'维护中':secured?'已为你锁定':available?'这个时段可用':'时段已占用或已结束',alternatives:available||expired?[]:replacements(id,plan.date,plan.slot,records,catalog,ids)};});
+ if(!Array.isArray(ids)||ids.length>8||new Set(ids).size!==ids.length||ids.some(id=>!catalog.some(item=>item.id===id)))throw new BookingError('请选择最多8件不同的有效设备。');
+ if(!timed||!ids.length){const items=ids.map(id=>({...catalog.find(item=>item.id===id),available:false,secured:false,reason:'选好时间，再查看可用性',alternatives:[]}));const checked={...plan,items,expired:false,available:0,reserved:0,reservable:0,blocked:0,total:ids.length,readiness:ids.length?50:0};return {...checked,planState:derivePlanState(checked,records)};}
+ const expired=businessMoment(plan.date,plan.slot.slice(-5))<=new Date();
+ const items=ids.map(id=>{const item=catalog.find(item=>item.id===id);const secured=!expired&&!!plan.userId&&records.some(row=>row.status!=='cancelled'&&row.userId===plan.userId&&row.equipmentId===id&&row.date===plan.date&&row.slot===plan.slot);const available=!expired&&item.operationalStatus!=='maintenance'&&(secured||freeSlots(records,plan.date,id).includes(plan.slot));return {...item,available,secured,reason:expired?'这次计划已结束':item.operationalStatus==='maintenance'?'维护中':secured?'已为你锁定':available?'这个时段可预约':'时段已占用或已结束',alternatives:available||expired?[]:replacements(id,plan.date,plan.slot,records,catalog,ids)};});
  const available=items.filter(item=>item.available).length;
- return {...plan,expired,items,available,total:items.length,readiness:Math.round(available/items.length*100),checkedAt:new Date().toISOString(),capacityMeaning:'所选设备在目标时段可用或已为本人锁定的比例，不包含电量或归还状态'};
+ const reserved=items.filter(item=>item.secured).length,reservable=items.filter(item=>item.available&&!item.secured).length;
+ const checked={...plan,expired,items,available,reserved,reservable,blocked:items.length-available,total:items.length,readiness:Math.round(available/items.length*100),checkedAt:new Date().toISOString(),capacityMeaning:'所选设备在目标时段可用或已为本人锁定的比例，不包含电量或归还状态'};
+ return {...checked,planState:derivePlanState(checked,records)};
 }
 export function recommendCreative(value,records,catalog=equipment){
  if(!value||typeof value!=='object'||Array.isArray(value))throw new BookingError('顾问没有返回有效装备方案，请重新描述你的计划。',502);

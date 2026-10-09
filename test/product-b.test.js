@@ -36,8 +36,8 @@ test('扩充后台台账用于AI查询与六节周报，替代设备来自实际
  const ai=createAiAssistant({config,fetchImpl:async(url,{body})=>{context=JSON.parse(JSON.parse(body).messages[1].content).context;return {ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify({intent:'availability',date:date(),equipmentId:'gimbal-g1',slot:'14:00–16:00'})}}]})};}});
  const records=[{equipmentId:'gimbal-g1',date:date(),slot:'14:00–16:00'}];const result=await ai.assist({mode:'availability',question:'明日下午云台相机'},records);assert.equal(context.catalog.length,28);assert.deepEqual(result.matches[0].slots,[]);
  const alternatives=answerQuery(bookingContext([]),{intent:'alternatives',date:date(),equipmentId:'projector',slot:'14:00–16:00'});assert.equal(alternatives.matches.length,2);assert.ok(alternatives.matches.every(item=>item.name.includes('投影')));
- const report=createAiAssistant({config,fetchImpl:async()=>({ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify({sections:{overview:['window','count','sample'],popular:['popular'],peak:['peak'],anomalies:['anomalies'],utilization:['utilization']},suggestions:['collect-samples','review-plan']})}}]})})});
- const output=await report.assist({mode:'report'},records);assert.equal(output.sections.length,6);assert.equal(output.source.total,1);assert.equal(output.source.devices.length,28);assert.equal(output.source.capacity,546);assert.match(output.text,/有效预约 1 条/);
+ const report=createAiAssistant({config,fetchImpl:async()=>({ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify({sections:{overview:['window','count','sample'],popular:['popular'],peak:['peak'],lowBooking:['lowBooking'],occupancy:['utilization']},suggestions:['collect-samples','review-plan']})}}]})})});
+ const output=await report.assist({mode:'report'},records.map(row=>({...row,date:localDate()})));assert.equal(output.sections.length,6);assert.equal(output.source.total,1);assert.equal(output.source.devices.length,28);assert.equal(output.source.capacity,546);assert.match(output.text,/有效预约 1 条/);
 });
 function fakeClock(){let task=null;return {set(fn){task=fn;return 1;},clear(){task=null;},tick(){task?.();},running:()=>!!task};}
 test('28件查询上下文保留真实台账/匿名预约/时段，避免重复周报长文本；周报仍保留完整依据',()=>{
@@ -45,7 +45,7 @@ test('28件查询上下文保留真实台账/匿名预约/时段，避免重复�
  const context=bookingContext([record]),query=modelContext(context,'availability');
  assert.equal(query.catalog.length,28);assert.deepEqual(query.reservations,[{equipmentId:record.equipmentId,date:record.date,slot:record.slot}]);
  assert.equal(query.stats.slotCounts.length,3);assert.equal(query.stats.peak[0].slot,record.slot);assert.equal(query.facts,undefined);assert.equal(query.actions,undefined);assert.equal(query.cleanRecords,undefined);
- assert.ok(JSON.stringify(query).length<JSON.stringify(modelContext(context)).length);assert.equal(modelContext(context).facts,context.facts);
+ assert.ok(JSON.stringify(query).length<JSON.stringify(context).length);assert.ok(JSON.stringify(modelContext(context)).length<JSON.stringify(context).length);assert.equal(modelContext(context).facts,context.facts);
 });
 test('轮播自动切换、边界循环；手动选择持久暂停，不在用户操作后抢画面',()=>{
  const clock=fakeClock(),changes=[];const carousel=createCarousel({count:5,scheduler:clock,onChange:index=>changes.push(index)});

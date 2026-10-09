@@ -7,7 +7,7 @@ import { addDays, freeSlots, planSummary } from '../src/planning.js';
 import { validateBooking, localDate } from '../src/booking.js';
 const config={YOSHUB_API_KEY:'unit-test-secret',YOSHUB_BASE_URL:'https://unit-test.example/v1',YOSHUB_MODEL:'test-model'};
 const response=content=>({ok:true,json:async()=>({choices:[{message:{content}}],usage:{prompt_tokens:12,completion_tokens:8}})});
-const report=JSON.stringify({sections:{overview:['window','count','sample'],popular:['popular'],peak:['peak'],anomalies:['anomalies'],utilization:['utilization']},suggestions:['collect-samples','review-plan']});
+const report=JSON.stringify({sections:{overview:['window','count','sample'],popular:['popular'],peak:['peak'],lowBooking:['lowBooking'],occupancy:['utilization']},suggestions:['collect-samples','review-plan']});
 
 test('规划统计由真实记录生成，七天容量、跨月日期和时间终点正确',()=>{
  const now=new Date('2026-10-07T11:00:00');
