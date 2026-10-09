@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-10-08T00:52:18+08:00",
+  "teacherObservedReflectionBranch": "master",
+  "teacherReportDate": "2026-10-07",
+  "previousMaster": "ff2ba9dfd38313895c54df3b450e7fdcd35e4239",
+  "courseOnlyCommit": "19041ea6e38472d21ae5b32c7883cc3d9f0095e3",
+  "author": "蒲嘉洋",
+  "files": [
+    "docs/反思录/蒲嘉洋/day10.md",
+    "docs/反思录/蒲嘉洋/day7.md",
+    "docs/反思录/蒲嘉洋/day8.md",
+    "docs/反思录/蒲嘉洋/day9.md"
+  ],
+  "productBranchMerged": false,
+  "githubMainChanged": false,
+  "oldTagsChanged": false,
+  "pushed": true,
+  "independentReviewCommit": "ea5025539077d547486aedc961159911b3582c0c",
+  "independentReviewFiles": [
+    "README.md",
+    "docs/个人质量验收.md",
+    "docs/交叉验收/发给吴晟的issue.md",
+    "docs/交叉验收/吴晟.md",
+    "docs/任务看板.md",
+    "docs/反思录/蒲嘉洋/day6.md",
+    "docs/第6天完工报告.md"
+  ],
+  "verifiedRemoteMaster": "ea5025539077d547486aedc961159911b3582c0c",
+  "defaultBranchOfficialSelfcheck": {
+    "day10": 0,
+    "day9": 0,
+    "day7": 0,
+    "day8": 0
+  },
+  "publishedIssues": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "missingIssue": 10,
+  "teacherServerRefreshVerified": false
+}

@@ -1,27 +1,26 @@
-# 第10天完工报告（2026-10-08提前准备）
+# 第10天完工报告（2026-10-08提前准备，10-09整理）
 
-姓名：蒲嘉洋。章节：Demo Day材料准备。实际准备日期2026-10-08，不代表正式Day10课堂已经发生。
-本人独立完成，使用个人黑盒验收、自动化测试、AI代码审计、CI和Git恢复演练作为质量验证。
+姓名：蒲嘉洋。项目：借一下 · Borrow Lab，老师选题5「实验室设备预约系统」。正式Day10为2026-10-16；本报告记录已经发生的技术与材料准备，不表示正式路演已完成。
 
-## 已真实完成
+本人独立负责，AI工具辅助实现与验证，不虚构同学互审或教师评价。
 
-- [x] 30秒项目介绍、3分钟/5分钟路演稿
-- [x] 用户痛点、AI/方案/冲突、架构、测试/CI、真实Bug和未来规划
-- [x] 现场断网90秒口述备用演示方案；十章证据集中审计
-- [x] day10.md记录真实经历、对话摘要、验收证据及未完成边界。
+## 已真实准备
 
-## 交付证据
+- 台账、时段预约、冲突拒绝、我的预约、取消释放、到期标记；SQLite事务与有效预约唯一索引保护并发，整套预约全有或全无。
+- 2026-10-08本机161组测试通过/0失败；两独立进程12次抢槽1成功、11冲突，同槽有效记录1条。此为真实历史本机证据，不冒充今天新CI。
+- 自然语言查询读取真实台账；六部分周报与DeepSeek真实输出已核对。预约占用率不等于实际使用率，模型失败不影响普通预约。
+- 8分钟校园采访故事、答辩回答、断网与模型失败备用路线已准备。
+- 2026-10-08 23:39已生成90秒功能开场视频（1920×1080、H.264/AAC），用本机Edge真实截图、合成配音和许可音乐剪辑；不是本人现场录屏或8分钟讲解彩排。
 
-- [反思](https://gitee.com/pujiayang-vibe/vibe-pujiayang/blob/day10/docs/反思录/蒲嘉洋/day10.md)
-- [本章提前快照](https://gitee.com/pujiayang-vibe/vibe-pujiayang/tree/day10)：本次只创建新tag，不动day1～day6。
-- [最终审计](https://gitee.com/pujiayang-vibe/vibe-pujiayang/blob/feat/glass-review-workspace/docs/十天交付最终审计.md)：Issue/官方自查/CI成功状态以该表实际核验为准。
-- [历史86组测试](https://gitee.com/pujiayang-vibe/vibe-pujiayang/blob/day10/docs/验收证据/桌面最终精修/tests.txt)
-- [CI](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/workflows/ci.yml)：mock，不消耗API余额。
-- 本地新版 http://localhost:3004/ ；新版未部署、未合main。旧公开静态站不是新版服务端产品。
+## 可核验材料
 
-## 最大卡点与未完成
+- [day10提前技术快照](https://gitee.com/pujiayang-vibe/vibe-pujiayang/tree/day10)与[反思](https://gitee.com/pujiayang-vibe/vibe-pujiayang/blob/day10/docs/反思录/蒲嘉洋/day10.md)：标签于2026-10-08创建，原样保留，今天不新建或移动标签。
+- 本机：docs/8分钟Demo完整故事.md、docs/Demo彩排.md、docs/老师选题符合性核查.md；161组原始日志data/course-final-tests.log。
+- 视频：E:/桌面/vibecode/Borrow Lab 演示视频/Borrow Lab · 90秒功能开场片.mp4；同目录视频验收.json记录90秒与解码通过。MP4及本地演示数据库不进入Git。
+- [课程最终审计](https://gitee.com/pujiayang-vibe/vibe-pujiayang/blob/feat/glass-review-workspace/docs/十天交付最终审计.md)：最新本地补充尚未提交时，以本机文件为准，不假装旧day10快照包含后续全部改进。
 
-完成的是提前路演材料，不是正式Demo Day。本人路演、教师真实反馈、成绩与比赛结果不能提前填写；90秒录像仍待本人录制。
+## 仍需真实完成
 
-正式当天最小动作：填写当天真实反思、实名commit并push、确认本报告、官方自查与CI。保持本次tag不覆盖，不倒签。
+本人8分钟完整计时、正式课堂路演、真实教师反馈尚未发生。正式当天补真实反思、实名commit与push、原样官方自查、报告确认及CI；不倒签、不改自查程序。本轮未部署、未合并主分支。
 
+正式交卷与CI状态以课程最终审计和真实执行证据为准；提前材料不冒充正式当天课堂经历。

@@ -1,4 +1,6 @@
 # 第10天：Demo Day（提前准备记录）
+完整技术证据：[day10归档快照](https://gitee.com/pujiayang-vibe/vibe-pujiayang/tree/day10/docs/反思录/蒲嘉洋/day10.md)。此反思同步到课程默认分支供巡查读取，产品代码保留在功能分支。
+
 姓名：蒲嘉洋。准备2026-10-08；正式Day10计划2026-10-16尚未到。
 
 ## 实际完成与反思
