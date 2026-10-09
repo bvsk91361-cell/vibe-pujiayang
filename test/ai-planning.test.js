@@ -10,7 +10,7 @@ const response=content=>({ok:true,json:async()=>({choices:[{message:{content}}],
 const report=JSON.stringify({sections:{overview:['window','count','sample'],popular:['popular'],peak:['peak'],lowBooking:['lowBooking'],occupancy:['utilization']},suggestions:['collect-samples','review-plan']});
 
 test('规划统计由真实记录生成，七天容量、跨月日期和时间终点正确',()=>{
- const now=new Date('2026-10-07T11:00:00');
+ const now=new Date('2026-10-07T11:00:00+08:00');
  assert.deepEqual(freeSlots([], '2026-10-07','camera',now),['14:00–16:00','19:00–21:00']);
  assert.deepEqual(freeSlots([], '2026-10-06','camera',now),[]);
  assert.equal(addDays('2026-12-30',3),'2027-01-02');

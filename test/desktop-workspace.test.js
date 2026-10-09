@@ -45,7 +45,7 @@ test('本人已经锁定的设备计入准备度，其他账号不共享',()=>{
  assert.equal(commonAvailability(plan(),r,equipment).find(row=>row.date===date()).complete,2);
 });
 test('共同时间不包含已结束时段，维护设备不参与空闲',()=>{
- const now=new Date('2026-10-08T17:00:00'),p={...plan(),date:'2026-10-08',equipmentIds:['camera','light-f3']};
+ const now=new Date('2026-10-08T17:00:00+08:00'),p={...plan(),date:'2026-10-08',equipmentIds:['camera','light-f3']};
  const days=commonAvailability(p,[],equipment,'2026-10-08',now);
  assert.equal(days[0].moments.length,1);assert.equal(days[0].best.slot,slots[2]);assert.equal(days[0].best.available,1);assert.equal(days[0].complete,0);
 });

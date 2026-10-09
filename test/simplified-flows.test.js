@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {join,resolve} from 'node:path';
+import {join,resolve,relative,isAbsolute,basename} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {createProductStore} from '../src/product-store.js';
 import {createApp} from '../server.js';
@@ -17,10 +17,14 @@ const date=()=>addDays(localDate(),2),slot='14:00–16:00';
 const store=t=>{const db=createProductStore(':memory:');t.after(()=>db.close());return db;};
 const input=(user,ids=['camera','projector','recorder'])=>({userId:user.id,equipmentIds:ids,date:date(),slot,name:'采访搭配',requestId:randomUUID()});
 const memory=()=>{const values=new Map();return {getItem:key=>values.get(key)||null,setItem:(key,value)=>values.set(key,value)};};
+function assertFixtureDirectory(directory){
+ const target=resolve(directory),child=relative(resolve(tmpdir()),target);
+ assert.ok(child&&!isAbsolute(child)&&child===basename(target)&&child.startsWith('borrow-simplify-'),'Only this test temporary directory may be removed');
+}
 
 test('创建空方案真实可恢复；编辑、保存和重开都不产生预约',async t=>{
  const dir=await mkdtemp(join(tmpdir(),'borrow-simplify-'));let db=createProductStore(join(dir,'test.sqlite'));
- t.after(async()=>{db.close();assert.ok(resolve(dir).startsWith(join(resolve(tmpdir(),'borrow-simplify-'))));await rm(dir,{recursive:true,force:true});});
+ t.after(async()=>{db.close();assertFixtureDirectory(dir);await rm(dir,{recursive:true,force:true});});
  const user=db.users()[0],empty=db.savePlan(user.id,{name:'周五创作',sceneId:'custom',date:'',slot:'',equipmentIds:[]});
  assert.ok(empty.id);assert.equal(db.list().length,0);assert.equal(empty.planState.state,'DRAFT');
  db.savePlan(user.id,{...empty,name:'周五产品短片',equipmentIds:['camera','light-f1']},empty.id);db.close();db=createProductStore(join(dir,'test.sqlite'));
@@ -54,7 +58,7 @@ test('本人已预约设备不重复创建；其他身份的占用不能被当�
 
 test('同一请求重复提交与重启重放均幂等；取消后旧回执不能冒充有效预约',async t=>{
  const dir=await mkdtemp(join(tmpdir(),'borrow-simplify-'));let db=createProductStore(join(dir,'test.sqlite'));
- t.after(async()=>{db.close();assert.ok(resolve(dir).startsWith(resolve(tmpdir())+'\\borrow-simplify-'));await rm(dir,{recursive:true,force:true});});
+ t.after(async()=>{db.close();assertFixtureDirectory(dir);await rm(dir,{recursive:true,force:true});});
  const user=db.users()[0],request=input(user),first=db.reserveSet(request);assert.deepEqual(db.reserveSet(request),first);assert.equal(db.list().length,3);
  db.close();db=createProductStore(join(dir,'test.sqlite'));assert.deepEqual(db.reserveSet(request),first);
  assert.throws(()=>db.reserveSet({...request,slot:'19:00–21:00'}),error=>error.status===409);
