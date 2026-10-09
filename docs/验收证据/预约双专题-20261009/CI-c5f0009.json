@@ -1,0 +1,37 @@
+{
+  "sha": "c5f0009e4d85b457d028bc769f0d428ae1dacb7f",
+  "run": 37865309959,
+  "url": "https://github.com/bvsk91361-cell/vibe-pujiayang/actions/runs/37865309959",
+  "steps": [
+    {
+      "name": "Business rules and API tests",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5,
+      "started_at": "2026-10-09T00:32:42Z",
+      "completed_at": "2026-10-09T00:32:44Z"
+    },
+    {
+      "name": "Read-only MCP protocol check",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6,
+      "started_at": "2026-10-09T00:32:44Z",
+      "completed_at": "2026-10-09T00:32:44Z"
+    },
+    {
+      "name": "Coursework evidence gate",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7,
+      "started_at": "2026-10-09T00:32:44Z",
+      "completed_at": "2026-10-09T00:32:44Z"
+    }
+  ],
+  "testLines": [
+    "2026-10-09T00:32:44.2619561Z # tests 174",
+    "2026-10-09T00:32:44.2620538Z # pass 174",
+    "2026-10-09T00:32:44.2621003Z # fail 0",
+    "2026-10-09T00:32:44.2621998Z # skipped 0"
+  ]
+}

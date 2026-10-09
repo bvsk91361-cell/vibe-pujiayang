@@ -1,63 +1,59 @@
-# 蒲嘉洋的 Vibe Coding 课程实践
+# 借一下 · Borrow Lab
 
-[![Course CI](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/workflows/ci.yml)
+蒲嘉洋独立负责、使用AI工具协作实现的高校实验实训与校园创作共享设备智能预约平台。候选分支：feat/glass-review-workspace。
+本地新版：http://localhost:3004/ 。本轮未部署、未合main。
 
-[在线器材预约演示](https://bvsk91361-cell.github.io/vibe-pujiayang/) · [GitHub 镜像](https://github.com/bvsk91361-cell/vibe-pujiayang)
+## 课程交付
 
-线上演示保存当前浏览器预约，不同设备不共享。本地 Node 版继续使用 JSON 持久化，部署差异见 [部署手册](docs/部署手册.md)。
+Day1正式6/6并冻结；Day2～Day6已被老师系统识别为提前完成（本人2026-10-08反馈）。
+[十天最终审计](docs/十天交付最终审计.md) · [十天总控台](docs/十天交付总控台.md) · [个人质量验收](docs/个人质量验收.md)。
 
-- 姓名：蒲嘉洋
-- 讨论组：第 10 组
-- 学习目标：学会把需求说清楚，验证 AI 生成的代码，使用 Git 留存版本，并交付可运行的项目。
+Day10报告[IKK8N3](https://gitee.com/pujiayang-vibe/vibe-pujiayang/issues/IKK8N3)已真实发布，十章Issue齐全；正式当天动作见最终审计。
 
-本仓库保存个人项目代码、需求文档、测试和真实学习过程记录。
+day1～day6归档tag不移动。day7～day10为2026-10-08实际提前准备，不假装未来课堂已发生。本人独立完成，使用个人黑盒验收、自动化测试、AI代码审计、CI和Git恢复演练作为质量验证。
 
-## 项目：借一下 · 实验室设备预约（题库第5项）
+## 当前产品与工程
 
-三条样例设备台账、日期/时段预约、冲突拒绝、我的预约筛选、取消与到期标记。后端保存本机 JSON 数据，刷新和重启保留记录。[正式选题](docs/正式选题.md)说明最小闭环和第7天AI周报/查询计划；目前尚未接入真实大模型。
+- 28件/10类设备、原创品牌/Hero与线性场景图、搜索与详情。
+- 场景组合、可独立保存的创作方案、真实空闲核对、规则替换；单件与最多8件整套原子事务预约。
+- 冲突拒绝、取消后重约、SQLite本机持久化；个人账号/头像/偏好/收藏与历史。
+- Yos Hub/deepseek-v4-flash查询、创作推荐与六部分周报。Key只在后端环境变量/本机.env，mock测试不烧余额。
+- 10-09预约双专题Edge真实点击10组通过，四桌面尺寸通过；新CI174/174与[证据](docs/验收证据/预约双专题-20261009/联合浏览器.json)可核验。10-08真实周报9.588秒、Vlog推荐5.730秒证据保留，开放式模型需求仍可能上游超时。
 
-### 本地启动
+[数据模型](docs/数据模型说明.md) · [AI接入与成本](docs/AI接入与成本.md) · [桌面验收](docs/桌面最终精修验收.md) · [设计参考与许可证](docs/设计参考与许可证.md)。
 
-需要 Node.js 22 或更高版本，无需安装第三方依赖。
+## 本地运行
 
-```bash
-npm start
+Node.js22.14或兼容更新版，无第三方运行依赖：
+
+```powershell
+node scripts/seed-product.js
+$env:PORT="3004"
+node server.js
 ```
 
-浏览器打开 `http://localhost:3000`。停止服务：在启动终端按 Ctrl+C。
+已有3004服务无需重复启动。配置AI.ps1仅在本机隐藏输入Key；禁止发到聊天、前端或Git。
+数据在被Git忽略的data/borrow-lab.sqlite；种子不会清空预约或偏好。
+本地账号切换不是公网身份认证；完整新版需Node+SQLite，不宣称离线PWA或商店上架。
 
-```bash
+```powershell
 npm test
+python -X utf8 ci_check.py --through-day 10 --name "蒲嘉洋"
+python -X utf8 "交作业自查.py" --day N --name "蒲嘉洋"
 ```
 
-2026-10-07 实际运行：13 组测试全部通过。覆盖五条核心规则、真实 HTTP 闭环、取消/重新预约、持久化、并发重复请求、中文分块、静态存储失败、CSV 边界、我的预约筛选与到期边界。浏览器证据见 [验收证据](docs/验收证据/)。
+官方脚本保持原样，检查今日实名commit、反思、今日入库、origin远程tag；GiteeIssue/CI需另核对。正式当天不覆盖已有dayN。
+[本地运行与演示说明](docs/本地运行与演示说明.md)。
 
-### 数据与适用范围
+## 证据与演示
 
-数据写入 `data/reservations.json`，不进入 Git。本版为单进程、本机课程原型，没有账号登录；可以查看和取消共享记录。公网部署前需补身份验证、取消权限和备份。
+[![Course CI](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/workflows/ci.yml/badge.svg?branch=feat%2Fglass-review-workspace)](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/workflows/ci.yml)
 
-### 第 1—6 天个人补做
+[GitHub镜像](https://github.com/bvsk91361-cell/vibe-pujiayang) · [Gitee报告列表](https://gitee.com/pujiayang-vibe/vibe-pujiayang/issues) · [历史线上静态版](https://bvsk91361-cell.github.io/vibe-pujiayang/)。
+旧线上仅浏览器存储，不含新版后端AI，不能冒充当前产品公网部署。
 
-按本人要求独立推进。使用2026-10-07实际提交和验证，不倒签，不虚构组长、同学互评或教师批阅。标签是本次补做材料的归档时点，不代表曾按六个历史日期完成开发。本人独立验收与课程替代流程是否获认可，需本人和教师实际确认。
+[Day1～6原过程审计](docs/第1-6天个人总审计报告.md) · [Git恢复](docs/急救演练.md) · [代码审计](docs/第5天代码审计.md) · [Demo彩排](docs/Demo彩排.md) · [8分钟完整故事](docs/8分钟Demo完整故事.md) · [老师选题核查](docs/老师选题符合性核查.md)。
 
-| 天数 | 审计材料 | 反思 |
-|---|---|---|
-| 1 | [环境](docs/环境审计.md) · [电梯稿](docs/电梯稿.md) | [day1](docs/反思录/蒲嘉洋/day1.md) |
-| 2 | [需求、骨架、个人 PR](docs/第2天个人审计.md) | [day2](docs/反思录/蒲嘉洋/day2.md) |
-| 3 | [两组真实闭环摘要](docs/反思录/对话/day3-两组真实闭环.md) | [day3](docs/反思录/蒲嘉洋/day3.md) |
-| 4 | [外部组件](docs/外部组件接入.md) · [部署](docs/部署手册.md) | [day4](docs/反思录/蒲嘉洋/day4.md) |
-| 5 | [代码审计与整改](docs/第5天代码审计.md) | [day5](docs/反思录/蒲嘉洋/day5.md) |
-| 6 | [急救演练](docs/急救演练.md) · [个人质量验收](docs/个人质量验收.md) | [day6](docs/反思录/蒲嘉洋/day6.md) |
+独立演示：node scripts/demo-day.js（3005，每次新库，日常预约不清空）。浏览器流程smoke不是本人讲解彩排。
 
-- 实际补做日期：2026-10-07；不伪造 2026-09-18 的提交。
-- 需求：[PRD](docs/PRD.md)；方案：[技术方案](docs/技术方案.md)；优先级：[任务看板](docs/任务看板.md)。
-- 反思与实际对话摘要：[day6](docs/反思录/蒲嘉洋/day6.md)。
-- 个人质量验收：[独立验收记录](docs/个人质量验收.md)。本人独立完成，使用个人黑盒验收、自动化测试、AI代码审计、CI和Git恢复演练作为质量验证。
-- CI：GitHub Actions 真实成功，README 为动态徽章；修复运行见 [37564369479](https://github.com/bvsk91361-cell/vibe-pujiayang/actions/runs/37564369479)。
-- 完工报告：[第6天完工报告](https://gitee.com/pujiayang-vibe/vibe-pujiayang/issues/IKJT3S)。当前流程按本人独立质量验证记录，不声称同学参与。
-
-## 第7至10天提前交付
-
-2026-10-08真实提前准备：day7～day10反思与标签已推送。第7～9天报告已发布，第10天正文已保存，因Gitee当日Issue上限由本人明天发布。
-
-本默认分支补齐巡查材料；完整产品与技术证据保留在feat/glass-review-workspace及day7～day10快照。[十天最终审计](https://gitee.com/pujiayang-vibe/vibe-pujiayang/blob/feat/glass-review-workspace/docs/十天交付最终审计.md)。不表示未来课堂或正式路演已经发生。
+本人现场彩排/录像/正式路演与真实反馈仍待发生；不虚构同学参与、教师批准、成绩或比赛结果。

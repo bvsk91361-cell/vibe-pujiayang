@@ -1,0 +1,79 @@
+{
+  "database": "data/demo/demo-2026-10-09-1791505593794.sqlite",
+  "checkedAt": "2026-10-09T00:26:34.004Z",
+  "steps": [
+    {
+      "name": "导航直接预约无默认麦克风、双栏、没有设备不能提交",
+      "status": "PASS"
+    },
+    {
+      "name": "真实28件10类与搜索分类、维护禁用、Escape恢复焦点",
+      "status": "PASS"
+    },
+    {
+      "name": "自由选择相机与同槽双方预读",
+      "status": "PASS"
+    },
+    {
+      "name": "真实预约凭证、提交中跨页选择保护与刷新持久化",
+      "status": "PASS"
+    },
+    {
+      "name": "第二身份真实409、不显示成功且保留设备",
+      "status": "PASS"
+    },
+    {
+      "name": "取消记录轻量分区、服务端释放、另一身份再次预约",
+      "status": "PASS"
+    },
+    {
+      "name": "设备详情正确带入、更换保留日期时段、实际写入更换后设备",
+      "status": "PASS"
+    },
+    {
+      "name": "已取消有效记录再次预约正确带入、被占用不放行",
+      "status": "PASS"
+    },
+    {
+      "name": "多设备场景更换一件保留其他设备与原时间",
+      "status": "PASS"
+    },
+    {
+      "name": "四尺寸记录布局、选择器视口边界、按钮不竖排",
+      "status": "PASS"
+    }
+  ],
+  "widths": [
+    {
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "buttons": 0,
+      "gap": 65
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "overflow": false,
+      "buttons": 0,
+      "gap": 65
+    },
+    {
+      "width": 1600,
+      "height": 900,
+      "overflow": false,
+      "buttons": 0,
+      "gap": 65
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "overflow": false,
+      "buttons": 0,
+      "gap": 65
+    }
+  ],
+  "errors": [],
+  "paidCalls": 0,
+  "durationMs": 17365
+}

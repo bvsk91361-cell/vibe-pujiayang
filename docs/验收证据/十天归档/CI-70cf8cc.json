@@ -1,0 +1,64 @@
+{
+  "id": 112902898634,
+  "name": "test",
+  "status": "completed",
+  "conclusion": "success",
+  "html_url": "https://github.com/bvsk91361-cell/vibe-pujiayang/actions/runs/37653580416/job/112902898634",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-python@v5",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Business rules and API tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Read-only MCP protocol check",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Coursework evidence gate",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-python@v5",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-node@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}
