@@ -115,6 +115,6 @@ export function createAiAssistant({ config=process.env, fetchImpl=fetch, timeout
    }
   }finally{busy=false;}
  }
- return {status,assist};
+ return {status,assist,setCatalog(next){catalog=next;}};
 }
 

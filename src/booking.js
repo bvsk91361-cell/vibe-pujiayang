@@ -22,13 +22,13 @@ export function isBusinessDate(date) {
 export class BookingError extends Error {
   constructor(message, status = 422) { super(message); this.status = status; }
 }
-export function validateBooking(input, records, today = localDate(), now = new Date()) {
+export function validateBooking(input, records, today = localDate(), now = new Date(), catalog = equipment) {
   if (!input || typeof input !== 'object') throw new BookingError('请填写预约信息。');
   const { equipmentId, date, slot } = input;
   const name = typeof input.name === 'string' ? input.name.trim() : '';
   if (!name || name.length > 30) throw new BookingError('姓名需填写 1–30 个字符。');
-  if (!equipment.some(item => item.id === equipmentId)) throw new BookingError('请选择有效器材。');
-  if (equipment.find(item=>item.id===equipmentId).operationalStatus==='maintenance') throw new BookingError('这件设备正在维护，请选择其他设备。');
+  if (!catalog.some(item => item.id === equipmentId)) throw new BookingError('请选择有效器材。');
+  if (catalog.find(item=>item.id===equipmentId).operationalStatus==='maintenance') throw new BookingError('这件设备正在维护，请选择其他设备。');
   if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new BookingError('请选择有效日期。');
   if (!isBusinessDate(date) || date < today) throw new BookingError('请选择今天或以后的有效日期。');
   if (!slots.includes(slot)) throw new BookingError('请选择有效时段。');

@@ -27,7 +27,7 @@ export function bookingContext(records, start = localDate(), catalog = equipment
  const peak=total?slotCounts.filter(item=>item.count===Math.max(...slotCounts.map(item=>item.count))):[];
  const activeDevices=devices.filter(item=>item.capacity);
  const lowBooked=activeDevices.filter(item=>item.booked===Math.min(...activeDevices.map(item=>item.booked)));
- const scheduling=activeDevices.filter(item=>lowBooked.some(low=>low.id===item.id)).flatMap(item=>Array.from({length:7},(_,index)=>addDays(start,index)).flatMap(date=>freeSlots(clean,date,item.id).map(slot=>({equipmentId:item.id,name:item.name,date,slot})))).slice(0,3);
+ const scheduling=activeDevices.filter(item=>lowBooked.some(low=>low.id===item.id)).flatMap(item=>Array.from({length:7},(_,index)=>addDays(start,index)).flatMap(date=>freeSlots(clean,date,item.id,undefined,catalog).map(slot=>({equipmentId:item.id,name:item.name,date,slot})))).slice(0,3);
  const percentage=(a,b)=>b?(a/b*100).toFixed(1)+'%':'维护中，不计可用容量';
  const facts={
   window:`统计窗口：${start} 至 ${end}（七天预约台账，以列出的起止日期为准）。`,
@@ -67,7 +67,7 @@ export function renderReport(context,selection) {
 export function answerQuery(context,query) {
  if(query.intent==='other-times'){
   const devices=context.catalog.filter(item=>query.equipmentIds?query.equipmentIds.includes(item.id):query.equipmentId===null||item.id===query.equipmentId);
-  const matches=Array.from({length:7},(_,index)=>addDays(query.date||context.today,index)).flatMap(date=>devices.map(item=>({id:item.id,name:item.name,date,slots:freeSlots(context.cleanRecords,date,item.id).filter(slot=>date!==(query.date||context.today)||slot!==query.slot)}))).filter(item=>item.slots.length).slice(0,6);
+  const matches=Array.from({length:7},(_,index)=>addDays(query.date||context.today,index)).flatMap(date=>devices.map(item=>({id:item.id,name:item.name,date,slots:freeSlots(context.cleanRecords,date,item.id,undefined,context.catalog).filter(slot=>date!==(query.date||context.today)||slot!==query.slot)}))).filter(item=>item.slots.length).slice(0,6);
   return {text:`其他空闲时间\n${matches.length?matches.map(item=>`${item.date} · ${item.name}：${item.slots.join('、')}`).join('\n'):'未来七天没有找到这些设备的其他空闲时段，请调整日期或选择同用途设备。'}\n\n结果来自实时预约台账；尚未预约，确认提交时再次校验。`,matches,source:{date:query.date||context.today,days:7,catalog:devices}};
  }
  if(query.intent==='peak'){
@@ -76,13 +76,13 @@ export function answerQuery(context,query) {
  if(query.intent==='alternatives'){
   const original=context.catalog.find(item=>item.id===query.equipmentId);
   const same=context.catalog.filter(item=>item.id!==original.id&&item.capability===original.capability&&item.operationalStatus!=='maintenance');
-  const equivalents=query.date?same.map(item=>({name:item.name,slots:freeSlots(context.cleanRecords,query.date,item.id).filter(slot=>!query.slot||slot===query.slot)})):same.map(item=>({name:item.name,slots:[]}));
+  const equivalents=query.date?same.map(item=>({name:item.name,slots:freeSlots(context.cleanRecords,query.date,item.id,undefined,context.catalog).filter(slot=>!query.slot||slot===query.slot)})):same.map(item=>({name:item.name,slots:[]}));
   const available=equivalents.filter(item=>item.slots.length);
   let text=available.length?`同用途且指定时间空闲的替代设备：${available.map(item=>item.name+': '+item.slots.join('、')).join('；')}。`:same.length?(query.date?'同用途替代设备在指定时段均不可用，请调整日期或时段。':'同用途替代设备需明确日期/时段后再核对空闲。'):`台账中只有这一件同用途设备（${original.name}），没有同等用途替代设备。${context.catalog.filter(item=>item.id!==original.id).map(item=>item.name).join('、')}用途不同，不能当作等效替代。`;
-  if(query.date)text+=`\n${query.date} 原设备其他空闲时段：${freeSlots(context.cleanRecords,query.date,original.id).join('、')||'无'}。`;
+  if(query.date)text+=`\n${query.date} 原设备其他空闲时段：${freeSlots(context.cleanRecords,query.date,original.id,undefined,context.catalog).join('、')||'无'}。`;
   else text+='\n请明确日期和时段，可再查询原设备的空闲时间并改约。';
   return {text:`替代设备核对\n${text}`,matches:equivalents,source:{catalog:context.catalog}};
  }
- const matches=context.catalog.filter(item=>query.equipmentIds?query.equipmentIds.includes(item.id):query.equipmentId===null||item.id===query.equipmentId).map(item=>({id:item.id,name:item.name,maintenance:item.operationalStatus==='maintenance',slots:freeSlots(context.cleanRecords,query.date,item.id).filter(slot=>query.slot===null||query.slot===slot)}));
+ const matches=context.catalog.filter(item=>query.equipmentIds?query.equipmentIds.includes(item.id):query.equipmentId===null||item.id===query.equipmentId).map(item=>({id:item.id,name:item.name,maintenance:item.operationalStatus==='maintenance',slots:freeSlots(context.cleanRecords,query.date,item.id,undefined,context.catalog).filter(slot=>query.slot===null||query.slot===slot)}));
  return {text:`${query.date} 空闲查询\n${matches.map(item=>`${item.name}：${item.maintenance?'维护中':item.slots.length?item.slots.join('、'):'指定时段已被预约或已结束'}`).join('\n')}\n\n结果来自当前预约台账；提交时再次检测冲突。`,matches,source:{date:query.date,catalog:context.catalog}};
 }

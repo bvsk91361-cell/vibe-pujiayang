@@ -5,8 +5,8 @@ export function addDays(date, count) {
   value.setUTCDate(value.getUTCDate() + count);
   return Number.isNaN(value.getTime()) ? '' : value.toISOString().slice(0,10);
 }
-export function freeSlots(records, date, equipmentId, now = new Date()) {
-  if(equipment.find(item=>item.id===equipmentId)?.operationalStatus==='maintenance')return [];
+export function freeSlots(records, date, equipmentId, now = new Date(), catalog = equipment) {
+  if(catalog.find(item=>item.id===equipmentId)?.operationalStatus==='maintenance')return [];
   return slots.filter(slot => {
     const [hour, minute] = slot.slice(-5).split(':').map(Number);
     const ended = date < localDate(now) || (date === localDate(now) && businessMinutes(now) >= hour * 60 + minute);
@@ -38,7 +38,7 @@ export function commonAvailability(plan, records, catalog = equipment, start = l
         if(!ended&&secured)reserved++;
         if(!ended && item.operationalStatus !== 'maintenance'){
           if(secured)covered++;
-          else if(freeSlots(records,date,id,now).includes(slot)){reservable++;covered++;}
+          else if(freeSlots(records,date,id,now,catalog).includes(slot)){reservable++;covered++;}
         }
       }
       // `available` stays compatible with existing readiness / AI consumers.

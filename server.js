@@ -1,5 +1,7 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { DatabaseSync } from 'node:sqlite';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { equipment, slots, BookingError } from './src/booking.js';
@@ -8,6 +10,7 @@ import { createProductStore } from './src/product-store.js';
 import { creativeScenes,inspectPlan } from './src/creative.js';
 import { commonAvailability } from './src/planning.js';
 import {occupancyHeatmap} from './src/occupancy.js';
+import {createAdminAuth} from './src/admin-auth.js';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 const assets = new Map([
@@ -31,6 +34,11 @@ const assets = new Map([
   ['/settings.js',['public/settings.js','text/javascript; charset=utf-8']],
   ['/product-logic.css',['public/product-logic.css','text/css; charset=utf-8']],
   ['/brand.svg',['public/brand.svg','image/svg+xml']],
+  ['/admin',['public/admin.html','text/html; charset=utf-8']],
+  ['/admin/',['public/admin.html','text/html; charset=utf-8']],
+  ...['admin.js','admin-charts.js'].map(file=>['/'+file,['public/'+file,'text/javascript; charset=utf-8']]),
+  ['/admin.css',['public/admin.css','text/css; charset=utf-8']],
+  ['/admin-entry.css',['public/admin-entry.css','text/css; charset=utf-8']],
   ['/manifest.webmanifest',['public/manifest.webmanifest','application/manifest+json']],
   ['/', ['public/index.html', 'text/html; charset=utf-8']],
   ['/app.js', ['public/app.js', 'text/javascript; charset=utf-8']],
@@ -46,9 +54,21 @@ const assets = new Map([
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']]
   ,...['tokens.css','shell.css','showcase.css','workspace.css','product.css'].map(file=>['/'+file,['public/'+file,'text/css; charset=utf-8']])
 ]);
-export function createApp(store = createProductStore(resolve(root,'data/borrow-lab.sqlite'),{legacyFile:resolve(root,'data/reservations.json')}), assistant = null, {catalog=equipment,demo=null}={}) {
-  assistant ||= createAiAssistant({catalog});
-  return createServer(async (req, res) => {
+function defaultStore() {
+  const file=resolve(process.env.BORROW_DB_FILE||resolve(root,'data/borrow-lab.sqlite'));
+  // Protect the existing ledger before the first additive admin migration.
+  if(existsSync(file)){
+    const source=new DatabaseSync(file);
+    try{if(!source.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='admin_accounts'").get())source.prepare('VACUUM INTO ?').run(`${file}.pre-admin-${Date.now()}.sqlite`);}finally{source.close();}
+  }
+  return createProductStore(file,{legacyFile:process.env.BORROW_DB_FILE?undefined:resolve(root,'data/reservations.json')});
+}
+export function createApp(store = defaultStore(), assistant = null, options={}) {
+  const {catalog=equipment,demo=null,adminAuth=null,adminOrigin=null}=options;
+  const runtimeCatalog=()=>Object.hasOwn(options,'catalog')?catalog:(store.catalog?.()||catalog);
+  assistant ||= createAiAssistant({catalog:runtimeCatalog()});
+  const auth=adminAuth||createAdminAuth(store.file||':memory:');
+  const app=createServer(async (req, res) => {
     res.setHeader('Referrer-Policy','no-referrer');
     res.setHeader('X-Content-Type-Options','nosniff');
     res.setHeader('Content-Security-Policy',"default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'");
@@ -56,11 +76,68 @@ export function createApp(store = createProductStore(resolve(root,'data/borrow-l
     try {
       const path = new URL(req.url, 'http://localhost').pathname;
       const url=new URL(req.url,'http://localhost');
+      async function inputBody(limit=550000){const parts=[];let length=0;for await(const part of req){length+=part.length;if(length>limit)throw new BookingError('内容过长。',413);parts.push(part);}try{return JSON.parse(Buffer.concat(parts).toString('utf8'));}catch{throw new BookingError('内容格式错误。',400);}}
+      if(path==='/api/admin'||path.startsWith('/api/admin/')){
+        const secure=req.socket.encrypted||process.env.NODE_ENV==='production'||adminOrigin?.startsWith('https://');
+        const isWrite=!['GET','HEAD'].includes(req.method);
+        function requireAdminOrigin(){
+          const expected=adminOrigin||`${req.socket.encrypted?'https':'http'}://${req.headers.host}`;
+          let origin;try{origin=new URL(expected);}catch{throw new BookingError('管理请求来源不受支持。',403);}
+          if(!adminOrigin&&!['localhost','127.0.0.1','[::1]'].includes(origin.hostname))throw new BookingError('管理请求来源不受支持。',403);
+          if(typeof req.headers.origin!=='string'||req.headers.origin!==expected||req.headers['sec-fetch-site']==='cross-site')throw new BookingError('管理请求来源不受支持。',403);
+        }
+        if(path==='/api/admin/login'&&req.method==='POST'){
+          requireAdminOrigin();
+          const input=await inputBody(2048);
+          if(!input||typeof input!=='object'||Array.isArray(input))throw new BookingError('账号或密码不正确，请重新输入。',401);
+          const result=await auth.login(input.username,input.password,req.socket.remoteAddress);
+          // Renewing a login revokes the browser's previous valid session.
+          try{auth.logout(auth.requireSession(req).token);}catch(error){if(error.status!==401)throw error;}
+          res.setHeader('Set-Cookie',auth.cookie(result.token,{secure}));
+          return json(200,result.session);
+        }
+        const session=auth.requireSession(req);
+        if(isWrite){requireAdminOrigin();auth.requireCsrf(req,session);}
+        function activeAdmin(){const fresh=auth.requireSession(req);auth.requireCsrf(req,fresh);return fresh.admin;}
+        if(path==='/api/admin/session'&&req.method==='GET')return json(200,{admin:session.admin,csrfToken:session.csrfToken,expiresAt:session.expiresAt});
+        if(path==='/api/admin/logout'&&req.method==='POST'){
+          auth.logout(session.token);res.setHeader('Set-Cookie',auth.cookie('',{secure,clear:true}));return json(200,{ok:true});
+        }
+        if(!store.admin)throw new BookingError('管理台账暂时不可用。',503);
+        const query=Object.fromEntries(url.searchParams);
+        if(path==='/api/admin/dashboard'&&req.method==='GET')return json(200,await store.admin.dashboard(query));
+        if(path==='/api/admin/bookings'&&req.method==='GET')return json(200,await store.admin.bookings(query));
+        if(path==='/api/admin/equipment'&&req.method==='GET')return json(200,await store.admin.equipment(query));
+        if(path==='/api/admin/users'&&req.method==='GET')return json(200,await store.admin.users(query));
+        if(path==='/api/admin/analytics'&&req.method==='GET')return json(200,await store.admin.analytics(query));
+        if(path==='/api/admin/reports'&&req.method==='GET')return json(200,await store.admin.reports(query));
+        if(path==='/api/admin/reports'&&req.method==='POST'){
+          await inputBody(1024);
+          assistant.setCatalog?.(runtimeCatalog());
+          const controller=new AbortController();res.once('close',()=>{if(!res.writableEnded)controller.abort();});
+          const records=await store.list();activeAdmin();
+          const result=await assistant.assist({mode:'report'},records,{signal:controller.signal});
+          const saved=await store.admin.saveReport(result,activeAdmin());
+          if(!res.destroyed)return json(201,saved);return;
+        }
+        const bookingRoute=path.match(/^\/api\/admin\/bookings\/([a-zA-Z0-9-]+)(\/cancel)?$/);
+        if(bookingRoute){
+          if(req.method==='GET'&&!bookingRoute[2])return json(200,await store.admin.booking(bookingRoute[1]));
+          if(req.method==='POST'&&bookingRoute[2]){const input=await inputBody(2048);return json(200,await store.admin.cancelBooking(bookingRoute[1],input?.reason,activeAdmin()));}
+        }
+        const equipmentRoute=path.match(/^\/api\/admin\/equipment\/([a-zA-Z0-9-]+)$/);
+        if(equipmentRoute){
+          if(req.method==='GET')return json(200,await store.admin.equipmentDetail(equipmentRoute[1]));
+          if(req.method==='PATCH'){const input=await inputBody(4096);return json(200,await store.admin.updateEquipment(equipmentRoute[1],input,activeAdmin()));}
+        }
+        const userRoute=path.match(/^\/api\/admin\/users\/([a-zA-Z0-9-]+)$/);
+        if(userRoute&&req.method==='GET')return json(200,await store.admin.user(userRoute[1]));
+        return json(404,{error:'管理接口不存在。'});
+      }
       if (!['GET','HEAD'].includes(req.method) && req.headers.origin) {
-        const origin=new URL(req.headers.origin);
+        let origin;try{origin=new URL(req.headers.origin);}catch{throw new BookingError('请求来源不受支持。',403);}
         if (!['localhost','127.0.0.1','[::1]'].includes(origin.hostname) || origin.host!==req.headers.host) throw new BookingError('请求来源不受支持。',403);
       }
-      async function inputBody(limit=550000){const parts=[];let length=0;for await(const part of req){length+=part.length;if(length>limit)throw new BookingError('内容过长。',413);parts.push(part);}try{return JSON.parse(Buffer.concat(parts).toString('utf8'));}catch{throw new BookingError('内容格式错误。',400);}}
       if(req.method==='GET'&&path==='/api/environment')return json(200,demo||{demo:false});
       if(req.method==='GET'&&path==='/api/users'){const users=store.users();if(demo)users.sort((a,b)=>Number(b.id===demo.users[0].id)-Number(a.id===demo.users[0].id));return json(200,users);}
       if(req.method==='POST'&&path==='/api/users')return json(201,store.createUser(await inputBody(4096)));
@@ -70,14 +147,14 @@ export function createApp(store = createProductStore(resolve(root,'data/borrow-l
       if(req.method==='POST'&&path==='/api/favorites'){const input=await inputBody(4096);return json(200,store.favorite(input.userId,input.equipmentId,!!input.enabled));}
       if(req.method==='GET'&&path==='/api/scenes')return json(200,creativeScenes);
       if(req.method==='POST'&&path==='/api/plans/check'){
-        const input=await inputBody(8192),records=await store.list(),checked=inspectPlan(input,records,catalog);
-        return json(200,{...checked,commonTimes:commonAvailability(checked,records,catalog)});
+        const input=await inputBody(8192),records=await store.list(),checked=inspectPlan(input,records,runtimeCatalog());
+        return json(200,{...checked,commonTimes:commonAvailability(checked,records,runtimeCatalog())});
       }
       if(req.method==='POST'&&path==='/api/plans'){const input=await inputBody(8192);return json(201,store.savePlan(input.userId,input,input.id));}
       if(req.method==='POST'&&path==='/api/plans/ready'){const input=await inputBody(4096);return json(200,store.readyPlan(input.userId,input.id));}
       if(req.method==='GET'&&path==='/api/replacements')return json(200,store.replace(url.searchParams.get('equipmentId'),url.searchParams.get('date'),url.searchParams.get('slot')));
-      if(req.method==='GET'&&path==='/api/heatmap')return json(200,occupancyHeatmap(await store.list(),undefined,catalog));
-      if (req.method === 'GET' && path === '/api/equipment') return json(200, { equipment:catalog, slots });
+      if(req.method==='GET'&&path==='/api/heatmap')return json(200,occupancyHeatmap(await store.list(),undefined,runtimeCatalog()));
+      if (req.method === 'GET' && path === '/api/equipment') return json(200, { equipment:runtimeCatalog(), slots });
       if (req.method === 'GET' && path === '/api/reservations') return json(200, await store.list());
       if (req.method === 'POST' && path === '/api/reservations/batch')return json(201,await store.reserveSet(await inputBody(8192)));
       if (req.method === 'GET' && path === '/api/ai/status') return json(200, assistant.status());
@@ -91,6 +168,7 @@ export function createApp(store = createProductStore(resolve(root,'data/borrow-l
         let input;
         try { input = JSON.parse(Buffer.concat(parts).toString('utf8')); } catch { throw new BookingError('问题格式错误。', 400); }
         const controller=new AbortController();res.once('close',()=>{if(!res.writableEnded)controller.abort();});
+        assistant.setCatalog?.(runtimeCatalog());
         const result=await assistant.assist(input, await store.list(),{signal:controller.signal});
         if(!res.destroyed)return json(200,result);return;
       }
@@ -123,6 +201,8 @@ export function createApp(store = createProductStore(resolve(root,'data/borrow-l
       json(error.status || 500, { error: error.status ? error.message : '服务器暂时出错，请稍后重试。' });
     }
   });
+  if(!adminAuth)app.once('close',()=>auth.close());
+  return app;
 }
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {
   try { process.loadEnvFile(resolve(root, '.env')); } catch (error) { if (error.code !== 'ENOENT') throw error; }

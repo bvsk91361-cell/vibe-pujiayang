@@ -38,11 +38,11 @@ test('预约及到期边界精确到开始/结束分钟；取消状态独立；�
  assert.doesNotThrow(()=>validateBooking(row,[{...row,status:'cancelled'}],row.date,businessMoment(row.date,'08:00')));
 });
 
-test('台账seed更新目录payload，不重置预约与身份；统计排除取消及未知设备',async t=>{
+test('台账seed补齐缺失设备但保留持久名称、预约与身份；统计排除取消及未知设备',async t=>{
  const dir=await directory(t),file=join(dir,'catalog.sqlite');let store=createProductStore(file);const user=store.users()[0],booking=store.add({userId:user.id,equipmentId:'camera',date:tomorrow(),slot});store.close();
  const db=new DatabaseSync(file);db.prepare('UPDATE equipment SET payload=? WHERE id=?').run(JSON.stringify({...equipment[0],name:'旧设备名称'}),'camera');db.close();
  store=createProductStore(file);cleanup(t,()=>store.close());const raw=new DatabaseSync(file);cleanup(t,()=>raw.close());
- assert.equal(JSON.parse(raw.prepare('SELECT payload FROM equipment WHERE id=?').get('camera').payload).name,equipment.find(row=>row.id==='camera').name);assert.equal(store.list()[0].id,booking.id);assert.equal(store.users()[0].id,user.id);
+ assert.equal(JSON.parse(raw.prepare('SELECT payload FROM equipment WHERE id=?').get('camera').payload).name,'旧设备名称');assert.equal(store.list()[0].id,booking.id);assert.equal(store.users()[0].id,user.id);
  const summary=planSummary([booking,{...booking,id:'cancelled',status:'cancelled'},{...booking,equipmentId:'unknown'}],tomorrow());assert.equal(summary.total,1);assert.equal(summary.devices.find(row=>row.id==='camera').booked,1);
 });
 

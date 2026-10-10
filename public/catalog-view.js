@@ -6,7 +6,7 @@ export function filterEquipment(catalog,{category='all',query='',status='all',so
  const result=catalog.filter(item=>{
   if(category!=='all'&&item.category!==category)return false;
   if(scene&&!item.scenes.includes(scene))return false;
-  const maintenance=item.operationalStatus==='maintenance',free=freeSlots(records,date,item.id).length;
+  const maintenance=item.operationalStatus==='maintenance',free=freeSlots(records,date,item.id,undefined,catalog).length;
   const availabilityQuery=/^(空闲|可借|可用)$/.test(keyword);
   const names=creativeScenes.filter(row=>row.ids.includes(item.id)).map(row=>row.name);
   if(availabilityQuery ? maintenance||free===0 : ![item.name,item.model,item.description,categories.find(row=>row.id===item.category)?.name,...names,...item.tags,...item.specs].join(' ').toLowerCase().includes(keyword))return false;

@@ -11,7 +11,7 @@ export function renderDetail({content,title,extra,item,date,records}) {
   title.textContent=item.name;
   const family=document.createElement('p');family.className='detail-family';family.textContent=item.productName;
   const intro=document.createElement('p');intro.className='detail-intro';intro.textContent=item.description;
-  const free=freeSlots(records,date,item.id);
+  const free=freeSlots(records,date,item.id,undefined,[item]);
   const state=document.createElement('p');state.className='detail-availability'+(!free.length?' is-busy':'');
   state.textContent=item.operationalStatus==='maintenance'?'正在维护':`${dateLabel(date)} · ${free.length ? free.length+'个可用时段':'暂无空闲时段'}`;
   const specs=document.createElement('div');specs.className='detail-grid';

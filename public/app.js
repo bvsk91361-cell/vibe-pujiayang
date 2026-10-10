@@ -1,7 +1,7 @@
 import { createBrowserApi } from './browser-api.js';
 import { exportCsv } from './export-csv.js';
 import { visibleReservations, reservationStatus } from './reservation-view.js';
-import { addDays, freeSlots, planSummary } from './planning.js';
+import { freeSlots } from './planning.js';
 import { deviceSvg } from './device-art.js';
 import { filterEquipment } from './catalog-view.js';
 import { mountShowcase } from './showcase.js';
@@ -13,7 +13,6 @@ import { goView,openDialog } from './navigation.js';
 import { icon } from './icons.js';
 import {dateLabel,identityName} from './plan-state.js';
 import {localDate} from './booking.js';
-import {renderOccupancy} from './occupancy-view.js';
 const $ = selector => document.querySelector(selector);
 const staticMode = $('meta[name="storage-mode"]')?.content === 'browser';
 const browserApi = staticMode ? createBrowserApi(localStorage) : null;
@@ -21,6 +20,8 @@ const form = $('#booking-form');
 for(const input of form.querySelectorAll('.semantic-fields input,.semantic-fields select'))input.tabIndex=-1;
 let equipment = [], slots = [], allRecords = [], category = 'all';
 let recordsVersion=0;
+let lastSnapshot='', refreshing=false;
+const changes=!staticMode&&typeof BroadcastChannel==='function'?new BroadcastChannel('borrow-lab-changes'):null;
 let cancelRecord = null;
 let showroom=null,scene=null,expanded=false,bookingFlow=null;
 const today=()=>localDate();
@@ -64,7 +65,7 @@ function renderCatalog() {
   card.dataset.equipmentId=item.id;
   const art = node('div',`device-art ${item.color}`); art.innerHTML = deviceSvg(item,'card');
   const meta = node('div','card-meta'); meta.append(node('h3','',item.name),node('span','device-code',item.productName));
-  const bottom = node('div','card-bottom'); const free = freeSlots(allRecords,chosenDate(),item.id).length;
+  const bottom = node('div','card-bottom'); const free = freeSlots(allRecords,chosenDate(),item.id,undefined,equipment).length;
   const maintenance=item.operationalStatus==='maintenance';
   const tag = node('span',`availability${free === 0 ? ' busy' : ''}`,maintenance?'维护中 · 暂不可预约':free ? `所选日期 · ${free}个空闲时段` : '所选日期已约满');
   const button = node('button','secondary','预约');button.insertAdjacentHTML('beforeend',icon(item.id===form.elements.equipmentId.value?'check':'arrow'));button.disabled=maintenance;
@@ -74,20 +75,6 @@ function renderCatalog() {
   const tags=node('div','tags');for(const label of item.tags)tags.append(node('span','pill',label));
   const actions=node('div','card-actions');actions.append(detail,button);bottom.append(tag,actions);
   const sceneCopy=node('div','card-scenes',item.scenes.map(id=>scenes.find(row=>row.id===id)?.name).filter(Boolean).slice(0,2).join(' · '));const info=node('div','card-info');info.append(meta,node('p','',item.description),sceneCopy,tags,bottom);card.append(art,info);grid.append(card);
- }
-}
-function renderInsights(){
- renderOccupancy($('#occupancy-heatmap'),allRecords,equipment);
- $('#metric-devices').replaceChildren(document.createTextNode(String(equipment.length)),node('small','','件'));
- const date = chosenDate(); const free = equipment.reduce((total,item)=>total+freeSlots(allRecords,date,item.id).length,0);
- $('#metric-free').replaceChildren(document.createTextNode(String(free)),node('small','','个'));
- const mine = visibleReservations(allRecords,form.elements.name.value,true).filter(record=>!reservationStatus(record).expired).length;
- $('#metric-mine').replaceChildren(document.createTextNode(String(mine)),node('small','','条'));
- $('#overview-date').textContent = `${dateLabel(date)} · 共 ${allRecords.length} 项安排`;
- const summary = planSummary(allRecords,today(),equipment);const chart = $('#utilization'); chart.replaceChildren();
- for(const item of [...summary.devices].sort((a,b)=>b.booked-a.booked).slice(0,6)){
-  const row = node('div','util-row');const bar = node('div','util-bar'); const fill = node('span');
-  fill.style.width=`${Math.min(item.percent,100)}%`;bar.append(fill);row.append(node('span','',item.name),bar,node('small','',item.capacity?`${item.percent}%`:'维护')); row.title=`${item.booked}/${item.capacity}个时段已预约`;chart.append(row);
  }
 }
 function renderRecords(){
@@ -103,10 +90,42 @@ function renderRecords(){
   const mark=node('div','record-device');mark.innerHTML=deviceSvg(item,'reservation');const actions=node('div','reservation-current-actions');actions.append(badge,cancel);row.append(mark,detail,actions);list.append(row);
  }
 }
-function renderAll(){renderCatalog();bookingFlow?.render();renderRecords();renderInsights();}
-async function syncRecords({signal}={}){const version=++recordsVersion;return {records:await api('/api/reservations',{signal:signal||AbortSignal.timeout(12000)}),version};}
-function setRecords(packet){if(packet.version!==recordsVersion)return false;allRecords=packet.records;return true;}
-async function refresh(){const packet=await syncRecords();if(!setRecords(packet))return;renderAll();document.dispatchEvent(new Event('borrow:refresh'));}
+function renderAll(){renderCatalog();bookingFlow?.render();renderRecords();}
+async function syncRecords({signal}={}){
+ const version=++recordsVersion, options={signal:signal||AbortSignal.timeout(12000)};
+ const [records,catalog]=await Promise.all([api('/api/reservations',options),api('/api/equipment',options)]);
+ return {records,catalog,version};
+}
+function setRecords(packet){
+ if(packet.version!==recordsVersion)return false;
+ allRecords=packet.records;
+ // Keep references used by the booking flow, adviser and open device details.
+ if(packet.catalog){
+  const existing=new Map(equipment.map(item=>[item.id,item]));
+  equipment.splice(0,equipment.length,...packet.catalog.equipment.map(item=>Object.assign(existing.get(item.id)||{},item)));
+  slots=packet.catalog.slots;
+  const selected=form.elements.equipmentId.value;
+  form.elements.equipmentId.replaceChildren(...equipment.map(item=>{
+   const option=new Option(item.name+(item.operationalStatus==='maintenance'?'（维护中）':''),item.id);
+   option.disabled=item.operationalStatus==='maintenance';return option;
+  }));
+  form.elements.equipmentId.value=selected;
+ }
+ return true;
+}
+async function refresh({quiet=false}={}){
+ const packet=await syncRecords();if(!setRecords(packet))return;
+ const snapshot=JSON.stringify([allRecords,equipment]);
+ if(quiet&&snapshot===lastSnapshot)return;
+ lastSnapshot=snapshot;renderAll();showroom?.refreshDetail();document.dispatchEvent(new Event('borrow:refresh'));
+ if(!quiet)changes?.postMessage({type:'changed',at:Date.now()});
+}
+async function syncVisible(){
+ if(staticMode||document.hidden||!equipment.length||refreshing||bookingFlow?.busy())return;
+ refreshing=true;
+ try{await refresh({quiet:true});}catch{/* Keep the last verified data; normal actions retry explicitly. */}
+ finally{refreshing=false;}
+}
 function scrollToBooking(){goView('booking');}
 $('#cancel-keep').addEventListener('click',()=>$('#cancel-dialog').close());
 $('#cancel-dialog').addEventListener('close',()=>{cancelRecord=null;});
@@ -138,7 +157,7 @@ async function initialize(){
  if(environment.demo){const label=node('aside','demo-environment','独立演示数据');label.setAttribute('role','status');label.title='演示预约保存在独立 SQLite 数据库，不影响日常数据';document.body.append(label);}
  $('#storage-note').textContent=staticMode?'在线演示 · 当前浏览器独立保存预约':'本地演示 · 同机共享预约，姓名筛选不等于登录';
  const catalog=await api('/api/equipment');equipment=catalog.equipment;slots=catalog.slots;
- showroom=mountShowcase({equipment,getRecords:()=>allRecords,getDate:chosenDate,onSelect:id=>{selectEquipment(id);scrollToBooking();},onAccount:account=>{if(bookingFlow?.busy()){notify('正在保存预约，请稍后切换身份。');return false;}form.elements.name.value=account.name;$('#mine').checked=true;renderRecords();renderInsights();},onPlans:()=>{$('#mine').checked=true;renderRecords();goView('reservations');}});
+ showroom=mountShowcase({equipment,getRecords:()=>allRecords,getDate:chosenDate,onSelect:id=>{selectEquipment(id);scrollToBooking();},onAccount:account=>{if(bookingFlow?.busy()){notify('正在保存预约，请稍后切换身份。');return false;}form.elements.name.value=account.name;$('#mine').checked=true;renderRecords();},onPlans:()=>{$('#mine').checked=true;renderRecords();goView('reservations');}});
  for(const item of [{id:'all',name:'全部设备'},...categories]){const button=node('button','',item.name);button.type='button';button.dataset.category=item.id;$('#categories').append(button);}
  for(const item of scenes){const button=node('button','scene-card');button.type='button';button.dataset.scene=item.id;button.append(node('b','',item.name),node('span','',item.description));button.addEventListener('click',()=>{scene=scene===item.id?null:item.id;category='all';expanded=false;renderFilterButtons();renderCatalog();$('#equipment-title').scrollIntoView();});$('#scenes').append(button);}renderFilterButtons();
  for(const item of equipment){const option=new Option(item.name+(item.operationalStatus==='maintenance'?'（维护中）':''),item.id);option.disabled=item.operationalStatus==='maintenance';form.elements.equipmentId.add(option);}
@@ -148,10 +167,14 @@ async function initialize(){
  mountBookingPicker({catalog:equipment,getIntent:()=>bookingFlow.intent(),getUserId:()=>bookingFlow.userId(),getRecords:()=>allRecords,onSelect:(id,replaceId)=>bookingFlow.changeEquipment(id,replaceId),isBusy:()=>bookingFlow.busy()});
  try{const state=await api('/api/ai/status');$('#ai-state').textContent=state.configured?'助手已连接。让AI把台账整理成建议，空闲结果由系统核对。':'助手尚未配置。普通预约不受影响，完成服务端设置后即可使用。';}
  catch{$('#ai-state').textContent=staticMode?'静态演示提供预约体验。AI助手需要连接配置模型的后端。':'暂时无法连接助手，普通预约可继续使用。';}
- await mountProduct({api,equipment,getRecords:()=>allRecords,notify:toast,openDetail:item=>showroom.openDetail(item),startBooking,getBooking:()=>bookingFlow.intent(),setAccount:user=>{bookingFlow.setUser(user);$('#mine').checked=true;renderRecords();renderInsights();},setBooking:(id,date,slot,planId=null)=>startBooking({name:equipment.find(item=>item.id===id)?.name||'设备搭配',equipmentIds:id?[id]:bookingFlow.intent()?.equipmentIds||[],date:date||'',slot:slot||'',planId})});
+ await mountProduct({api,equipment,getRecords:()=>allRecords,notify:toast,openDetail:item=>showroom.openDetail(item),startBooking,getBooking:()=>bookingFlow.intent(),setAccount:user=>{bookingFlow.setUser(user);$('#mine').checked=true;renderRecords();},setBooking:(id,date,slot,planId=null)=>startBooking({name:equipment.find(item=>item.id===id)?.name||'设备搭配',equipmentIds:id?[id]:bookingFlow.intent()?.equipmentIds||[],date:date||'',slot:slot||'',planId})});
  $('#ai-state').textContent='告诉我你准备做什么。';
  $('#storage-note').hidden=true;renderAll();
 }
 function renderFilterButtons(){for(const item of $('#categories').querySelectorAll('button')){const active=item.dataset.category===category;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));}for(const item of $('#scenes').querySelectorAll('button')){const active=item.dataset.scene===scene;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));}}
-setInterval(()=>{if(equipment.length){renderRecords();renderInsights();document.dispatchEvent(new Event('borrow:clock-tick'));}},60000);
+setInterval(()=>{if(equipment.length){renderRecords();document.dispatchEvent(new Event('borrow:clock-tick'));}},60000);
+setInterval(syncVisible,15000);
+window.addEventListener('focus',syncVisible);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncVisible();});
+if(changes)changes.onmessage=syncVisible;
  initialize().catch(error=>notify(`这次没有连接上。${error.message}`,true));

@@ -20,7 +20,7 @@ export function checkMoment(date,slot,{allowPast=false}={}){
 }
 export function replacements(id,date,slot,records,catalog=equipment,excluded=[]){
  const original=catalog.find(item=>item.id===id);if(!original)return [];
- return catalog.filter(item=>item.id!==id&&!excluded.includes(item.id)&&item.capability===original.capability&&item.operationalStatus!=='maintenance'&&freeSlots(records,date,item.id).includes(slot)).map(item=>({...item,fit:item.category===original.category?100:75,reason:item.category===original.category?'同类能力与目标时段均匹配':'同用途能力匹配；请核对附件接口'})).sort((a,b)=>b.fit-a.fit).slice(0,3);
+ return catalog.filter(item=>item.id!==id&&!excluded.includes(item.id)&&item.capability===original.capability&&item.operationalStatus!=='maintenance'&&freeSlots(records,date,item.id,undefined,catalog).includes(slot)).map(item=>({...item,fit:item.category===original.category?100:75,reason:item.category===original.category?'同类能力与目标时段均匹配':'同用途能力匹配；请核对附件接口'})).sort((a,b)=>b.fit-a.fit).slice(0,3);
 }
 export function inspectPlan(plan,records,catalog=equipment,{allowPast=false}={}){
  const timed=!!plan.date&&!!plan.slot;
@@ -30,7 +30,7 @@ export function inspectPlan(plan,records,catalog=equipment,{allowPast=false}={})
  if(!Array.isArray(ids)||ids.length>8||new Set(ids).size!==ids.length||ids.some(id=>!catalog.some(item=>item.id===id)))throw new BookingError('请选择最多8件不同的有效设备。');
  if(!timed||!ids.length){const items=ids.map(id=>({...catalog.find(item=>item.id===id),available:false,secured:false,reason:'选好时间，再查看可用性',alternatives:[]}));const checked={...plan,items,expired:false,available:0,reserved:0,reservable:0,blocked:0,total:ids.length,readiness:ids.length?50:0};return {...checked,planState:derivePlanState(checked,records)};}
  const expired=businessMoment(plan.date,plan.slot.slice(-5))<=new Date();
- const items=ids.map(id=>{const item=catalog.find(item=>item.id===id);const secured=!expired&&!!plan.userId&&records.some(row=>row.status!=='cancelled'&&row.userId===plan.userId&&row.equipmentId===id&&row.date===plan.date&&row.slot===plan.slot);const available=!expired&&item.operationalStatus!=='maintenance'&&(secured||freeSlots(records,plan.date,id).includes(plan.slot));return {...item,available,secured,reason:expired?'这次计划已结束':item.operationalStatus==='maintenance'?'维护中':secured?'已为你锁定':available?'这个时段可预约':'时段已占用或已结束',alternatives:available||expired?[]:replacements(id,plan.date,plan.slot,records,catalog,ids)};});
+ const items=ids.map(id=>{const item=catalog.find(item=>item.id===id);const secured=!expired&&!!plan.userId&&records.some(row=>row.status!=='cancelled'&&row.userId===plan.userId&&row.equipmentId===id&&row.date===plan.date&&row.slot===plan.slot);const available=!expired&&item.operationalStatus!=='maintenance'&&(secured||freeSlots(records,plan.date,id,undefined,catalog).includes(plan.slot));return {...item,available,secured,reason:expired?'这次计划已结束':item.operationalStatus==='maintenance'?'维护中':secured?'已为你锁定':available?'这个时段可预约':'时段已占用或已结束',alternatives:available||expired?[]:replacements(id,plan.date,plan.slot,records,catalog,ids)};});
  const available=items.filter(item=>item.available).length;
  const reserved=items.filter(item=>item.secured).length,reservable=items.filter(item=>item.available&&!item.secured).length;
  const checked={...plan,expired,items,available,reserved,reservable,blocked:items.length-available,total:items.length,readiness:Math.round(available/items.length*100),checkedAt:new Date().toISOString(),capacityMeaning:'所选设备在目标时段可用或已为本人锁定的比例，不包含电量或归还状态'};

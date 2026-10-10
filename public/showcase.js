@@ -46,5 +46,14 @@ export function mountShowcase({equipment,onSelect,onPlans,getRecords=()=>[],getD
  for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('cancel',event=>{event.preventDefault();closeDialog(dialog);});let y=null,outside=false;const isOutside=event=>{const box=dialog.getBoundingClientRect();return event.target===dialog&&(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom);};dialog.addEventListener('pointerdown',event=>{outside=isOutside(event);});dialog.addEventListener('click',event=>{if(outside&&isOutside(event))closeDialog(dialog);outside=false;});const handle=dialog.querySelector('.sheet-handle');handle?.addEventListener('pointerdown',event=>{y=event.clientY;handle.setPointerCapture(event.pointerId);});handle?.addEventListener('pointerup',event=>{if(y!==null&&event.clientY-y>50)closeDialog(dialog);y=null;});}
  $('#detail-book').addEventListener('click',()=>{if(detail&&detail.operationalStatus!=='maintenance'){closeDialog($('#detail-dialog'));onSelect(detail.id);}});
  $('#detail-dialog').addEventListener('close',()=>{const context=detailContext;requestAnimationFrame(()=>{if(context&&document.body.dataset.view===context.view)window.scrollTo({top:context.y,behavior:'instant'});});});
- return {openDetail(item){detailContext={view:document.body.dataset.view,y:scrollY};detail=item;renderDetail({content:$('#detail-content'),title:detailTitle,extra:detailExtra,item,date:getDate(),records:getRecords()});$('#detail-book').disabled=item.operationalStatus==='maintenance';$('#detail-book').textContent=item.operationalStatus==='maintenance'?'维护中':'预约此设备';openDialog($('#detail-dialog'));document.dispatchEvent(new CustomEvent('borrow:detail',{detail:item}));}};
+ function refreshDetail(){
+  if(!detail||!$('#detail-dialog').open)return;
+  detail=equipment.find(item=>item.id===detail.id)||detail;
+  const scroll=$('#detail-dialog').scrollTop;
+  renderDetail({content:$('#detail-content'),title:detailTitle,extra:detailExtra,item:detail,date:getDate(),records:getRecords()});
+  $('#detail-book').disabled=detail.operationalStatus==='maintenance';
+  $('#detail-book').textContent=detail.operationalStatus==='maintenance'?'维护中':'预约此设备';
+  $('#detail-dialog').scrollTop=scroll;
+ }
+ return {refreshDetail,openDetail(item){detailContext={view:document.body.dataset.view,y:scrollY};detail=equipment.find(current=>current.id===item.id)||item;renderDetail({content:$('#detail-content'),title:detailTitle,extra:detailExtra,item:detail,date:getDate(),records:getRecords()});$('#detail-book').disabled=detail.operationalStatus==='maintenance';$('#detail-book').textContent=detail.operationalStatus==='maintenance'?'维护中':'预约此设备';openDialog($('#detail-dialog'));document.dispatchEvent(new CustomEvent('borrow:detail',{detail}));}};
 }

@@ -1,0 +1,7 @@
+/* Only the existing identity switch panel gains an admin choice. */
+#accounts .account-admin{border:1px solid color-mix(in srgb,var(--accent,#958aff) 55%,transparent);background:color-mix(in srgb,var(--accent,#958aff) 8%,var(--surface,#142238));transition:border-color .18s,background .18s}
+#accounts .account-admin:hover{border-color:var(--accent,#958aff);background:color-mix(in srgb,var(--accent,#958aff) 15%,var(--surface,#142238))}
+#accounts .admin-entry-symbol{display:grid;place-items:center;background:transparent;color:var(--accent,#958aff)}
+#accounts .admin-entry-symbol .icon{width:25px;height:25px}#accounts .account-admin small{color:inherit;opacity:.8}
+#accounts .account-admin:focus-visible{outline:2px solid var(--accent,#958aff);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){#accounts .account-admin{transition:none}}
