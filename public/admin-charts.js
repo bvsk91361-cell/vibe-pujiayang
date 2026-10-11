@@ -3,6 +3,62 @@ export const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char 
 export const number = value => Number.isFinite(Number(value)) ? Number(value) : 0;
 export const dateShort = value => String(value || '').slice(5).replace('-', '/');
 
+const tideDate = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value+'T12:00:00Z')) && new Date(value+'T12:00:00Z').toISOString().slice(0,10) === value;
+const tideSlot = value => typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d–([01]\d|2[0-3]):[0-5]\d$/.test(value) && value.slice(0,5) < value.slice(-5);
+const tideDay = (date, offset) => new Date(Date.parse(date+'T12:00:00Z') + offset*86400000).toISOString().slice(0,10);
+const tideRate = (count, capacity) => capacity ? Math.round(count/capacity*1000)/10 : null;
+
+// Demand counts distinct persisted equipment/date/slot reservations, never a synthetic wave.
+// Capacity describes currently operational equipment; historic maintenance durations are unknown.
+export function aggregateDemandTides({catalog = [], categories = [], records = [], dates = [], slots = [], today} = {}) {
+  const timelineDates = [...new Set(dates.filter(tideDate))].sort();
+  const timelineSlots = [...new Set(slots.filter(tideSlot))].sort();
+  const acceptedSlots = new Set(timelineSlots), displayedDates = new Set(timelineDates);
+  const devices = new Map(catalog.filter(item => item && typeof item.id === 'string' && typeof item.category === 'string').map(item => [item.id,item]));
+  const groups = [...new Map(categories.filter(item => item && typeof item.id === 'string').map(item => [item.id,item])).values()];
+  const knownCategories = new Set(groups.map(item => item.id));
+  const distinct = new Map();
+  for (const record of records) {
+    const device = record && devices.get(record.equipmentId);
+    if (!device || !knownCategories.has(device.category) || record.status === 'cancelled' || record.state === 'cancelled' || !tideDate(record.date) || !acceptedSlots.has(record.slot)) continue;
+    distinct.set(JSON.stringify([device.id,record.date,record.slot]), {...record,category:device.category,operational:device.operationalStatus === 'active'});
+  }
+  const active = [...distinct.values()];
+  const comparisonRange = tideDate(today) ? {
+    current:{start:tideDay(today,-7),end:tideDay(today,-1),days:7},
+    previous:{start:tideDay(today,-14),end:tideDay(today,-8),days:7}
+  } : null;
+  const tracks = groups.map(group => {
+    const ownDevices = [...devices.values()].filter(item => item.category === group.id);
+    const operationalDevices = ownDevices.filter(item => item.operationalStatus === 'active');
+    const own = active.filter(record => record.category === group.id);
+    const visible = own.filter(record => displayedDates.has(record.date));
+    const nodes = timelineDates.flatMap(date => timelineSlots.map(slot => {
+      const matching = visible.filter(record => record.date === date && record.slot === slot);
+      const count = matching.length, operationalCount = matching.filter(record => record.operational).length, capacity = operationalDevices.length;
+      return {date,slot,count,operationalCount,capacity,occupancyRate:tideRate(operationalCount,capacity),intensity:0};
+    }));
+    const peak = nodes.reduce((best,node) => node.count > (best?.count || 0) ? node : best,null);
+    const slotTotals = timelineSlots.map(slot => ({slot,count:visible.filter(record => record.slot === slot).length}));
+    const peakSlot = slotTotals.reduce((best,row) => row.count > (best?.count || 0) ? {...row} : best,null);
+    const total = visible.length, operationalTotal = visible.filter(record => record.operational).length;
+    const capacity = operationalDevices.length*timelineDates.length*timelineSlots.length;
+    const suppliedFreeSlots = operationalDevices.map(item => item.nextFreeSlot).filter(slot => slot && tideDate(slot.date) && acceptedSlots.has(slot.slot) && (!tideDate(today) || slot.date >= today)).sort((a,b) => a.date.localeCompare(b.date) || a.slot.localeCompare(b.slot));
+    const next = suppliedFreeSlots[0];
+    let comparison = null;
+    if (comparisonRange) {
+      const current = own.filter(row => row.date >= comparisonRange.current.start && row.date <= comparisonRange.current.end).length;
+      const previous = own.filter(row => row.date >= comparisonRange.previous.start && row.date <= comparisonRange.previous.end).length;
+      const change = current-previous;
+      comparison = {current,previous,change,percent:previous ? Math.round(change/previous*1000)/10 : current ? null : 0,direction:change > 0 ? previous ? 'up' : 'new' : change < 0 ? 'down' : 'flat'};
+    }
+    return {id:group.id,name:group.name || group.id,deviceCount:ownDevices.length,operationalDevices:operationalDevices.length,total,operationalTotal,capacity,occupancyRate:tideRate(operationalTotal,capacity),nodes,peak,slotTotals,peakSlot,nextFreeSlot:next ? {date:next.date,slot:next.slot} : null,comparison};
+  }).filter(track => track.deviceCount);
+  const maxCount = Math.max(0,...tracks.flatMap(track => track.nodes.map(node => node.count)));
+  for (const track of tracks) for (const node of track.nodes) node.intensity = maxCount ? node.count/maxCount : 0;
+  return {dates:timelineDates,slots:timelineSlots,tracks,total:tracks.reduce((sum,track) => sum+track.total,0),maxCount,comparisonRange};
+}
+
 export function lineChart(rows = [], {id = 'trend', label = '预约趋势', showCancelled = false} = {}) {
   if (!rows.length) return '<div class="chart-empty">此统计周期暂无数据</div>';
   const width = 760, height = 210, left = 38, right = 18, top = 20, bottom = 36;

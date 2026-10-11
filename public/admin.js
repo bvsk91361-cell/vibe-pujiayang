@@ -15,6 +15,7 @@ let motion=null,live=null,liveMode='polling';
 let session=null, currentPage='', request=null, requestSequence=0, detailRequest=null, detailSequence=0, reportRequestSequence=0, lastUpdated='', filterTimer, toastTimer, reportBusy=false, drawerState=null, previousFocus=null;
 const params={dashboard:{days:'7'},bookings:{page:'1',pageSize:'100'},equipment:{days:'7'},users:{days:'7'},analytics:{days:'14'},operations:{days:'7'},system:{}};
 let filterOptions={categories}, reportData=null;
+let tidePeriod='recent',tideSnapshot=null;
 const channel=typeof BroadcastChannel==='function'?new BroadcastChannel('borrow-lab-changes'):null;
 
 function frontendUrl(){try{const hash=sessionStorage.getItem('borrow-admin-return');return '/'+(hash&&/^#[a-zA-Z0-9/_?=&.-]+$/.test(hash)?hash:'#workspace');}catch{return '/#workspace';}}
@@ -32,6 +33,7 @@ function card(title,subtitle,body,{id='',action='',className=''}={}){return `<se
 function mount(target,html){return reconcile(typeof target==='string'?document.querySelector(target):target,html);}
 
 function renderLogin(message=''){
+ tideSnapshot=null;
  currentPage='login';request?.abort();live?.dispose();closeOverlay();motion?.dispose();
  root.innerHTML=loginMarkup({message,frontendUrl:frontendUrl()});motion=mountMotion(root);
  if(location.hash!=='#/login')history.replaceState(null,'','#/login');
@@ -58,18 +60,31 @@ async function navigate(){
   document.querySelector('#admin-main').innerHTML=`<div class="page-enter">${heading(next,{params:params[next]||{}})}${filters(next)}<div id="page-error"></div><div id="page-data" aria-busy="true">${loading()}</div>${next==='operations'?'<div id="report-area"></div>':''}</div>`;
   restoreFilters();await loadPage();if(next==='operations')loadReports();
 }
+const tideDay=(day,offset)=>new Date(Date.parse(day+'T00:00:00Z')+offset*86400000).toISOString().slice(0,10);
+async function loadTideRecords(intelligence,signal){
+ const today=intelligence.today,from=tideDay(today,-14),to=tideDay(today,6),records=new Map();let total=null;
+ for(let page=1;;page++){
+  const query=new URLSearchParams({from,to,page:String(page),pageSize:'100'}),result=await api('bookings?'+query,{signal});
+  if(!Array.isArray(result.items)||!Number.isInteger(result.total)||result.total<0)throw new Error('设备需求暂时无法同步，请重试。');
+  if(total!==null&&total!==result.total)throw new Error('预约刚有更新，请重新同步。');
+  total=result.total;for(const row of result.items)records.set(row.id,row);
+  if(page*100>=total){if(records.size!==total)throw new Error('预约刚有更新，请重新同步。');return [...records.values()];}
+  if(!result.items.length)throw new Error('设备需求暂时无法同步，请重试。');
+ }
+}
 async function loadPage(){
   if(!session||!pages[currentPage])return;
-  request?.abort();request=new AbortController();const sequence=++requestSequence,page=currentPage;
+  request?.abort();request=new AbortController();const sequence=++requestSequence,page=currentPage,signal=request.signal;
   syncStatus('loading');const dataNode=document.querySelector('#page-data');dataNode?.setAttribute('aria-busy','true');
   const query=new URLSearchParams(Object.entries(params[page]||{}).filter(([,value])=>value!==''&&value!=null));
-  try{const queryPart=query.size?'?'+query:'';const primaryPage=page==='operations'?'analytics':page;const [data,intelligence]=await Promise.all([page==='system'?Promise.resolve({}):api(primaryPage+queryPart,{signal:request.signal}),api('intelligence'+queryPart,{signal:request.signal})]);if(sequence!==requestSequence||page!==currentPage)return;
-    lastUpdated=intelligence.updatedAt||data.updatedAt||data.generatedAt||new Date().toISOString();mount('#page-error','');renderData(page,data,intelligence);if(data.filters)updateOptions(data.filters);if(data.categories)updateOptions({categories:data.categories});syncStatus();
+  try{const queryPart=query.size?'?'+query:'';const primaryPage=page==='operations'?'analytics':page;const [data,intelligence]=await Promise.all([page==='system'?Promise.resolve({}):api(primaryPage+queryPart,{signal}),api('intelligence'+queryPart,{signal})]);if(sequence!==requestSequence||page!==currentPage)return;
+    const tideRecords=page==='analytics'?await loadTideRecords(intelligence,signal):undefined;if(sequence!==requestSequence||page!==currentPage)return;
+    lastUpdated=intelligence.updatedAt||data.updatedAt||data.generatedAt||new Date().toISOString();mount('#page-error','');renderData(page,data,intelligence,tideRecords);if(data.filters)updateOptions(data.filters);if(data.categories)updateOptions({categories:data.categories});syncStatus();
   }catch(error){if(error.name==='AbortError'||sequence!==requestSequence||page!==currentPage||!session)return;syncStatus('error');mount('#page-error',`<div class="error-banner" role="alert"><span>${esc(error.message)}${lastUpdated?` 当前保留上次 ${timeLabel(lastUpdated)} 的数据。`:''}</span><button class="btn btn-small" data-action="refresh">重新同步</button></div>`);if(dataNode?.querySelector('.loading-grid'))mount(dataNode,empty('暂时无法加载','重新同步后即可继续查看'));
   }finally{if(sequence===requestSequence)dataNode?.setAttribute('aria-busy','false');}
 }
 
-function renderData(page,data,intelligence){const changed=mount('#page-data',renderSpace(page,{primary:data,intelligence,session},{params:params[page]||{},filterOptions,session}));if(changed)motion?.refresh();}
+function renderData(page,data,intelligence,tideRecords){if(page==='analytics')tideSnapshot={data,intelligence,tideRecords};const changed=mount('#page-data',renderSpace(page,{primary:data,intelligence,session,tideRecords},{params:params[page]||{},filterOptions,session,tidePeriod}));if(changed)motion?.refresh();}
 function reportHtml(report){if(!report)return `<div class="report-empty">${icon('spark')}<div>还没有周报<p class="muted">生成本周周报</p></div></div>`;
   return `<div class="report-meta"><span>统计周期 ${esc(report.period?.start||report.source?.start||'')} — ${esc(report.period?.end||report.source?.end||'')}</span><span>生成于 ${fullTime(report.generatedAt)}</span><span>${report.provider==='ledger'?'预约统计':'智能周报'}${report.model?' · '+esc(report.model):''}</span></div><div class="report-body report-text">${esc(report.text||'暂无报告正文')}</div>`;}
 function renderReports(error=''){if(currentPage!=='operations')return;const reports=reportData?.items||[];mount('#report-area',card('本周周报','',`${error?`<div class="inline-error" role="alert" style="margin-bottom:16px">${esc(error)}</div>`:''}${reports.length>1?`<label class="field" style="margin-bottom:18px"><span>已保存周报 · ${number(reportData.total)} 份</span><select id="report-selector">${reports.map(report=>`<option value="${esc(report.id)}">${esc(report.period?.start||'')} — ${esc(report.period?.end||'')} · ${fullTime(report.generatedAt)}</option>`).join('')}</select></label>`:''}<div id="selected-report">${reportHtml(reportData?.latest)}</div>`,{className:'report-card',action:`<button class="btn btn-primary btn-small" data-action="generate-report" ${reportBusy?'disabled':''}>${reportBusy?'<i class="spinner"></i>正在生成':'生成本周周报 '+icon('spark')}</button>`}));}
@@ -114,6 +129,8 @@ document.addEventListener('click',async event=>{
   if(target.dataset.days){params[currentPage].days=target.dataset.days;document.querySelectorAll('[data-days]').forEach(button=>{const active=button===target;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});loadPage();return;}
   if(target.dataset.pageNumber){params.bookings.page=target.dataset.pageNumber;loadPage();return;}
   const action=target.dataset.action;
+  if(action==='tide-period'&&currentPage==='analytics'&&tideSnapshot){tidePeriod=target.dataset.period==='upcoming'?'upcoming':'recent';const {data,intelligence,tideRecords}=tideSnapshot;renderData('analytics',data,intelligence,tideRecords);return;}
+  if(action==='tide-detail'&&currentPage==='analytics'){const date=target.dataset.tideDate,slot=target.dataset.tideSlot;params.bookings={page:'1',pageSize:'100',from:date,to:date,slot,category:target.dataset.tideCategory,status:Date.parse(date+'T'+slot.slice(-5)+':00+08:00')<=Date.now()?'expired':Date.parse(date+'T'+slot.slice(0,5)+':00+08:00')<=Date.now()?'current':'upcoming'};closeOverlay();location.hash='#/bookings';return;}
   if(action==='toggle-password'){const input=document.querySelector('[name="password"]'),show=input.type==='password';input.type=show?'text':'password';target.textContent=show?'隐藏':'显示';target.setAttribute('aria-pressed',String(show));target.setAttribute('aria-label',show?'隐藏密码':'显示密码');input.focus();}
   if(action==='refresh'){loadPage();if(currentPage==='operations')loadReports();}
   if(action==='reset-filters'){params[currentPage]=currentPage==='bookings'?{page:'1',pageSize:'100'}:{};document.querySelector('#filter-form')?.reset();loadPage();}

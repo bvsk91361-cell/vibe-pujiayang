@@ -3,23 +3,20 @@ import assert from 'node:assert/strict';
 import {lineChart,stateChart,heatmapChart,horizontalBars} from '../public/admin-charts.js';
 import {renderSpace} from '../public/admin/space.js';
 
-test('overview shows dated active/cancelled trend while detailed insights retain independently filterable future slots',()=>{
+test('overview removes booking topics while insights retain one slot map and one category tide',()=>{
   const trend=[{date:'2026-10-10',count:3,cancelled:6},{date:'2026-10-11',count:0,cancelled:1}];
   const pulse={dates:['2026-10-12'],slots:['14:00–16:00'],cells:[{date:'2026-10-12',slot:'14:00–16:00',activeBookings:2,availableEquipment:24,capacity:26,occupancyRate:7.7}]};
   const dashboard=renderSpace('dashboard',{intelligence:{pulse},primary:{trend,trendRange:{start:'2026-10-10',end:'2026-10-11'}}});
-  assert.match(dashboard,/预约趋势/);
-  assert.match(dashboard,/data-count-key="overview-trend-total" data-count-value="3"/);
-  assert.match(dashboard,/data-count-key="overview-trend-cancelled" data-count-value="7"/);
-  assert.match(dashboard,/class="cancelled-trend-line"/);
-  assert.match(dashboard,/<text[^>]*>8<\/text>/); // cancellation peak participates in the shared axis.
-  assert.match(dashboard,/<td>2026-10-10<\/td><td>3<\/td><td>6<\/td>/);
-  assert.doesNotMatch(dashboard,/data-heat-date|class="command-pulse/);
-  const detail=renderSpace('analytics',{intelligence:{pulse},primary:{}});
+  assert.match(dashboard,/资源就绪/);
+  assert.doesNotMatch(dashboard,/预约趋势|即将开始|最近动态|data-heat-date|class="command-pulse|tide-chart|command-insight-rail/);
+  const detail=renderSpace('analytics',{intelligence:{pulse,today:'2026-10-11'},primary:{}});
+  assert.equal((detail.match(/<h2>预约分布<\/h2>/g)||[]).length,1);
+  assert.equal((detail.match(/<h2>设备需求潮汐图<\/h2>/g)||[]).length,1);
   assert.match(detail,/data-heat-date="2026-10-12"/);
   assert.match(detail,/预约占用2件，空闲24件，占用比例7.7%/);
   assert.match(detail,/--pulse-strength:1/);
   assert.match(detail,/预约数量 · 低/);
-  assert.doesNotMatch(detail,/overview-booking-trend/);
+  assert.doesNotMatch(detail,/overview-booking-trend|分类预约|command-insight-rail/);
 });
 
 test('admin charts expose real values through text and keyboard alternatives',()=>{

@@ -21,6 +21,8 @@ export function mountMotion(root, {reduced} = {}) {
   const counts = new WeakMap();
   const previousCounts = new Map();
   const fields = new Map();
+  const tideFlows = new Map();
+  const tideShapes = new WeakMap();
   let disposed = false;
   const quiet = () => reduced === true || media.matches || document.hidden;
   root.dataset.motionLibraries = 'framer-motion-dom-14.1.0 gsap-3.15.0 svg canvas';
@@ -112,6 +114,7 @@ export function mountMotion(root, {reduced} = {}) {
         onComplete() {element.textContent = `${target.toFixed(decimals)}${suffix}`;}});
     }
     decoratePaths();
+    syncTides();
     // A data patch may update edge classes while a retained keyboard target is
     // still focused. Reapply its actual relations, never invent new edges.
     const focusedNode = document.activeElement?.closest?.('[data-node-id]');
@@ -119,6 +122,33 @@ export function mountMotion(root, {reduced} = {}) {
     networkHighlight(hoveredNode?.dataset.nodeId || (focusedNode && root.contains(focusedNode) ? focusedNode.dataset.nodeId : null));
     for (const [canvas, field] of fields) if (!root.contains(canvas)) {field.dispose(); fields.delete(canvas);}
     for (const canvas of root.querySelectorAll('[data-light-canvas]')) if (!fields.has(canvas)) fields.set(canvas, lightfield(canvas, quiet));
+  }
+
+  function syncTides() {
+    for (const [path,animation] of tideFlows) if (!root.contains(path)) {animation.cancel();tideFlows.delete(path);}
+    for (const chart of root.querySelectorAll('.tide-chart')) {
+      chart.dataset.tideMotion=quiet()?'paused':'running';
+      for(const path of chart.querySelectorAll('.tide-line,.tide-area,.tide-flow')){
+        const target=path.getAttribute('d'),previous=tideShapes.get(path);tideShapes.set(path,target);
+        if(previous&&previous!==target&&!quiet()){
+          gsap.killTweensOf(path,'attr');path.setAttribute('d',previous);
+          tween(path,{attr:{d:target},duration:.35,ease:'power2.out'});
+        }
+      }
+      let index=0;
+      for(const path of chart.querySelectorAll('[data-tide-flow]')){
+        let animation=tideFlows.get(path);
+        if(!animation){animation=path.animate([{strokeDashoffset:100},{strokeDashoffset:0}],{duration:16000+index*400,iterations:Infinity});tideFlows.set(path,animation);}
+        quiet()?animation.pause():animation.play();index++;
+      }
+    }
+    const rings=[...root.querySelectorAll('.insight-booking-map .pulse-cell')].filter(cell=>Number(cell.style.getPropertyValue('--pulse-strength'))>=.9).slice(0,3).map(cell=>cell.querySelector('.pulse-rings'));
+    for(const ring of rings){
+      let animation=tideFlows.get(ring);
+      if(!animation){animation=ring.animate([{opacity:.64},{opacity:1},{opacity:.64}],{duration:4800,iterations:Infinity});tideFlows.set(ring,animation);}
+      quiet()?animation.pause():animation.play();
+    }
+    for(const [element,animation]of tideFlows)if(element.classList.contains('pulse-rings')&&!rings.includes(element)){animation.cancel();tideFlows.delete(element);}
   }
 
   function playLogin({success = false} = {}) {
@@ -144,6 +174,7 @@ export function mountMotion(root, {reduced} = {}) {
       for (const item of tweens) item.progress(1);
     }
     for (const field of fields.values()) field.sync();
+    syncTides();
   }
   document.addEventListener('visibilitychange', quietChanged, {signal: abort.signal});
   media.addEventListener('change', quietChanged, {signal: abort.signal});
@@ -154,6 +185,8 @@ export function mountMotion(root, {reduced} = {}) {
     for (const control of controls) control.stop();
     for (const item of tweens) item.kill();
     for (const field of fields.values()) field.dispose();
+    for (const animation of tideFlows.values()) animation.cancel();
+    tideFlows.clear();
     controls.clear(); tweens.clear(); fields.clear();
     mounted.delete(root);
   }};
