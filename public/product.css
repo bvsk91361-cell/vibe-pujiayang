@@ -223,8 +223,7 @@ body[data-view=discover]:not(.scrolled) .nav-link.active,body[data-view=discover
   filter:blur(70px);
   opacity:.45;
   background:var(--scene-glow);
-  transition:background var(--motion-hero);
-  animation:ambient-drift 17s ease-in-out infinite alternate
+  transition:background var(--motion-hero)
 }
 .ambient-field i:nth-child(1) {
   width:58vw;
@@ -238,8 +237,7 @@ body[data-view=discover]:not(.scrolled) .nav-link.active,body[data-view=discover
   height:30vw;
   right:5%;
   bottom:-20%;
-  opacity:.25;
-  animation-delay:-7s
+  opacity:.25
 }
 .ambient-field i:nth-child(3) {
   width:25vw;
@@ -471,7 +469,6 @@ body[data-view=discover]:not(.scrolled) .nav-link.active,body[data-view=discover
   transition:transform var(--motion-standard) var(--ease-settle),box-shadow var(--motion-standard)
 }
 .experience-card:hover,.experience-card:focus-visible {
-  transform:translateY(-5px);
   box-shadow:var(--depth-shadow)
 }
 .experience-card:nth-child(4n+2) {
@@ -1817,15 +1814,6 @@ dialog::backdrop {
   to {
     opacity:1;
     transform:none
-  }
-
-}
-@keyframes ambient-drift {
-  from {
-    transform:translate(-3%,-2%) scale(.98)
-  }
-  to {
-    transform:translate(4%,6%) scale(1.05)
   }
 
 }

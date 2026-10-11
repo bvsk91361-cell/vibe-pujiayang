@@ -36,7 +36,7 @@ function render(route){
  for(const button of document.querySelectorAll('[data-back]')){button.hidden=!route.back||route.view==='discover';button.textContent=route.back?'返回'+names[route.back]:'返回';}
  window.scrollTo({top:route.position||0,behavior:'instant'});document.body.classList.toggle('scrolled',route.position>24);
  document.dispatchEvent(new CustomEvent('borrow:view',{detail:route.view}));
- if(route.changed&&document.documentElement.dataset.motion!=='reduce'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const page=document.querySelector(`[data-page="${route.view}"]`);for(const animation of page.getAnimations())animation.cancel();page.animate([{opacity:.72,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:320,easing:'cubic-bezier(.16,1,.3,1)'});}
+ if(route.changed&&document.documentElement.dataset.motion!=='reduce'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const page=document.querySelector(`[data-page="${route.view}"]`);for(const animation of page.getAnimations())animation.cancel();page.animate([{opacity:0,transform:'translateY(20px)'},{opacity:1,transform:'none'}],{duration:480,easing:'cubic-bezier(.16,1,.3,1)'});}
 }
 export function goView(view,options={}){
  if(!Object.hasOwn(pages,view))return;

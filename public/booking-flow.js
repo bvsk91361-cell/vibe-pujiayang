@@ -49,13 +49,20 @@ export function mountBookingFlow({api,equipment,getRecords,syncRecords,setRecord
  }
  function start(input){if(busy())throw new Error('预约正在确认，请稍后再试');if(!user)throw new Error('身份尚未加载');const resuming=input.source==='equipment'&&!intent?.receipt&&intent?.source==='equipment'&&intent.userId===user.id&&intent.equipmentIds.length===1&&intent.equipmentIds[0]===input.equipmentIds[0];const value=resuming?{...input,date:input.date??intent.date,slot:input.slot??intent.slot}:input;receiptTrusted=false;intent=bookingIntent(value,user.id,equipment,{sourceView:currentView()||'equipment',sourceY:scrollY});weekStart=intent.date||localDate();error='';submission.reset();persist();goView('booking');render();void refreshAvailability();}
  function setUser(next){const changed=user?.id!==next.id;user=next;form.elements.name.value=user.name;form.elements.userId.value=user.id;if(changed){availability.cancel();checking=false;error='';receiptTrusted=false;intent=readBooking(storage,user.id,equipment);weekStart=intent?.date||localDate();submission.reset();}render();}
+ function timeLabel(moment){
+  if(!moment)return '暂无可约时段';
+  if(intent?.equipmentIds.length!==1)return availabilityLabel(moment);
+  if(moment.reserved)return '本人已预约';
+  if(moment.reservable??moment.available)return '可预约';
+  return equipment.find(item=>item.id===intent.equipmentIds[0])?.operationalStatus==='maintenance'?'维护中':'已约满';
+ }
  function renderDates(){
   const focused=document.activeElement?.closest('#week,#time-slots')?document.activeElement.getAttribute('aria-label'):null;
   const week=$('#week');week.replaceChildren();$('#week-label').textContent='选择日期';$('#week-prev').disabled=!intent||weekStart<=localDate()||busy();$('#week-next').disabled=!intent||busy();
   const days=intent?commonAvailability(intent,getRecords(),equipment,weekStart):[];
-  for(let i=0;i<7;i++){const date=addDays(weekStart,i),moment=days[i]?.best,b=button('',()=>choose({date}),'day'+(intent?.date===date?' selected':''));b.setAttribute('aria-label','选择'+date);b.setAttribute('aria-pressed',String(intent?.date===date));b.disabled=!intent||busy()||date<localDate();b.innerHTML='<strong>'+dateLabel(date)+'</strong><small>'+(moment?esc(availabilityLabel(moment)):intent?'暂无可约时段':'先选设备')+'</small>';week.append(b);}
+  for(let i=0;i<7;i++){const date=addDays(weekStart,i),moment=days[i]?.best,b=button('',()=>choose({date}),'day'+(intent?.date===date?' selected':''));b.classList.toggle('is-available',!!moment?.complete);b.classList.toggle('is-partial',!!moment?.available&&!moment.complete);b.setAttribute('aria-label','选择'+date);b.setAttribute('aria-pressed',String(intent?.date===date));b.disabled=!intent||busy()||date<localDate();b.innerHTML='<strong>'+dateLabel(date)+'</strong><small>'+(moment?esc(timeLabel(moment)):intent?'暂无可约时段':'先选设备')+'</small>';week.append(b);}
   const times=$('#time-slots');times.replaceChildren();
-  for(const slot of slots){const plan=intent?.date?inspectPlan({...intent,slot},getRecords(),equipment,{allowPast:true}):null,expired=plan?.planState.state==='PAST',conflict=!!plan?.blocked,owned=plan?.reserved===plan?.total&&!!plan?.total,b=button('',()=>choose({slot}),'slot'+(intent?.slot===slot?' selected':'')+(conflict?' full':'')+(owned?' secured':''));b.disabled=busy()||!intent?.date||expired;b.setAttribute('aria-label','选择'+slot);b.setAttribute('aria-pressed',String(intent?.slot===slot));b.innerHTML='<strong>'+slot+'</strong><span>'+(!intent?.date?'先选日期':expired?'已结束':esc(availabilityLabel(plan)))+'</span>';times.append(b);}
+  for(const slot of slots){const plan=intent?.date?inspectPlan({...intent,slot},getRecords(),equipment,{allowPast:true}):null,expired=plan?.planState.state==='PAST',conflict=!!plan?.blocked,owned=plan?.reserved===plan?.total&&!!plan?.total,b=button('',()=>choose({slot}),'slot'+(intent?.slot===slot?' selected':'')+(conflict?' full':'')+(owned?' secured':''));b.disabled=busy()||!intent?.date||expired;b.setAttribute('aria-label','选择'+slot);b.setAttribute('aria-pressed',String(intent?.slot===slot));b.innerHTML='<strong>'+slot+'</strong><span>'+(!intent?.date?'先选日期':expired?'已结束':esc(timeLabel(plan)))+'</span>';times.append(b);}
   if(focused)[...document.querySelectorAll('#week button,#time-slots button')].find(b=>b.getAttribute('aria-label')===focused&&!b.disabled)?.focus({preventScroll:true});
  }
  function render(){
@@ -64,7 +71,7 @@ export function mountBookingFlow({api,equipment,getRecords,syncRecords,setRecord
   const opener=$('#booking-device-open');if(opener){opener.hidden=complete;opener.disabled=busy();opener.textContent=intent?'更换设备':'选择设备';opener.classList.toggle('primary',!intent);opener.classList.toggle('secondary',!!intent);}
   if(!intent){form.elements.equipmentId.value='';form.elements.date.value='';form.elements.slot.value='';form.elements.planId.value='';for(const el of form.querySelectorAll('.form-heading,#booking-summary,#booking-checklist,#message'))el.hidden=false;$('#booking-success').hidden=true;$('#smart-replace-booking').replaceChildren();$('#selection').textContent='还没有选择设备';$('#booking-summary').textContent='';$('#booking-checklist').replaceChildren();submit.hidden=true;submit.disabled=true;$('#message').textContent='';renderDates();return;}
   form.elements.equipmentId.value=intent.equipmentIds[0];form.elements.date.value=intent.date;form.elements.slot.value=intent.slot;form.elements.planId.value=intent.planId||'';
-  $('#booking-title').textContent='选一个合适的时间';$('#selection').textContent=intent.name;
+  $('#selection').textContent=intent.name;
   for(const el of form.querySelectorAll('.form-heading,#booking-summary,#booking-checklist,#booking-submit,#message,#smart-replace-booking'))el.hidden=complete;
   $('#booking-success').hidden=!complete;
   if(complete){renderSuccess();return;}

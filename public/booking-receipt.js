@@ -10,7 +10,7 @@ export function receiptDetails(intent,catalog){
  const equipment=intent.equipmentIds.map(id=>catalog.find(item=>item.id===id));
  if(equipment.some(item=>!item))throw new Error('预约设备信息需要重新核对');
  const scene=creativeScenes.find(item=>item.id===intent.sceneId);
- const source=intent.planId?(intent.receipt.records.find(item=>item.planName)?.planName||intent.name):scene?.name||null;
+ const source=intent.planId?(intent.receipt.records.find(item=>item.planName)?.planName||intent.name):scene?.name.replace(/Vlog/gi,'记录')||null;
  return {equipment,date:intent.receipt.date,slot:intent.receipt.slot,source,records:intent.receipt.records};
 }
 export function renderReceipt(card,intent,catalog,{onReservations,onSecondary}){
@@ -22,7 +22,7 @@ export function renderReceipt(card,intent,catalog,{onReservations,onSecondary}){
  const timing=document.createElement('div');timing.className='receipt-timing';
  timing.innerHTML='<div>'+icon('calendar')+'<span><small>日期</small><time datetime="'+details.date+'">'+esc(dateLabel(details.date,{relative:false,weekday:true}))+'</time></span></div><div>'+icon('clock')+'<span><small>时段</small><strong>'+esc(details.slot)+'</strong></span></div>';
  const equipment=document.createElement('ul');equipment.className='receipt-equipment';equipment.dataset.count=details.equipment.length;
- for(const item of details.equipment){const row=document.createElement('li'),record=details.records.find(row=>row.equipmentId===item.id);row.innerHTML='<span class="receipt-device-art" aria-hidden="true">'+deviceSvg(item,'receipt')+'</span><span class="receipt-device-copy"><strong>'+esc(item.name)+'</strong><small>预约编号 <span>'+esc(record.id)+'</span></small></span>';equipment.append(row);}
+ for(const item of details.equipment){const row=document.createElement('li'),record=details.records.find(row=>row.equipmentId===item.id),number=record.id.length>12?record.id.slice(0,8)+'…':record.id;row.innerHTML='<span class="receipt-device-art" aria-hidden="true">'+deviceSvg(item,'receipt')+'</span><span class="receipt-device-copy"><strong>'+esc(item.name)+'</strong><small>编号 <span title="'+esc(record.id)+'" aria-label="预约编号 '+esc(record.id)+'">'+esc(number)+'</span></small></span>';equipment.append(row);}
  summary.append(timing,equipment);
  if(details.source){const source=document.createElement('p');source.className='receipt-source';source.textContent=details.source;summary.append(source);}
  const actions=document.createElement('div');actions.className='receipt-actions';

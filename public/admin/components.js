@@ -10,16 +10,16 @@ export const date=value=>value?String(value).slice(5).replace('-','月')+'日':'
 export const category=id=>categories.find(row=>row.id===id)?.name||id||'共享设备';
 export const states={available:'当前空闲',current:'预约占用',occupied:'预约占用',upcoming:'即将使用',hot:'本期热门',maintenance:'维护中',expired:'已到期',cancelled:'已取消',active:'正常运营'};
 export const pages={
- dashboard:{title:'资源智能中心',name:'Resource Intelligence Center',context:'指挥中心',icon:'discover',description:'设备、时间与创作需求，在同一个空间清楚连接'},
- equipment:{title:'设备智能墙',name:'Equipment Intelligence',context:'设备智能',icon:'camera',description:'掌握每件设备的状态、预约需求与下一次空闲'},
- bookings:{title:'时间流调度',name:'Time Flow Engine',context:'预约调度',icon:'calendar',description:'沿时间看清资源安排，直接处理需要关注的预约'},
- users:{title:'创作者网络',name:'Creator Network',context:'用户生态',icon:'user',description:'从真实身份、方案与预约关系，理解资源需求'},
- operations:{title:'AI 运营中心',name:'Operations Brain',context:'智能决策',icon:'spark',description:'先看事实，再看推理，最后做出可解释的决策'},
- analytics:{title:'资源脉冲',name:'Resource Insight',context:'资源洞察',icon:'sound',description:'让预约占用的分布、热点与空闲空间变得可见'},
- system:{title:'系统状态',name:'System',context:'系统',icon:'layers',description:'查看当前会话、同步机制与业务统计边界'}
+ dashboard:{title:'资源总览',name:'资源总览',context:'资源总览',icon:'discover'},
+ equipment:{title:'设备管理',name:'设备管理',context:'设备管理',icon:'camera'},
+ bookings:{title:'预约调度',name:'预约调度',context:'预约调度',icon:'calendar'},
+ users:{title:'用户关系',name:'用户关系',context:'用户关系',icon:'user'},
+ operations:{title:'运营建议',name:'运营建议',context:'运营建议',icon:'spark'},
+ analytics:{title:'资源洞察',name:'资源洞察',context:'资源洞察',icon:'sound'},
+ system:{title:'系统状态',name:'系统状态',context:'系统',icon:'layers'}
 };
 export function badge(state){return `<span class="command-state state-${esc(state)}"><i></i>${esc(states[state]||state||'暂无')}</span>`;}
-export function empty(title='暂无记录',description='这里会随真实台账的变化更新'){return `<div class="command-empty">${icon('layers')}<h3>${esc(title)}</h3><p>${esc(description)}</p></div>`;}
+export function empty(title='暂无记录',description=''){return `<div class="command-empty">${icon('layers')}<h3>${esc(title)}</h3>${description?`<p>${esc(description)}</p>`:''}</div>`;}
 export function artwork(item,id='wall'){try{return deviceSvg({...item,model:item.model||''},`command-${id}-${item.id}`);}catch{return icon('camera');}}
 export function section(title,subtitle,body,{action='',className=''}={}){return `<section class="command-panel ${className}"><header class="command-panel-head"><div><h2>${title}</h2>${subtitle?`<p>${subtitle}</p>`:''}</div>${action}</header>${body}</section>`;}
 export function sparkline(rows=[],id='spark'){
@@ -30,13 +30,13 @@ export function sparkline(rows=[],id='spark'){
 export function nextFree(item){return item.nextFreeSlot?`${date(item.nextFreeSlot.date)} · ${esc(item.nextFreeSlot.slot)}`:item.operationalStatus==='maintenance'?'维护期间暂停预约':'未来 14 天暂无空闲'};
 export function sourceText(source){
  if(typeof source==='string')return source;
- if(!source)return '当前持久化业务台账';
+ if(!source)return '预约记录';
  const names={reservations:'预约台账',equipment:'设备运营状态','plans + reservations + equipment':'创作方案与设备预约台账'};
  return [names[source.table]||'当前业务台账',source.start&&source.end?`${source.start} — ${source.end}`:source.asOf?`截至 ${source.asOf}`:'',source.sampleSize!=null?`${num(source.sampleSize)} 个有效预约时段`:''].filter(Boolean).join(' · ');
 }
 export function evidenceText(evidence){
  if(typeof evidence==='string')return evidence;
- if(!evidence)return '依据当前真实台账计算';
+ if(!evidence)return '暂无统计';
  const parts=[];
  if(evidence.devices)parts.push(evidence.devices.map(item=>`${item.name}：${num(item.bookings)} 次`).join('；'));
  if(evidence.names)parts.push(evidence.names.join('、'));
@@ -46,12 +46,12 @@ export function evidenceText(evidence){
  if(evidence.share!=null)parts.push(`占本周 ${percent(evidence.share)}`);
  if(evidence.activeBookings!=null)parts.push(`该时段占用 ${num(evidence.activeBookings)} 件，空闲 ${num(evidence.availableEquipment)} 件`);
  if(evidence.occupancyRate!=null)parts.push(`预约占用 ${percent(evidence.occupancyRate)}`);
- if(evidence.equipmentIds&&!evidence.names)parts.push(`已检查 ${evidence.equipmentIds.length} 件真实设备`);
+ if(evidence.equipmentIds&&!evidence.names)parts.push(`已检查 ${evidence.equipmentIds.length} 件设备`);
  if(evidence.nextFreeSlot)parts.push(`下一空闲 ${evidence.nextFreeSlot.date} · ${evidence.nextFreeSlot.slot}`);
  if('nextFreeSlot' in evidence&&!evidence.nextFreeSlot)parts.push('未来 14 天未找到匹配空闲');
- return parts.join('；')||'依据当前真实预约与设备状态计算';
+ return parts.join('；')||'暂无统计';
 }
 export function insightRail(insights=[],summary={}){
- return `<aside class="command-insight-rail" aria-label="运营决策提示"><div class="insight-rail-title"><span class="brain-mark">${icon('spark')}</span><div><h2>运营脉络</h2><p>台账规则分析 · 依据可查</p></div></div>${insights.length?insights.slice(0,3).map((item,index)=>`<article class="command-insight ${esc(item.severity||'info')}"><div class="insight-number">${String(index+1).padStart(2,'0')}<i></i></div><h3>${esc(item.title)}</h3><p class="insight-advice">${esc(item.advice)}</p><details><summary>查看依据 ${icon('plus')}</summary><dl><dt>数据来源</dt><dd>${esc(sourceText(item.source))}</dd><dt>分析逻辑</dt><dd>${esc(item.logic)}</dd><dt>事实证据</dt><dd>${esc(evidenceText(item.evidence))}</dd></dl></details></article>`).join(''):empty('等待台账同步','不会生成没有依据的建议')}<div class="insight-boundary">${icon('check')}<p>建议仅供决策参考<br>不会自动移动或取消预约</p></div><a class="command-text-link" href="#/operations">进入运营分析 ${icon('arrow')}</a></aside>`;
+ return `<aside class="command-insight-rail" aria-label="运营建议"><div class="insight-rail-title"><span class="brain-mark">${icon('spark')}</span><div><h2>运营建议</h2></div></div>${insights.length?insights.slice(0,3).map((item,index)=>`<article class="command-insight ${esc(item.severity||'info')}"><div class="insight-number">${String(index+1).padStart(2,'0')}<i></i></div><h3>${esc(item.title)}</h3><p class="insight-advice">${esc(item.advice)}</p><details><summary>查看详情 ${icon('plus')}</summary><dl><dt>预约记录</dt><dd>${esc(sourceText(item.source))}</dd><dt>分析</dt><dd>${esc(item.logic)}</dd><dt>统计</dt><dd>${esc(evidenceText(item.evidence))}</dd></dl></details></article>`).join(''):empty('正在读取建议')}<a class="command-text-link" href="#/operations">查看全部建议 ${icon('arrow')}</a></aside>`;
 }
-export function pagination(data={}){const page=Math.max(1,num(data.page)||1),size=Math.max(1,num(data.pageSize)||20),pages=Math.max(1,Math.ceil(num(data.total)/size));return `<div class="command-pagination"><span>匹配 ${num(data.total)} 条 · 完整台账筛选</span><div><button class="btn btn-quiet btn-small" data-page-number="${page-1}" ${page<=1?'disabled':''}>上一页</button><span>${page} / ${pages}</span><button class="btn btn-quiet btn-small" data-page-number="${page+1}" ${page>=pages?'disabled':''}>下一页</button></div></div>`;}
+export function pagination(data={}){const page=Math.max(1,num(data.page)||1),size=Math.max(1,num(data.pageSize)||20),pages=Math.max(1,Math.ceil(num(data.total)/size));return `<div class="command-pagination"><span>共 ${num(data.total)} 条</span><div><button class="btn btn-quiet btn-small" data-page-number="${page-1}" ${page<=1?'disabled':''}>上一页</button><span>${page} / ${pages}</span><button class="btn btn-quiet btn-small" data-page-number="${page+1}" ${page>=pages?'disabled':''}>下一页</button></div></div>`;}

@@ -1,4 +1,5 @@
 /* Borrow Lab Command Center. Scoped to the independent admin document. */
+.admin-body .command-brandbar>.topbar-right{margin-left:auto}.admin-body .command-workspace .admin-main{padding-top:30px}.admin-body .finding-details{margin-top:18px;padding-top:16px;border-top:1px solid var(--command-line)}.admin-body .finding-details summary{cursor:pointer;color:var(--command-purple);font-size:13px}.admin-body .finding-details dl{margin-top:18px}
 .admin-body{--command-bg:#080d17;--command-surface:#0f1725;--command-line:rgba(155,173,220,.13);--command-ink:#f0f3ff;--command-muted:#a2aec6;--command-purple:#a79cff;--command-green:#74dfbd;--command-gold:#f0ca88;--command-red:#f6a2b3;background:var(--command-bg);color:var(--command-ink)}
 .admin-body .command-shell{grid-template-columns:174px minmax(0,1fr);grid-template-rows:78px minmax(0,1fr);background:radial-gradient(ellipse at 68% 0%,#6e54c711,transparent 38%),#080d17}
 .admin-body .command-brandbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 30px;border-bottom:1px solid var(--command-line);background:#0b1220;position:sticky;top:0;z-index:40;min-width:0}

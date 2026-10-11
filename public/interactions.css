@@ -79,3 +79,91 @@ html{scrollbar-gutter:stable}
 @media(max-width:600px){.avatar-editor:not([hidden]){grid-template-columns:1fr}#avatar-crop-preview{margin:auto}}
 @media(max-width:800px){#notification-dialog{width:calc(100vw - 32px);padding:20px}.notice-row{grid-template-columns:4em minmax(0,1fr);gap:10px;padding:16px 10px}.notice-time{grid-column:2}.notice-status{grid-column:1;grid-row:2}.notice-action{grid-column:2;justify-content:flex-start}}
 @media(prefers-reduced-motion:reduce){.icon-button,.profile-trigger{transition:none}}
+
+/* Product polish: one visual hierarchy, stable geometry, finite feedback. */
+body:not(.admin-body){--product-enter:480ms;--product-ease:cubic-bezier(.16,1,.3,1)}
+.hero .hero-inner{position:relative;z-index:2}
+.hero .hero-controls{position:relative;z-index:2}
+.hero #hero-title{font-size:clamp(56px,5.8vw,104px);letter-spacing:-.045em;line-height:1.12;max-width:8em;margin:0 0 32px}
+.hero .hero-actions{margin-top:36px}
+.hero #hero-book{padding:19px 28px;min-width:190px;font-size:18px}
+.hero .hero-nav button{font-size:15px;font-weight:450}
+.product-lightfield{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+button.primary,button.secondary{position:relative;isolation:isolate}
+.product-click-wave{position:absolute;width:16px;height:16px;border:1px solid currentColor;border-radius:50%;pointer-events:none;z-index:3}
+.cards>.card{border:1px solid var(--color-line);border-radius:24px;background:var(--color-surface);transition:border-color 240ms,background 240ms;box-shadow:0 8px 26px #050a140c}
+.cards>.card:hover,.cards>.card:focus-within{border-color:var(--color-focus);background:var(--color-surface-elevated)}
+.cards .card>.device-art{width:100%;height:200px;min-height:200px;border:0;border-radius:24px 24px 0 0;padding:22px 30px;background:radial-gradient(ellipse at 50% 68%,#7789cc10,transparent 70%);color:inherit}
+.cards .card>.device-art svg{height:155px;transition:transform 450ms var(--product-ease)}
+.cards .card>.device-art:hover svg,.cards .card>.device-art:focus-visible svg{transform:translateY(-4px) scale(1.025)}
+.cards .card-info{padding:12px 24px 22px;gap:12px}
+.cards .card-meta{display:block}
+.cards .card-meta h3{font-size:20px;letter-spacing:-.025em;margin:0}
+.cards .card-info>p{font-size:15px;line-height:1.6;margin:0;min-height:3.2em;color:var(--color-muted)}
+.cards .card-bottom{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;padding-top:16px}
+.cards .card-actions{justify-content:flex-end;margin:0;flex-shrink:0}
+.cards .card-bottom .availability{font-size:14px;padding:0;background:transparent;border:0;color:var(--color-success);white-space:nowrap}
+.cards .card-bottom .availability.busy{color:var(--color-muted)}
+.cards .card-bottom .secondary{padding:10px 15px;min-height:42px;white-space:nowrap}
+.scene-intro{margin-bottom:30px}
+.scene-intro h2{letter-spacing:-.035em}
+.experience-card{position:relative;border:1px solid var(--color-line);border-radius:26px;background:var(--color-surface);transition:border-color 240ms,background 240ms;min-height:365px}
+.experience-card .scene-art{height:175px;transition:opacity 220ms,transform 450ms var(--product-ease)}
+.experience-card p{font-size:15px;line-height:1.6;margin-bottom:16px}
+.experience-card h3{font-size:23px}
+.scene-kit-count{display:block;grid-column:2;text-align:left;color:var(--color-muted);font-size:14px}
+.scene-kit-preview{position:absolute;bottom:20px;left:22px;right:22px;height:100px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:8px;border:1px solid var(--color-border-interactive);border-radius:18px;background:var(--color-surface-elevated);opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity 220ms,transform 300ms var(--product-ease),visibility 220ms;pointer-events:none}
+.scene-kit-device{display:flex;align-items:center;gap:8px;text-align:left;font-size:13px;line-height:1.5;color:var(--color-ink);min-width:0}
+.scene-kit-art{display:block;width:36px;height:36px;flex:none}
+.scene-kit-art svg{width:100%;height:100%}
+.experience-card:hover,.experience-card:focus-visible{border-color:var(--color-focus);background:var(--color-surface-elevated)}
+.cards>.card:hover,.experience-card:hover,.saved-plan:hover{background-image:radial-gradient(220px circle at var(--card-x,50%) var(--card-y,35%),#9793ff12,transparent 75%)}
+.experience-card:hover .scene-art,.experience-card:focus-visible .scene-art{opacity:.18;transform:scale(.96)}
+.experience-card:hover .scene-kit-preview,.experience-card:focus-visible .scene-kit-preview{opacity:1;visibility:visible;transform:none}
+#detail-dialog .detail-specs{border-top:1px solid var(--color-line);padding-top:16px;margin:22px 0}
+.detail-specs summary{list-style:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;color:var(--color-muted);font-size:15px;padding:8px 0}
+.detail-specs summary::-webkit-details-marker{display:none}
+.detail-specs summary:after{content:'+';font-size:21px;color:var(--color-link)}
+.detail-specs[open] summary:after{content:'−'}
+.detail-specs .detail-grid{margin-top:18px}
+.detail-specs .visual-spec{border:0;border-left:1px solid var(--color-line);border-radius:0;background:transparent;padding:8px 14px;box-shadow:none}
+.detail-specs .visual-spec strong{font-size:23px}
+.detail-specs .visual-spec span{font-size:13px}
+#plan-editor .kit-grid[data-count="1"]{display:block;margin:24px 0}
+#plan-editor .kit-grid[data-count="1"]>.kit-item{max-width:none;min-height:0;border:0;border-radius:0;background:transparent}
+#plan-editor .kit-grid[data-count="1"] .kit-device-open{display:grid;grid-template-columns:160px minmax(0,1fr);grid-template-rows:auto auto;gap:6px 24px;min-height:160px;height:auto;padding:16px 0;align-content:center;border-radius:18px}
+#plan-editor .kit-grid[data-count="1"] .kit-art{grid-column:1;grid-row:1 / span 3;height:130px;margin:0;padding:12px}
+#plan-editor .kit-grid[data-count="1"] :is(h3,p,.kit-state){grid-column:2;margin:0}
+#plan-editor .kit-grid[data-count="1"] .kit-edit-controls{border-top:0}
+.booking-section .week-grid{position:relative;gap:10px;padding:14px 0 24px}
+.booking-section .week-grid:before{content:'';position:absolute;height:1px;left:16px;right:16px;bottom:10px;background:linear-gradient(90deg,transparent,var(--color-line) 10%,var(--color-line) 90%,transparent);pointer-events:none}
+.booking-section .day{position:relative;border-radius:18px;border-color:var(--color-line);background:var(--color-surface);transition:border-color 180ms,background 180ms}
+.booking-section .day:after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;left:calc(50% - 2.5px);bottom:-18px;background:var(--color-muted)}
+.booking-section .day.is-available:after{background:var(--color-success)}
+.booking-section .day.is-partial:after{background:var(--color-warning)}
+.booking-section .day:disabled:after{background:var(--color-muted);opacity:.45}
+.booking-section .day.selected:after{width:8px;height:8px;left:calc(50% - 4px);bottom:-19px;background:var(--color-accent);box-shadow:0 0 13px #8f8afa4d}
+.booking-section .day.selected{border-color:var(--color-focus)}
+.booking-section .day small{color:var(--color-muted);font-size:13px}
+.booking-section .day.is-available small{color:var(--color-success)}
+.booking-section .day.is-partial small{color:var(--color-warning)}
+.booking-section .day.selected small{color:inherit}
+.booking-section .slot{border-color:var(--color-line);background:var(--color-surface)}
+.booking-section .slot:not(.full):not(:disabled):not(.selected) span{color:var(--color-success)}
+.booking-section .slot.selected{border-color:var(--color-focus)}
+.reservation .record-device{border-radius:17px;background:var(--color-mist)}
+.reservation-status{display:inline-flex;align-items:center;gap:8px}
+.reservation-status:not(.expired):before{content:'';height:5px;width:5px;border-radius:50%;background:currentColor;animation:product-status 3s ease-in-out infinite}
+@keyframes product-status{0%,100%{opacity:1}50%{opacity:.4}}
+.toast.is-error{border-color:var(--color-border-interactive);background:var(--color-surface-elevated)}
+.toast.is-error:before{content:'';width:4px;align-self:stretch;border-radius:4px;background:var(--color-warning)}
+.thinking-orbit{animation-duration:2.8s}
+.thinking-orbit i{background:var(--color-link);box-shadow:0 0 18px #9d9cff42}
+.avatar.has-photo,.space-avatar.has-photo{padding:0;border:0;overflow:hidden;border-radius:50%;aspect-ratio:1}
+.avatar.has-photo img,.space-avatar.has-photo img{width:100%;height:100%;object-fit:cover;display:block;border:0;padding:0;border-radius:50%}
+@media(min-width:960px){.catalog-heading{margin-bottom:20px}.catalog-toolbar{margin-top:20px}.cards{gap:22px}.scenes-showcase .scene-experiences{gap:20px}.space-hero{padding-bottom:26px}}
+@media(max-width:1399px) and (min-width:960px){.hero #hero-title{font-size:64px}.cards .card-info{padding:10px 20px 20px}.cards .card>.device-art{height:180px;min-height:180px}.cards .card-meta h3{font-size:18px}.experience-card{min-height:355px}.scene-kit-preview{left:18px;right:18px}.scene-kit-device{font-size:13px}.booking-section .day small{font-size:13px}}
+@media(max-width:959px){.hero #hero-title{font-size:clamp(42px,7vw,70px)}.scene-kit-preview{display:none}.experience-card .scene-art{opacity:1}.cards .card-info{padding:10px 20px 20px}}
+@media(prefers-reduced-motion:reduce){.reservation-status:before{animation:none}.scene-kit-preview,.cards .device-art svg{transition:none}}
+html[data-motion=reduce] .reservation-status:before{animation:none}
+html[data-motion=reduce] :is(.scene-kit-preview,.cards .device-art svg){transition:none}

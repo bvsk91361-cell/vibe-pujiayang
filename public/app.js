@@ -11,7 +11,8 @@ import { categories,scenes } from './catalog.js';
 import { mountProduct } from './product.js';
 import { goView,openDialog } from './navigation.js';
 import { icon } from './icons.js';
-import {dateLabel,identityName} from './plan-state.js';
+import {dateLabel} from './plan-state.js';
+const identityName=user=>user?.name==='游客体验账号'?'访客':user?.name||'创作者';
 import {localDate} from './booking.js';
 const $ = selector => document.querySelector(selector);
 const staticMode = $('meta[name="storage-mode"]')?.content === 'browser';
@@ -33,7 +34,7 @@ function node(tag, className, text) {
 }
 async function api(path, options) {
  if (staticMode && !path.startsWith('/api/ai')) return browserApi(path, options);
- if (staticMode) throw new Error('在线静态演示暂未连接AI服务，请使用已配置模型的本地版。');
+ if (staticMode) throw new Error('智能推荐暂时不可用，请稍后再试。');
  const response = await fetch(path, options);
  let result;
  try { result = await response.json(); } catch { throw new Error('服务返回异常，请稍后重试。'); }
@@ -63,18 +64,16 @@ function renderCatalog() {
  for (const item of (expanded?visible:visible.slice(0,9))) {
   const card = node('article',`card${item.id === form.elements.equipmentId.value ? ' selected' : ''}`);
   card.dataset.equipmentId=item.id;
-  const art = node('div',`device-art ${item.color}`); art.innerHTML = deviceSvg(item,'card');
-  const meta = node('div','card-meta'); meta.append(node('h3','',item.name),node('span','device-code',item.productName));
+  const art = node('button',`device-art ${item.color}`);art.type='button';art.setAttribute('aria-label',`查看${item.name}详情`);art.addEventListener('click',()=>showroom.openDetail(item));art.innerHTML = deviceSvg(item,'card');
+  const meta = node('div','card-meta'); meta.append(node('h3','',item.name));
   const bottom = node('div','card-bottom'); const free = freeSlots(allRecords,chosenDate(),item.id,undefined,equipment).length;
   const maintenance=item.operationalStatus==='maintenance';
-  const tag = node('span',`availability${free === 0 ? ' busy' : ''}`,maintenance?'维护中 · 暂不可预约':free ? `所选日期 · ${free}个空闲时段` : '所选日期已约满');
+  const tag = node('span',`availability${free === 0 ? ' busy' : ''}`,maintenance?'维护中':free?'可预约':'暂无空闲时段');
   const button = node('button','secondary','预约');button.insertAdjacentHTML('beforeend',icon(item.id===form.elements.equipmentId.value?'check':'arrow'));button.disabled=maintenance;
   button.type='button'; button.setAttribute('aria-label',`预约${item.name}`);
   button.addEventListener('click',()=>{selectEquipment(item.id);scrollToBooking();});
-  const detail=node('button','text-button','设备详情');detail.type='button';detail.setAttribute('aria-label',`查看${item.name}详情`);detail.addEventListener('click',()=>showroom.openDetail(item));
-  const tags=node('div','tags');for(const label of item.tags)tags.append(node('span','pill',label));
-  const actions=node('div','card-actions');actions.append(detail,button);bottom.append(tag,actions);
-  const sceneCopy=node('div','card-scenes',item.scenes.map(id=>scenes.find(row=>row.id===id)?.name).filter(Boolean).slice(0,2).join(' · '));const info=node('div','card-info');info.append(meta,node('p','',item.description),sceneCopy,tags,bottom);card.append(art,info);grid.append(card);
+  const actions=node('div','card-actions');actions.append(button);bottom.append(tag,actions);
+  const info=node('div','card-info');info.append(meta,node('p','',item.description),bottom);card.append(art,info);grid.append(card);
  }
 }
 function renderRecords(){
@@ -149,13 +148,13 @@ document.addEventListener('keydown',event=>{if(event.key==='/'&&!['INPUT','TEXTA
 for(const link of document.querySelectorAll('.nav-link'))link.addEventListener('click',()=>{for(const item of document.querySelectorAll('.nav-link'))item.classList.toggle('active',item===link);});
 $('#export').addEventListener('click',async()=>{
  try{const csv=exportCsv(await api('/api/reservations'),equipment);const url=URL.createObjectURL(new Blob(['\uFEFF',csv],{type:'text/csv;charset=utf-8'}));
- const link=node('a');link.href=url;link.download='借一下-预约记录.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('已导出当前预约台账。');}
+ const link=node('a');link.href=url;link.download='借一下-预约记录.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('已导出预约记录');}
  catch(error){notify(error.message,true);}
 });
 async function initialize(){
  let environment={demo:false};if(!staticMode){try{environment=await api('/api/environment');}catch{}}
- if(environment.demo){const label=node('aside','demo-environment','独立演示数据');label.setAttribute('role','status');label.title='演示预约保存在独立 SQLite 数据库，不影响日常数据';document.body.append(label);}
- $('#storage-note').textContent=staticMode?'在线演示 · 当前浏览器独立保存预约':'本地演示 · 同机共享预约，姓名筛选不等于登录';
+ // Environment isolation remains server-owned; presentation has no teaching banner.
+ $('#storage-note').textContent='';
  const catalog=await api('/api/equipment');equipment=catalog.equipment;slots=catalog.slots;
  showroom=mountShowcase({equipment,getRecords:()=>allRecords,getDate:chosenDate,onSelect:id=>{selectEquipment(id);scrollToBooking();},onAccount:account=>{if(bookingFlow?.busy()){notify('正在保存预约，请稍后切换身份。');return false;}form.elements.name.value=account.name;$('#mine').checked=true;renderRecords();},onPlans:()=>{$('#mine').checked=true;renderRecords();goView('reservations');}});
  for(const item of [{id:'all',name:'全部设备'},...categories]){const button=node('button','',item.name);button.type='button';button.dataset.category=item.id;$('#categories').append(button);}
@@ -165,8 +164,8 @@ async function initialize(){
  form.elements.date.min=today();form.elements.date.value='';form.elements.slot.value='';form.elements.equipmentId.value='';await refresh();
  bookingFlow=mountBookingFlow({api,equipment,getRecords:()=>allRecords,syncRecords,setRecords,onUpdated:refresh});
  mountBookingPicker({catalog:equipment,getIntent:()=>bookingFlow.intent(),getUserId:()=>bookingFlow.userId(),getRecords:()=>allRecords,onSelect:(id,replaceId)=>bookingFlow.changeEquipment(id,replaceId),isBusy:()=>bookingFlow.busy()});
- try{const state=await api('/api/ai/status');$('#ai-state').textContent=state.configured?'助手已连接。让AI把台账整理成建议，空闲结果由系统核对。':'助手尚未配置。普通预约不受影响，完成服务端设置后即可使用。';}
- catch{$('#ai-state').textContent=staticMode?'静态演示提供预约体验。AI助手需要连接配置模型的后端。':'暂时无法连接助手，普通预约可继续使用。';}
+ try{const state=await api('/api/ai/status');$('#ai-state').textContent=state.configured?'可以开始了':'智能推荐暂时不可用';}
+ catch{$('#ai-state').textContent=staticMode?'智能推荐暂时不可用':'暂时无法连接顾问，请稍后再试';}
  await mountProduct({api,equipment,getRecords:()=>allRecords,notify:toast,openDetail:item=>showroom.openDetail(item),startBooking,getBooking:()=>bookingFlow.intent(),setAccount:user=>{bookingFlow.setUser(user);$('#mine').checked=true;renderRecords();},setBooking:(id,date,slot,planId=null)=>startBooking({name:equipment.find(item=>item.id===id)?.name||'设备搭配',equipmentIds:id?[id]:bookingFlow.intent()?.equipmentIds||[],date:date||'',slot:slot||'',planId})});
  $('#ai-state').textContent='告诉我你准备做什么。';
  $('#storage-note').hidden=true;renderAll();

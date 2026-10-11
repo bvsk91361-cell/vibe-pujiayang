@@ -30,7 +30,7 @@ export function mountBookingPicker({catalog,getIntent,getUserId,getRecords,onSel
   for(const item of rows){
    const original=session.replaceId||intent?.equipmentIds[0],chosen=original===item.id,elsewhere=!!intent?.equipmentIds.includes(item.id)&&!chosen,maintenance=item.operationalStatus!=='active';
    const card=document.createElement('article');card.className='booking-device-card'+(chosen?' is-selected':'');
-   let availability='选好时间，再查看空闲',ready=false;
+   let availability='时间待选',ready=false;
    if(maintenance)availability='维护中 · 暂不可预约';
    else if(intent?.date&&intent?.slot){const checked=inspectPlan({userId:getUserId(),date:intent.date,slot:intent.slot,equipmentIds:[item.id]},records,catalog,{allowPast:true}).items[0];availability=checked.reason;ready=checked.available;}
    card.innerHTML=`<div class="booking-device-art">${deviceSvg(item,'booking-picker')}</div><div class="booking-device-copy"><h3>${esc(item.name)}</h3><p>${esc(item.description)}</p><span class="booking-device-state${ready?' is-ready':''}">${esc(availability)}</span></div>`;
@@ -43,7 +43,7 @@ export function mountBookingPicker({catalog,getIntent,getUserId,getRecords,onSel
   if(!rows.length){const empty=document.createElement('div');empty.className='booking-device-empty';const title=document.createElement('h3');title.textContent='没有找到这件设备';empty.append(title,makeButton('查看全部',()=>{query.value='';category='all';renderCategories();render();},'text-button'));grid.append(empty);}
  }
  function open({replaceId=null}={}){
-  if(isBusy())return false;const intent=getIntent(),userId=getUserId();if(!userId)throw new Error('身份尚未加载');
+  if(isBusy())return false;const intent=getIntent(),userId=getUserId();if(!userId)throw new Error('正在加载账户，请稍后再试');
   if(intent?.receipt)throw new Error('这次预约已经完成，请开始新的预约');
   if(replaceId&&!intent?.equipmentIds.includes(replaceId))throw new Error('请选择当前预约中的设备');
   session={key:key(),replaceId:replaceId||intent?.equipmentIds[0]||null};category='all';query.value='';renderTargets();renderCategories();render();openDialog(dialog);query.focus({preventScroll:true});return true;
