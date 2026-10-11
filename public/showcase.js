@@ -6,16 +6,13 @@ import {goView,openDialog,closeDialog as closeSurface} from './navigation.js';
 import {renderDetail} from './detail-view.js';
 import {animate as motionAnimate} from './vendor/motion-dom.js';
 import {gsap} from './vendor/gsap.min.js';
-import {deviceSvg} from './device-art.js';
 const $=selector=>document.querySelector(selector);
-// Editorial combinations use the same catalog IDs as the booking flow.
-// They introduce equipment; availability is still checked on its booking page.
 const heroStories={
- cinema:{word:'影像',line:'从一个想法，到你的下一部作品。',title:'影像创作，从这套开始',ids:['camera','lens-l1','light-f1']},
- vlog:{word:'随行',line:'轻装出发，把日常拍成你的风格。',title:'轻便记录，从这套开始',ids:['gimbal-g1','microphone-m1','support-t2']},
- outdoor:{word:'远行',line:'换一个高度，看见更大的世界。',title:'户外视角，从这套开始',ids:['drone-a1','camera-c3','support-t2']},
- voice:{word:'声场',line:'让每一段对话，都有清晰的表达。',title:'清晰表达，从这套开始',ids:['microphone-m1','recorder-r2','support-t1']},
- presentation:{word:'映现',line:'把准备好的作品，带到更大的画面。',title:'灵感演示，从这套开始',ids:['projector','camera','recorder']}
+ cinema:{word:'影像',line:'从一个想法，到你的下一部作品。',question:'我准备拍摄校园短片，请推荐一套相机、镜头和补光设备。'},
+ vlog:{word:'随行',line:'轻装出发，把日常拍成你的风格。',question:'我想轻便记录日常，请帮我配一套适合随身拍摄的设备。'},
+ outdoor:{word:'远行',line:'换一个高度，看见更大的世界。',question:'我准备进行户外航拍，请推荐一套轻便的设备搭配。'},
+ voice:{word:'声场',line:'让每一段对话，都有清晰的表达。',question:'我准备录制双人对谈，请推荐一套收音清晰的设备。'},
+ presentation:{word:'映现',line:'把准备好的作品，带到更大的画面。',question:'我准备做课堂作品展示，请推荐一套投影和演示设备。'}
 };
 export function mountShowcase({equipment,onSelect,onPlans,getRecords=()=>[],getDate=()=>''}){
  let storage;try{storage=localStorage;}catch{}
@@ -28,7 +25,7 @@ export function mountShowcase({equipment,onSelect,onPlans,getRecords=()=>[],getD
  const slides=heroSlides.filter(slide=>equipment.some(item=>item.id===slide.equipmentId));
  let slideVersion=0;
  const sceneLabel=label=>label.replace(/\s*Vlog/gi,'记录');
- function cancelHeroEntrance(){for(const element of [$('#hero-copy'),$('#hero-art'),$('#hero-kit-devices'),$('#hero-stage-word'),$('.hero-stage-trails')])for(const animation of element.getAnimations())animation.cancel();}
+ function cancelHeroEntrance(){for(const element of [$('#hero-copy'),$('#hero-art'),$('#hero-stage-word'),$('.hero-stage-trails')])for(const animation of element.getAnimations())animation.cancel();}
  async function renderSlide(index,manual=false){
   const version=++slideVersion,slide=slides[index],item=equipment.find(item=>item.id===slide.equipmentId);
   const poster=document.createElement('img');poster.src='/assets/hero-'+slide.visual+'.webp';poster.alt='';poster.width=1536;poster.height=1024;poster.decoding='async';poster.fetchPriority=index===0?'high':'auto';
@@ -36,15 +33,7 @@ export function mountShowcase({equipment,onSelect,onPlans,getRecords=()=>[],getD
   if(version!==slideVersion)return;
   const story=heroStories[slide.visual];
   $('#hero-title').textContent='让设备\n跟上你的想法';$('#hero-label').textContent=sceneLabel(slide.label);$('#hero-description').textContent=story.line;$('#hero').dataset.tone='blue';$('#hero').dataset.scene=slide.visual;
-  $('#hero-stage-word').textContent=story.word;$('#hero-kit-title').textContent=story.title;
-  const devices=story.ids.map(id=>equipment.find(row=>row.id===id)).filter(Boolean);
-  const kit=document.createDocumentFragment();
-  for(const device of devices){
-   const button=document.createElement('button');button.type='button';button.className='hero-kit-device';button.dataset.equipmentId=device.id;button.setAttribute('aria-label','查看'+device.name);
-   const art=document.createElement('span');art.className='hero-kit-art';art.setAttribute('aria-hidden','true');art.innerHTML=deviceSvg(device,'hero-kit');
-   const label=document.createElement('span');label.textContent=device.name;button.append(art,label);button.addEventListener('click',()=>openDetail(device));kit.append(button);
-  }
-  $('#hero-kit-devices').replaceChildren(kit);
+  $('#hero-stage-word').textContent=story.word;$('#hero-advisor').dataset.question=story.question;
   $('#hero-art').replaceChildren(poster);$('#hero-book').innerHTML='开始找设备 '+icon('arrow');$('#hero-book').dataset.equipmentId=item.id;
   for(const [i,button]of [...$('#hero-nav').children].entries())button.setAttribute('aria-pressed',String(i===index));
   if(manual)$('#hero-announcement').textContent=`${index+1}/${slides.length}：${sceneLabel(slide.label)}`;
@@ -52,14 +41,13 @@ export function mountShowcase({equipment,onSelect,onPlans,getRecords=()=>[],getD
    const tokens=getComputedStyle(document.documentElement),duration=parseFloat(tokens.getPropertyValue('--motion-hero'))||900;
    cancelHeroEntrance();
    $('#hero-art').animate([{opacity:.6,transform:'translateX(18px)'},{opacity:1,transform:'none'}],{duration,easing:tokens.getPropertyValue('--ease-out').trim()});
-   $('#hero-kit-devices').animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'none'}],{duration:520,easing:'cubic-bezier(.16,1,.3,1)'});
    $('#hero-stage-word').animate([{opacity:0,transform:'translateX(25px)'},{opacity:1,transform:'none'}],{duration:850,easing:'cubic-bezier(.16,1,.3,1)'});
    $('.hero-stage-trails').animate([{opacity:.12,transform:'rotate(-6deg) scale(.94)'},{opacity:1,transform:'rotate(0deg) scale(1)'}],{duration:1100,easing:'cubic-bezier(.16,1,.3,1)'});
    if(index===0)$('#hero-copy').animate([{opacity:0,transform:'translateY(20px)'},{opacity:1,transform:'none'}],{duration:500,easing:'cubic-bezier(.2,.8,.2,1)'});
   }
  }
  let controller;
- for(const [index,slide]of slides.entries()){const button=document.createElement('button');button.type='button';button.setAttribute('aria-label','展示'+sceneLabel(slide.label));const preview=document.createElement('img');preview.src='/assets/hero-'+slide.visual+'.webp';preview.alt='';preview.width=108;preview.height=72;preview.decoding='async';const label=document.createElement('span');label.textContent=sceneLabel(slide.label);const progress=document.createElement('span');progress.className='theme-progress';progress.setAttribute('aria-hidden','true');button.append(preview,label,progress);button.addEventListener('click',()=>controller.go(index));$('#hero-nav').append(button);}
+ for(const [index,slide]of slides.entries()){const button=document.createElement('button');button.type='button';button.setAttribute('aria-label','展示'+sceneLabel(slide.label));const label=document.createElement('span');label.textContent=sceneLabel(slide.label);const progress=document.createElement('span');progress.className='theme-progress';progress.setAttribute('aria-hidden','true');button.append(label,progress);button.addEventListener('click',()=>controller.go(index));$('#hero-nav').append(button);}
  controller=createCarousel({count:slides.length,interval:5000,resumeOnInteraction:true,onChange:renderSlide,onState:state=>{if(!$('#hero-playback'))return;$('#hero-playback').textContent=state.paused?'轮播已暂停':'每5秒切换';$('#hero').dataset.autoplay=state.paused?'paused':'running';for(const [i,tab]of [...$('#hero-nav').children].entries()){const progress=tab.querySelector('.theme-progress');for(const animation of progress.getAnimations())animation.cancel();if(i===state.index&&!state.paused)progress.animate([{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:5000,fill:'forwards',easing:'linear'});}}});
  function applyPreferences(){document.documentElement.dataset.font=preferences.font;document.documentElement.dataset.motion=reduced()?'reduce':'normal';const theme=preferences.theme||'auto';document.documentElement.dataset.theme=theme==='auto'?(colorMedia.matches?'dark':'light'):theme;$('#motion-reduce').checked=preferences.reduceMotion;for(const button of $('#font-options').children)button.setAttribute('aria-pressed',String(button.dataset.font===preferences.font));for(const button of $('#theme-options').children)button.setAttribute('aria-pressed',String(button.dataset.theme===theme));controller.pause('reduced',reduced());if(reduced())cancelHeroEntrance();}
  function updatePreferences(value){preferences={...preferences,...value};savePreferences(storage,preferences);applyPreferences();document.dispatchEvent(new CustomEvent('borrow:preferences',{detail:value}));}
@@ -73,7 +61,7 @@ export function mountShowcase({equipment,onSelect,onPlans,getRecords=()=>[],getD
  document.addEventListener('visibilitychange',()=>{controller.pause('hidden',document.hidden);if(document.hidden)cancelHeroEntrance();});media.addEventListener('change',event=>{osReduced=event.matches;applyPreferences();});colorMedia.addEventListener('change',applyPreferences);document.addEventListener('borrow:view',event=>{controller.pause('view',event.detail!=='discover');if(event.detail!=='discover')cancelHeroEntrance();});window.addEventListener('pagehide',event=>{cancelHeroEntrance();if(event.persisted)controller.pause('hidden',true);else controller.dispose();});window.addEventListener('pageshow',event=>{if(event.persisted)controller.pause('hidden',document.hidden);});
  mountProductMotion({hero:$('#hero'),reduced,capable,media});
  $('#hero').addEventListener('keydown',event=>{if(event.key==='ArrowRight'){event.preventDefault();controller.next();}if(event.key==='ArrowLeft'){event.preventDefault();controller.previous();}});$('#hero-book').addEventListener('click',()=>goView('equipment'));
- const kitRegion=$('.hero-kit');kitRegion.addEventListener('pointerenter',()=>controller.pause('kit',true));kitRegion.addEventListener('pointerleave',()=>controller.pause('kit',false));kitRegion.addEventListener('focusin',()=>controller.pause('kitFocus',true));kitRegion.addEventListener('focusout',event=>{if(!kitRegion.contains(event.relatedTarget))controller.pause('kitFocus',false);});
+ $('#hero-advisor').addEventListener('click',()=>document.dispatchEvent(new CustomEvent('borrow:advisor-entry',{detail:{question:$('#hero-advisor').dataset.question||heroStories.cinema.question}})));
  for(const button of $('#font-options').children)button.addEventListener('click',()=>updatePreferences({font:button.dataset.font}));$('#motion-reduce').addEventListener('change',()=>updatePreferences({reduceMotion:$('#motion-reduce').checked}));
  function closeDialog(dialog){closeSurface(dialog,{reduce:reduced()});}
  for(const button of document.querySelectorAll('[data-close]'))button.addEventListener('click',()=>closeDialog($('#'+button.dataset.close)));

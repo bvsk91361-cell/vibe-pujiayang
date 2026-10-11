@@ -87,53 +87,44 @@ body:not(.admin-body){--product-enter:480ms;--product-ease:cubic-bezier(.16,1,.3
 .hero #hero-title{font-size:clamp(56px,5.3vw,102px);letter-spacing:-.045em;line-height:1.12;max-width:8em;margin:0 0 20px}
 .hero .hero-actions{margin-top:26px}
 .hero #hero-book{padding:19px 28px;min-width:190px;font-size:18px}
+.hero #hero-advisor{display:inline-flex;align-items:center;gap:10px;padding:19px 20px;min-height:68px;border:1px solid transparent;border-radius:16px;background:transparent;color:#dce2ff;font-size:18px;font-weight:500;white-space:nowrap;transition:background 240ms,border-color 240ms,color 240ms}
+.hero #hero-advisor .icon{width:22px;height:22px;color:#beb8ff;transition:transform 350ms var(--product-ease)}
+.hero #hero-advisor:hover,.hero #hero-advisor:focus-visible{background:#a7a9f410;border-color:#babaf02c;color:#fff}
+.hero #hero-advisor:hover .icon{transform:rotate(12deg) scale(1.08)}
 .hero #hero-description{font-size:20px;line-height:1.6;max-width:30ch;margin:0;color:#bdc8e4}
 .hero-stage{position:relative;isolation:isolate;min-width:0;pointer-events:none}
 .hero-stage-word{position:absolute;left:13%;top:-3%;font-size:clamp(100px,10.6vw,200px);line-height:1;font-weight:650;letter-spacing:.12em;color:#b3acff0a;-webkit-text-stroke:1px #bac4f629;white-space:nowrap;z-index:-1;user-select:none}
 .hero-stage-trails{position:absolute;inset:-8% -9%;width:118%;height:116%;overflow:visible;z-index:-1;transform-origin:center}
 .hero-stage-floor{position:absolute;inset:auto 6% 7%;height:9%;border-radius:50%;background:radial-gradient(ellipse,#858ee528,#677fc60c 48%,transparent 70%);filter:blur(10px);z-index:-1}
-.hero-kit{margin-top:30px;padding-top:19px;border-top:1px solid #b1b9eb26;max-width:500px;pointer-events:auto}
-.hero-kit h2{font-size:18px;line-height:1.4;letter-spacing:.02em;font-weight:500;color:#dbe2f8;margin:0 0 10px}
-.hero-kit-devices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.hero-kit-device{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;padding:0 10px 4px 0;background:transparent;border:0;border-radius:12px;text-align:left;white-space:nowrap;color:#afbcd7;font-size:14px;transition:background 220ms,color 220ms}
-.hero-kit-device:hover,.hero-kit-device:focus-visible{background:#a4a8fb0d;color:#f2f4ff}
-.hero-kit-device:focus-visible{outline:2px solid #a4acfb;outline-offset:4px}
-.hero-kit-art{display:block;width:112px;max-width:100%;height:64px;transition:transform 350ms var(--product-ease)}
-.hero-kit-art svg{width:100%;height:100%;filter:drop-shadow(0 6px 6px #04091d33)}
-.hero-kit-device:hover .hero-kit-art,.hero-kit-device:focus-visible .hero-kit-art{transform:translateY(-3px)}
 .hero .hero-controls{padding-bottom:24px}
-.hero .hero-nav{gap:16px;border-top:0}
-.hero .hero-nav button{display:flex;align-items:center;position:relative;gap:12px;font-size:16px;font-weight:450;padding:12px 14px;height:88px;min-height:88px;border:1px solid #acb9e522;border-radius:18px;background:linear-gradient(120deg,#a5aff510,#808cdf04);color:#a7b7d6;overflow:hidden;text-align:left;transition:background 250ms,border-color 250ms,color 250ms}
-.hero .hero-nav button:hover{background:linear-gradient(120deg,#a5aff522,#808cdf10);border-color:#aab5f555;color:#e5ebfd}
-.hero .hero-nav button[aria-pressed=true]{background:linear-gradient(120deg,#a5aff52e,#808cdf10);border-color:#b6befc6b;color:#f3f5ff;box-shadow:inset 0 0 28px #9c98f008,0 6px 22px #050a191c}
-.hero .hero-nav button>img{width:92px;height:62px;object-fit:contain;flex-shrink:0;transition:transform 500ms var(--product-ease)}
-.hero .hero-nav button:hover>img{transform:translateY(-2px) scale(1.05)}
-.hero .hero-nav button>.theme-progress{top:auto;bottom:0;left:18px;right:18px;height:2px;width:calc(100% - 36px);background:linear-gradient(90deg,#c0baff,#85c8e8);transform-origin:left}
+.hero .hero-nav{gap:28px;border-top:1px solid #acb9e526}
+.hero .hero-nav button{display:block;position:relative;font-size:16px;font-weight:450;padding:22px 0;height:80px;min-height:80px;border:0;border-radius:0;background:transparent;color:#a7b7d6;box-shadow:none;overflow:hidden;text-align:left;transition:color 250ms}
+.hero .hero-nav button:hover{background:transparent;color:#e5ebfd}
+.hero .hero-nav button[aria-pressed=true]{background:transparent;color:#f3f5ff;box-shadow:none}
+.hero .hero-nav button>.theme-progress{top:0;bottom:auto;left:0;right:0;height:2px;width:100%;background:linear-gradient(90deg,#c0baff,#85c8e8);transform-origin:left}
 @media(min-width:960px){
  #hero{min-height:760px}
- #hero .hero-inner{height:calc(100% - 132px);padding-top:126px;padding-bottom:24px;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:28px}
+ #hero .hero-inner{height:calc(100% - 104px);padding-top:126px;padding-bottom:24px;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:28px}
  #hero .hero-copy{max-width:none}
  #hero .hero-stage{height:clamp(410px,58vh,670px);align-self:center}
  #hero .hero-art{position:absolute;inset:-3% -8%;width:116%;max-width:none;height:106%;min-height:0;transform-style:flat}
  #hero .hero-art img{height:100%;width:100%;max-height:none;object-fit:contain}
- #hero .hero-controls{height:132px;padding-top:12px}
+ #hero .hero-controls{height:104px;padding-top:0}
 }
-@media(min-width:1600px){.hero-kit{max-width:540px;margin-top:36px}.hero-kit h2{font-size:20px}.hero-kit-art{width:132px;height:76px}.hero-kit-device{font-size:15px}.hero .hero-nav button>img{width:112px;height:70px}.hero .hero-nav button{height:96px}}
-@media(min-width:960px) and (max-width:1399px){.hero #hero-description{font-size:18px}.hero .hero-nav{gap:12px}.hero .hero-nav button{gap:8px;padding-inline:10px;font-size:15px}.hero .hero-nav button>img{width:74px}.hero-kit{margin-top:24px;padding-top:16px}.hero-kit h2{font-size:17px}.hero-kit-art{height:58px}.hero-kit-device{font-size:13px}}
+@media(min-width:960px) and (max-width:1399px){.hero #hero-description{font-size:18px}.hero .hero-nav{gap:20px}.hero .hero-nav button{font-size:15px}.hero #hero-advisor{font-size:17px;padding-inline:14px}}
 @media(max-width:959px){
- .hero-kit{display:none}
  .hero-stage{position:relative;width:100%;height:330px;flex:1;min-height:240px}
  .hero .hero-stage .hero-art{position:absolute;inset:0;width:100%;height:100%;min-height:0;margin:0}
  .hero-stage-word{font-size:100px;left:22%;top:0}
  .hero .hero-nav{gap:8px}
- .hero .hero-nav button{padding:8px 2px;gap:4px;flex-direction:column;justify-content:center;border-radius:12px;font-size:12px;height:82px;min-height:82px}
- .hero .hero-nav button>img{width:60px;height:42px}
+ .hero .hero-nav button{padding:16px 0;font-size:12px;height:58px;min-height:58px;text-align:center}
+ .hero #hero-advisor{padding:12px 14px;min-height:48px;font-size:15px}
  .hero #hero-description{font-size:16px;margin-bottom:18px}
 }
-@media(max-width:480px){.hero .hero-stage{height:240px;min-height:220px}.hero-stage-word{font-size:76px}.hero .hero-nav button{font-size:10px}.hero .hero-nav button>img{width:46px}.hero .hero-controls{height:105px;padding-bottom:12px}}
-html[data-motion=normal][data-effects=full] :is(#hero-art,#hero-stage-word,.hero-stage-trails,#hero-kit-devices){will-change:transform,opacity}
-html[data-motion=reduce] :is(.hero-kit-art,.hero .hero-nav button,.hero .hero-nav button>img){transition:none}
-@media(prefers-reduced-motion:reduce){.hero-kit-art,.hero .hero-nav button,.hero .hero-nav button>img{transition:none}}
+@media(max-width:480px){.hero .hero-stage{height:240px;min-height:220px}.hero-stage-word{font-size:76px}.hero .hero-nav button{font-size:10px}.hero .hero-controls{height:78px;padding-bottom:12px}}
+html[data-motion=normal][data-effects=full] :is(#hero-art,#hero-stage-word,.hero-stage-trails){will-change:transform,opacity}
+html[data-motion=reduce] :is(.hero .hero-nav button,#hero-advisor,#hero-advisor .icon){transition:none}
+@media(prefers-reduced-motion:reduce){.hero .hero-nav button,#hero-advisor,#hero-advisor .icon{transition:none}}
 .product-lightfield{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
 .product-lightfield>svg{position:absolute;inset:0;width:100%;height:100%}
 .product-lightpoint{position:absolute;top:0;left:0;display:block;border-radius:50%;background:#acb7ff70;will-change:transform;pointer-events:none}
