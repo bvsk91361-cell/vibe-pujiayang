@@ -3,21 +3,22 @@ export const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char 
 export const number = value => Number.isFinite(Number(value)) ? Number(value) : 0;
 export const dateShort = value => String(value || '').slice(5).replace('-', '/');
 
-export function lineChart(rows = [], {id = 'trend', label = '预约趋势'} = {}) {
+export function lineChart(rows = [], {id = 'trend', label = '预约趋势', showCancelled = false} = {}) {
   if (!rows.length) return '<div class="chart-empty">此统计周期暂无数据</div>';
   const width = 760, height = 210, left = 38, right = 18, top = 20, bottom = 36;
-  const max = Math.max(4, ...rows.map(row => number(row.count))), steps = Math.ceil(max / 4), ceiling = steps * 4;
+  const max = Math.max(4, ...rows.map(row => Math.max(number(row.count),showCancelled?number(row.cancelled):0))), steps = Math.ceil(max / 4), ceiling = steps * 4;
   const x = index => left + (width-left-right) * index / Math.max(1,rows.length-1);
   const y = count => height-bottom-(height-top-bottom)*number(count)/ceiling;
   const points = rows.map((row,index) => `${x(index)},${y(row.count)}`).join(' ');
+  const cancelledPoints = rows.map((row,index) => `${x(index)},${y(row.cancelled)}`).join(' ');
   const area = `M${left},${height-bottom} L${points.replaceAll(' ', ' L')} L${x(rows.length-1)},${height-bottom} Z`;
   const grid = Array.from({length:5},(_,index) => {
     const count = index*steps, yy = y(count);
     return `<line x1="${left}" x2="${width-right}" y1="${yy}" y2="${yy}" class="chart-grid"/><text x="${left-12}" y="${yy+4}" text-anchor="end">${count}</text>`;
   }).join('');
   const every = Math.max(1, Math.ceil(rows.length/8));
-  const dots = rows.map((row,index) => `<g tabindex="0" role="img" aria-label="${escapeHtml(row.date)}，预约 ${number(row.count)} 次，取消 ${number(row.cancelled)} 次"><title>${escapeHtml(row.date)} · 预约 ${number(row.count)} 次 · 取消 ${number(row.cancelled)} 次</title><circle class="chart-hit" cx="${x(index)}" cy="${y(row.count)}" r="12"/><circle class="chart-dot" cx="${x(index)}" cy="${y(row.count)}" r="4"/>${index%every===0||index===rows.length-1?`<text x="${x(index)}" y="${height-8}" text-anchor="${index===0?'start':index===rows.length-1?'end':'middle'}">${dateShort(row.date)}</text>`:''}</g>`).join('');
-  return `<div class="line-chart"><svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="${id}-title"><title id="${id}-title">${escapeHtml(label)}，共 ${rows.reduce((sum,row)=>sum+number(row.count),0)} 次预约</title><defs><linearGradient id="${id}-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8291ff" stop-opacity=".32"/><stop offset="1" stop-color="#8291ff" stop-opacity="0"/></linearGradient></defs>${grid}<path d="${area}" fill="url(#${id}-fill)"/><polyline class="trend-line" pathLength="1" points="${points}"/>${dots}</svg><details class="chart-text"><summary>查看图表数据</summary><table><thead><tr><th>日期</th><th>预约</th><th>取消</th></tr></thead><tbody>${rows.map(row=>`<tr><td>${escapeHtml(row.date)}</td><td>${number(row.count)}</td><td>${number(row.cancelled)}</td></tr>`).join('')}</tbody></table></details></div>`;
+  const dots = rows.map((row,index) => `<g tabindex="0" role="img" aria-label="${escapeHtml(row.date)}，预约 ${number(row.count)} 次，取消 ${number(row.cancelled)} 次"><title>${escapeHtml(row.date)} · 预约 ${number(row.count)} 次 · 取消 ${number(row.cancelled)} 次</title><circle class="chart-hit" cx="${x(index)}" cy="${y(row.count)}" r="12"/><circle class="chart-dot" cx="${x(index)}" cy="${y(row.count)}" r="4"/>${showCancelled?`<circle class="chart-cancelled-dot" cx="${x(index)}" cy="${y(row.cancelled)}" r="3"/>`:''}${index%every===0||index===rows.length-1?`<text x="${x(index)}" y="${height-8}" text-anchor="${index===0?'start':index===rows.length-1?'end':'middle'}">${dateShort(row.date)}</text>`:''}</g>`).join('');
+  return `<div class="line-chart"><svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="${id}-title"><title id="${id}-title">${escapeHtml(label)}，共 ${rows.reduce((sum,row)=>sum+number(row.count),0)} 次预约</title><defs><linearGradient id="${id}-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8291ff" stop-opacity=".32"/><stop offset="1" stop-color="#8291ff" stop-opacity="0"/></linearGradient></defs>${grid}<path d="${area}" fill="url(#${id}-fill)"/><polyline class="trend-line" ${showCancelled?'data-light-track':'pathLength="1"'} points="${points}"/>${showCancelled?`<polyline class="cancelled-trend-line" points="${cancelledPoints}"/>`:''}${dots}</svg><details class="chart-text"><summary>查看图表数据</summary><table><thead><tr><th>日期</th><th>预约</th><th>取消</th></tr></thead><tbody>${rows.map(row=>`<tr><td>${escapeHtml(row.date)}</td><td>${number(row.count)}</td><td>${number(row.cancelled)}</td></tr>`).join('')}</tbody></table></details></div>`;
 }
 
 export function stateChart(states = {}) {
