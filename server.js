@@ -11,6 +11,7 @@ import { creativeScenes,inspectPlan } from './src/creative.js';
 import { commonAvailability } from './src/planning.js';
 import {occupancyHeatmap} from './src/occupancy.js';
 import {createAdminAuth} from './src/admin-auth.js';
+import {createAdminEvents} from './src/admin-events.js';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 const assets = new Map([
@@ -37,6 +38,9 @@ const assets = new Map([
   ['/admin',['public/admin.html','text/html; charset=utf-8']],
   ['/admin/',['public/admin.html','text/html; charset=utf-8']],
   ...['admin.js','admin-charts.js'].map(file=>['/'+file,['public/'+file,'text/javascript; charset=utf-8']]),
+  ...['space.js','components.js','motion.js','api.js','live.js','details.js','reconcile.js'].map(file=>['/admin/'+file,['public/admin/'+file,'text/javascript; charset=utf-8']]),
+  ['/admin/command.css',['public/admin/command.css','text/css; charset=utf-8']],
+  ...['motion-dom.js','gsap.min.js'].map(file=>['/vendor/'+file,['public/vendor/'+file,'text/javascript; charset=utf-8']]),
   ['/admin.css',['public/admin.css','text/css; charset=utf-8']],
   ['/admin-entry.css',['public/admin-entry.css','text/css; charset=utf-8']],
   ['/manifest.webmanifest',['public/manifest.webmanifest','application/manifest+json']],
@@ -68,6 +72,7 @@ export function createApp(store = defaultStore(), assistant = null, options={}) 
   const runtimeCatalog=()=>Object.hasOwn(options,'catalog')?catalog:(store.catalog?.()||catalog);
   assistant ||= createAiAssistant({catalog:runtimeCatalog()});
   const auth=adminAuth||createAdminAuth(store.file||':memory:');
+  const events=createAdminEvents({store,auth,intervalMs:options.adminEventIntervalMs||5000});
   const app=createServer(async (req, res) => {
     res.setHeader('Referrer-Policy','no-referrer');
     res.setHeader('X-Content-Type-Options','nosniff');
@@ -105,6 +110,8 @@ export function createApp(store = defaultStore(), assistant = null, options={}) 
         }
         if(!store.admin)throw new BookingError('管理台账暂时不可用。',503);
         const query=Object.fromEntries(url.searchParams);
+        if(path==='/api/admin/events'&&req.method==='GET')return events.handle(req,res,session);
+        if(path==='/api/admin/intelligence'&&req.method==='GET')return json(200,await store.admin.intelligence(query));
         if(path==='/api/admin/dashboard'&&req.method==='GET')return json(200,await store.admin.dashboard(query));
         if(path==='/api/admin/bookings'&&req.method==='GET')return json(200,await store.admin.bookings(query));
         if(path==='/api/admin/equipment'&&req.method==='GET')return json(200,await store.admin.equipment(query));
@@ -123,12 +130,12 @@ export function createApp(store = defaultStore(), assistant = null, options={}) 
         const bookingRoute=path.match(/^\/api\/admin\/bookings\/([a-zA-Z0-9-]+)(\/cancel)?$/);
         if(bookingRoute){
           if(req.method==='GET'&&!bookingRoute[2])return json(200,await store.admin.booking(bookingRoute[1]));
-          if(req.method==='POST'&&bookingRoute[2]){const input=await inputBody(2048);return json(200,await store.admin.cancelBooking(bookingRoute[1],input?.reason,activeAdmin()));}
+          if(req.method==='POST'&&bookingRoute[2]){const input=await inputBody(2048);const result=await store.admin.cancelBooking(bookingRoute[1],input?.reason,activeAdmin());events.notify();return json(200,result);}
         }
         const equipmentRoute=path.match(/^\/api\/admin\/equipment\/([a-zA-Z0-9-]+)$/);
         if(equipmentRoute){
           if(req.method==='GET')return json(200,await store.admin.equipmentDetail(equipmentRoute[1]));
-          if(req.method==='PATCH'){const input=await inputBody(4096);return json(200,await store.admin.updateEquipment(equipmentRoute[1],input,activeAdmin()));}
+          if(req.method==='PATCH'){const input=await inputBody(4096);const result=await store.admin.updateEquipment(equipmentRoute[1],input,activeAdmin());events.notify();return json(200,result);}
         }
         const userRoute=path.match(/^\/api\/admin\/users\/([a-zA-Z0-9-]+)$/);
         if(userRoute&&req.method==='GET')return json(200,await store.admin.user(userRoute[1]));
@@ -202,6 +209,8 @@ export function createApp(store = defaultStore(), assistant = null, options={}) 
     }
   });
   if(!adminAuth)app.once('close',()=>auth.close());
+  app.once('close',()=>events.close());
+  const originalClose=app.close.bind(app);app.close=(...args)=>{events.close();return originalClose(...args);};
   return app;
 }
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {

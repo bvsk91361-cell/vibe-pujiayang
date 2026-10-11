@@ -1,0 +1,73 @@
+import http from 'node:http';
+import {readFile, mkdir, writeFile} from 'node:fs/promises';
+import {resolve, dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createRequire} from 'node:module';
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const tools = process.env.BORROW_BROWSER_TOOLS || 'E:/桌面/vibecode/Borrow Lab 路演影片/V5/project';
+const require = createRequire(resolve(tools, 'package.json'));
+const {chromium} = require('playwright');
+const pageMarkup = `<!doctype html><html><meta charset="utf-8"><style>body{background:#080f20;color:#fff}button{margin:10px;padding:16px}canvas{width:400px;height:180px}</style><main id="fixture"></main><script type="module">import{reconcile}from'/admin/reconcile.js';window.reconcile=reconcile;window.ready=true;</script></html>`;
+const modulePath = resolve(root, 'public/admin/reconcile.js');
+const server = http.createServer(async (request, response) => {
+  if (request.url === '/') {response.setHeader('Content-Type', 'text/html; charset=utf-8'); response.end(pageMarkup); return;}
+  if (request.url === '/admin/reconcile.js') {response.setHeader('Content-Type', 'text/javascript'); response.end(await readFile(modulePath)); return;}
+  response.writeHead(404).end();
+});
+await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+const browser = await chromium.launch({executablePath: process.env.BORROW_BROWSER_PATH || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true});
+const page = await browser.newPage({viewport: {width: 1366, height: 768}});
+const errors = [], checks = [];
+page.on('pageerror', error => errors.push(error.message));
+const record = (name, passed, detail = null) => checks.push({name, passed, detail});
+const initial = `<section id="editor"><input id="search" value="source"><textarea id="note">source note</textarea><select id="range"><option value="7" selected>七天</option><option value="30">三十天</option></select><details id="facts"><summary>依据</summary><p>原始依据</p></details></section><section id="cards"><button data-detail="equipment" data-id="camera" class="device available"><span data-count-key="camera" data-count-value="2">2</span>相机</button><button data-detail="equipment" data-id="microphone" class="device upcoming">麦克风</button></section><svg id="graph" viewBox="0 0 400 100"><path id="edge" d="M0 20L100 40" style="stroke:#918aff;stroke-width:2"/><g id="node" transform="translate(50 50)"><circle r="10"/></g></svg><canvas id="light" width="400" height="180"></canvas>`;
+const updated = initial.replace('class="device available"', 'class="device maintenance"').replace('data-count-value="2">2', 'data-count-value="9">9').replace('原始依据', '更新后的真实依据').replace('M0 20L100 40', 'M0 20L180 40').replace('translate(50 50)', 'translate(80 50)');
+try {
+  await page.goto(`http://127.0.0.1:${server.address().port}`); await page.waitForFunction(() => window.ready);
+  await page.evaluate(html => window.reconcile(document.querySelector('#fixture'), html), initial);
+  await page.evaluate(() => {
+    window.retained = {camera: document.querySelector('[data-id="camera"]'), microphone: document.querySelector('[data-id="microphone"]'), svg: document.querySelector('#graph'), path: document.querySelector('#edge'), canvas: document.querySelector('#light')};
+    window.canvasContext = window.retained.canvas.getContext('2d'); window.canvasContext.fillRect(10, 10, 10, 10);
+    document.querySelector('#facts').open = true;
+    document.querySelector('#edge').style.strokeDashoffset = '70px';
+    document.querySelector('#edge').style.strokeDasharray = '100px';
+    document.querySelector('#light').width = 777; document.querySelector('#light').height = 333;
+  });
+  await page.locator('#search').fill('用户正在输入'); await page.locator('#note').fill('尚未提交的说明'); await page.locator('#range').selectOption('30'); await page.locator('#search').focus();
+  await page.evaluate(html => window.reconcile(document.querySelector('#fixture'), html), updated);
+  record('Dirty text input and textarea preserved', await page.evaluate(() => document.querySelector('#search').value === '用户正在输入' && document.querySelector('#note').value === '尚未提交的说明'));
+  record('User-selected option preserved', await page.locator('#range').inputValue() === '30');
+  record('Focused search input preserved across data patch', await page.locator('#search').evaluate(el => document.activeElement === el));
+  record('Open evidence disclosure retained', await page.locator('#facts').evaluate(el => el.open));
+  record('Equipment business status class updated', await page.locator('[data-id="camera"]').getAttribute('class') === 'device maintenance');
+  record('Count source updated to latest true value', await page.locator('[data-count-key="camera"]').getAttribute('data-count-value') === '9');
+  record('SVG and Canvas objects retained', await page.evaluate(() => window.retained.svg === document.querySelector('#graph') && window.retained.path === document.querySelector('#edge') && window.retained.canvas === document.querySelector('#light') && window.canvasContext === document.querySelector('#light').getContext('2d')));
+  record('Canvas backing dimensions are not reset', await page.locator('#light').evaluate(el => el.width === 777 && el.height === 333));
+  record('SVG authored geometry changed while finite motion styles retained', await page.locator('#edge').evaluate(el => el.getAttribute('d') === 'M0 20L180 40' && el.style.strokeDashoffset === '70px'));
+  record('Unchanged source causes no DOM write', await page.evaluate(html => window.reconcile(document.querySelector('#fixture'), html) === false, updated));
+  await page.locator('[data-id="camera"]').focus();
+  const rearranged = updated.replace(/<section id="cards">([\s\S]*?)<\/section>/, '<section id="cards"><button data-detail="equipment" data-id="microphone" class="device upcoming">麦克风</button><button data-detail="equipment" data-id="camera" class="device maintenance"><span data-count-key="camera" data-count-value="9">9</span>相机</button></section>');
+  await page.evaluate(html => window.reconcile(document.querySelector('#fixture'), html), rearranged);
+  record('Keyed rows reorder without recreation', await page.evaluate(() => document.querySelector('#cards').firstElementChild === window.retained.microphone && document.querySelector('#cards').lastElementChild === window.retained.camera));
+  record('Focused keyed row remains focused after reorder', await page.locator('[data-id="camera"]').evaluate(el => document.activeElement === el));
+  const inserted = rearranged.replace('<section id="cards">', '<section id="cards"><button data-detail="equipment" data-id="projector" class="device available">投影仪</button>');
+  await page.evaluate(html => window.reconcile(document.querySelector('#fixture'), html), inserted);
+  record('New keyed data inserted without duplicating retained rows', await page.locator('#cards > button').count() === 3 && await page.evaluate(() => document.querySelector('#cards').lastElementChild === window.retained.camera));
+  const removed = inserted.replace('<button data-detail="equipment" data-id="microphone" class="device upcoming">麦克风</button>', '');
+  await page.evaluate(html => window.reconcile(document.querySelector('#fixture'), html), removed);
+  record('Removed keyed data does not remain stale', await page.locator('[data-id="microphone"]').count() === 0 && await page.locator('#cards > button').count() === 2);
+  await page.locator('[data-id="camera"]').focus();
+  await page.evaluate(html => window.reconcile(document.querySelector('#fixture'), html), updated);
+  record('Actively moved focused keyed node retains keyboard focus', await page.locator('[data-id="camera"]').evaluate(el => document.activeElement === el));
+  const editorAtEnd = updated.replace(/<section id="editor">([\s\S]*?)<\/section>/, '') + updated.match(/<section id="editor">([\s\S]*?)<\/section>/)[0];
+  await page.evaluate(html => window.reconcile(document.querySelector('#fixture'), html), editorAtEnd);
+  await page.locator('#search').focus();
+  await page.locator('#search').evaluate(el => el.setSelectionRange(2, 6, 'forward'));
+  await page.evaluate(html => window.reconcile(document.querySelector('#fixture'), html), updated);
+  record('Moved parent retains focused input and caret selection', await page.locator('#search').evaluate(el => document.activeElement === el && el.selectionStart === 2 && el.selectionEnd === 6 && el.value === '用户正在输入'));
+  record('No JavaScript errors', errors.length === 0, errors);
+  const report = {checkedAt: new Date().toISOString(), browser: 'Microsoft Edge / Playwright', module: 'public/admin/reconcile.js', passed: checks.filter(item => item.passed).length, failed: checks.filter(item => !item.passed).length, checks, errors};
+  await mkdir(resolve(root, 'data/command-center'), {recursive: true});
+  await writeFile(resolve(root, 'data/command-center/reconcile-verification.json'), JSON.stringify(report, null, 2));
+  console.log(JSON.stringify(report)); if (report.failed) process.exitCode = 1;
+} finally {await browser.close(); await new Promise(resolve => server.close(resolve));}

@@ -1,0 +1,13 @@
+{
+  "versions": {
+    "framer-motion": "14.1.0",
+    "gsap": "3.15.0",
+    "esbuild": "0.28.2"
+  },
+  "entries": [
+    "framer-motion/dom/mini",
+    "gsap"
+  ],
+  "builtAt": "2026-10-11T01:42:45.498Z",
+  "scriptsDisabled": true
+}

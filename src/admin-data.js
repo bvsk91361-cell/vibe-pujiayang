@@ -1,10 +1,11 @@
-import {randomUUID} from 'node:crypto';
+import {randomUUID,createHash} from 'node:crypto';
 import {existsSync} from 'node:fs';
 import {BookingError,slots,localDate,businessMoment,isBusinessDate} from './booking.js';
 import {categories} from './catalog.js';
 import {addDays} from './planning.js';
 import {occupancyHeatmap} from './occupancy.js';
 import {bookingContext,reportWeekStart} from './ai-context.js';
+import {buildIntelligence} from './admin-intelligence.js';
 
 const parse=row=>JSON.parse(row.payload);
 const integer=(value,fallback,max)=>Number.isInteger(Number(value))&&Number(value)>0?Math.min(Number(value),max):fallback;
@@ -215,6 +216,25 @@ export function createAdminData({db,file,catalog,transaction,clock=()=>new Date(
   const rows=stmt('SELECT payload FROM admin_reports ORDER BY generated_at DESC').all().map(parse);
   return {...paginate(rows,params),latest:rows[0]||null};
  }
+ function intelligence(params={}){
+  const now=clock(),records=allRecords(),devices=catalog(),selected=range(params,7);
+  // Read the existing persisted plans; no independent equipment data or write side effects.
+  const plans=stmt('SELECT payload,user_id FROM plans').all().map(row=>({...parse(row),userId:row.user_id}));
+  return buildIntelligence({catalog:devices,records:enriched(records,now),users:userRows(),plans,window:selected,pulse:heatmap(records,localDate(now),devices),now,params});
+ }
+ function revision(){
+  const now=clock(),date=localDate(now);
+  const snapshot={
+   equipment:stmt('SELECT id,payload FROM equipment ORDER BY id').all(),
+   reservations:stmt('SELECT id,status,payload FROM reservations ORDER BY id').all(),
+   plans:stmt('SELECT id,payload FROM plans ORDER BY id').all(),
+   users:stmt('SELECT id,name,role FROM users ORDER BY id').all(),
+   temporal:{date,slots:slots.map(slot=>({slot,state:businessMoment(date,slot.slice(-5))<=now?'elapsed':businessMoment(date,slot.slice(0,5))<=now?'current':'upcoming'}))}
+  };
+  // Only a digest leaves this method. Credentials, sessions, avatars and wall-clock
+  // seconds are excluded; unchanged business state therefore does not pulse randomly.
+  return createHash('sha256').update(JSON.stringify(snapshot)).digest('hex');
+ }
  function saveReport(result,admin,period){
   if(!result||typeof result.text!=='string'||!result.text.trim()||!Array.isArray(result.sections))throw new BookingError('周报内容不完整，未保存。',502);
   if(JSON.stringify(result).length>300000)throw new BookingError('周报内容过大，未保存。',413);
@@ -227,5 +247,5 @@ export function createAdminData({db,file,catalog,transaction,clock=()=>new Date(
    return value;
   });
  }
- return {dashboard,bookings,booking:bookingDetail,bookingDetail,equipment,equipmentDetail,updateEquipment,cancelBooking,users,user:userDetail,userDetail,analytics,reports,saveReport};
+ return {dashboard,intelligence,revision,bookings,booking:bookingDetail,bookingDetail,equipment,equipmentDetail,updateEquipment,cancelBooking,users,user:userDetail,userDetail,analytics,reports,saveReport};
 }
