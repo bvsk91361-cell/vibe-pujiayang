@@ -1,0 +1,318 @@
+﻿TAP version 13
+# Subtest: 规划统计由真实记录生成，七天容量、跨月日期和时间终点正确
+not ok 1 - 规划统计由真实记录生成，七天容量、跨月日期和时间终点正确
+  ---
+  duration_ms: 2.8806
+  location: 'E:\\桌面\\vibecode\\vibe-pujiayang-git\\data\\ci-repro-20261012\\before\\test\\ai-planning.test.js:12:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    -   '14:00–16:00',
+        '19:00–21:00'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: '14:00–16:00'
+    1: '19:00–21:00'
+  actual:
+    0: '19:00–21:00'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang-git/data/ci-repro-20261012/before/test/ai-planning.test.js:14:9)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: AI未配置时明确503，不发送外部请求
+ok 2 - AI未配置时明确503，不发送外部请求
+  ---
+  duration_ms: 1.0417
+  ...
+# Subtest: 周报仅发送汇总台账，不发送预约人姓名或泄露密钥；usage来自接口
+ok 3 - 周报仅发送汇总台账，不发送预约人姓名或泄露密钥；usage来自接口
+  ---
+  duration_ms: 2.4586
+  ...
+# Subtest: 空闲查询严格解析模型条件，空闲列表按台账计算而非模型推测
+ok 4 - 空闲查询严格解析模型条件，空闲列表按台账计算而非模型推测
+  ---
+  duration_ms: 2.572
+  ...
+# Subtest: 模型格式、未知设备和日期异常必须拒绝，不能当成正确空闲答案
+ok 5 - 模型格式、未知设备和日期异常必须拒绝，不能当成正确空闲答案
+  ---
+  duration_ms: 3.8188
+  ...
+# Subtest: 模型401、额度、网络、超时等错误提供安全兜底，不暴露上游内容
+ok 6 - 模型401、额度、网络、超时等错误提供安全兜底，不暴露上游内容
+  ---
+  duration_ms: 4.1173
+  ...
+# Subtest: 模型每日调用上限阻止重复消耗，HTTPS地址必须有效
+ok 7 - 模型每日调用上限阻止重复消耗，HTTPS地址必须有效
+  ---
+  duration_ms: 8.9024
+  ...
+# Subtest: Yos Hub默认地址和模型生效，密钥只进入服务端Authorization，不进入返回状态
+ok 8 - Yos Hub默认地址和模型生效，密钥只进入服务端Authorization，不进入返回状态
+  ---
+  duration_ms: 0.9488
+  ...
+# Subtest: 报告输出截断或只有标题时不能显示为有效报告，截断usage仍计入统计
+ok 9 - 报告输出截断或只有标题时不能显示为有效报告，截断usage仍计入统计
+  ---
+  duration_ms: 1.8196
+  ...
+# (node:62328) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 业务规则1：有效预约保留器材、日期、时段，并去掉姓名两端空格
+ok 10 - 业务规则1：有效预约保留器材、日期、时段，并去掉姓名两端空格
+  ---
+  duration_ms: 1.9743
+  ...
+# Subtest: 业务规则2：同器材、同日期、同时段的重复预约返回409
+ok 11 - 业务规则2：同器材、同日期、同时段的重复预约返回409
+  ---
+  duration_ms: 0.5643
+  ...
+# Subtest: 业务规则3：不同器材或日期或时段不会被误判为重复
+ok 12 - 业务规则3：不同器材或日期或时段不会被误判为重复
+  ---
+  duration_ms: 0.3089
+  ...
+# Subtest: 业务规则4：空姓名、未知器材和非法时段必须被拒绝
+ok 13 - 业务规则4：空姓名、未知器材和非法时段必须被拒绝
+  ---
+  duration_ms: 0.3508
+  ...
+# Subtest: 业务规则5：过去日期、不存在的日期和错误日期格式必须被拒绝
+not ok 14 - 业务规则5：过去日期、不存在的日期和错误日期格式必须被拒绝
+  ---
+  duration_ms: 0.9036
+  location: 'E:\\桌面\\vibecode\\vibe-pujiayang-git\\data\\ci-repro-20261012\\before\\test\\booking.test.js:31:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Got unwanted exception.
+    Actual message: "这个时段已经结束，请选择后续时段。"
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  actual:
+  error: '这个时段已经结束，请选择后续时段。'
+  stack: |-
+    validateBooking (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang-git/data/ci-repro-20261012/before/src/booking.js:37:59)
+    file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang-git/data/ci-repro-20261012/before/test/booking.test.js:35:29
+    getActual (node:assert:840:5)
+    Function.doesNotThrow (node:assert:1006:32)
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang-git/data/ci-repro-20261012/before/test/booking.test.js:35:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+  operator: 'doesNotThrow'
+  stack: |-
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang-git/data/ci-repro-20261012/before/test/booking.test.js:35:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 接口闭环：预约保存、重建存储后读取、重复拒绝、取消后重新预约
+ok 15 - 接口闭环：预约保存、重建存储后读取、重复拒绝、取消后重新预约
+  ---
+  duration_ms: 86.9192
+  ...
+# Subtest: 并发护栏：同时提交两个重复预约，只允许一个写入
+ok 16 - 并发护栏：同时提交两个重复预约，只允许一个写入
+  ---
+  duration_ms: 9.4747
+  ...
+# Subtest: HTTP分块UTF-8：中文姓名跨数据块时必须原样保存
+ok 17 - HTTP分块UTF-8：中文姓名跨数据块时必须原样保存
+  ---
+  duration_ms: 30.7137
+  ...
+# Subtest: 优化只提供当前装备和最多两件真实可用替代，排除其他预约及姓名
+ok 18 - 优化只提供当前装备和最多两件真实可用替代，排除其他预约及姓名
+  ---
+  duration_ms: 2.6723
+  ...
+# Subtest: 优化替换冲突装备，保持方案名称、身份、日期与时段
+ok 19 - 优化替换冲突装备，保持方案名称、身份、日期与时段
+  ---
+  duration_ms: 1.8747
+  ...
+# Subtest: 优化拒绝非候选设备，包含已存在但用途错误的真实设备
+ok 20 - 优化拒绝非候选设备，包含已存在但用途错误的真实设备
+  ---
+  duration_ms: 1.0083
+  ...
+# Subtest: 优化拒绝重复归类、重复装备、遗漏原设备与移除所有装备
+ok 21 - 优化拒绝重复归类、重复装备、遗漏原设备与移除所有装备
+  ---
+  duration_ms: 0.552
+  ...
+# Subtest: 缺少当前方案不消耗模型调用
+ok 22 - 缺少当前方案不消耗模型调用
+  ---
+  duration_ms: 5.1446
+  ...
+# Subtest: 共同时间使用全组合，不将部分可用误标为共同可用
+ok 23 - 共同时间使用全组合，不将部分可用误标为共同可用
+  ---
+  duration_ms: 1.9999
+  ...
+# Subtest: 本人已经锁定的设备计入准备度，其他账号不共享
+ok 24 - 本人已经锁定的设备计入准备度，其他账号不共享
+  ---
+  duration_ms: 2.6634
+  ...
+# Subtest: 共同时间不包含已结束时段，维护设备不参与空闲
+not ok 25 - 共同时间不包含已结束时段，维护设备不参与空闲
+  ---
+  duration_ms: 1.427
+  location: 'E:\\桌面\\vibecode\\vibe-pujiayang-git\\data\\ci-repro-20261012\\before\\test\\desktop-workspace.test.js:47:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang-git/data/ci-repro-20261012/before/test/desktop-workspace.test.js:50:9)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 设备搜索支持创作场景、分类与可借状态
+ok 26 - 设备搜索支持创作场景、分类与可借状态
+  ---
+  duration_ms: 2.0463
+  ...
+# Subtest: 设备视觉类别覆盖全部台账，区别高、宽、紧凑产品
+ok 27 - 设备视觉类别覆盖全部台账，区别高、宽、紧凑产品
+  ---
+  duration_ms: 0.5311
+  ...
+# Subtest: 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
+ok 28 - 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
+  ---
+  duration_ms: 1.9107
+  ...
+# Subtest: 到期页面标记：过去日期、时段结束边界、使用中与未来日期
+not ok 29 - 到期页面标记：过去日期、时段结束边界、使用中与未来日期
+  ---
+  duration_ms: 1.6226
+  location: 'E:\\桌面\\vibecode\\vibe-pujiayang-git\\data\\ci-repro-20261012\\before\\test\\reservation-view.test.js:10:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    '已到期' !== '待使用'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '待使用'
+  actual: '已到期'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang-git/data/ci-repro-20261012/before/test/reservation-view.test.js:12:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# (node:48836) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 创建空方案真实可恢复；编辑、保存和重开都不产生预约
+ok 30 - 创建空方案真实可恢复；编辑、保存和重开都不产生预约
+  ---
+  duration_ms: 54.3173
+  ...
+# Subtest: 场景整套直接预约三件真实设备，不先创建方案；通知按这次预约聚合
+ok 31 - 场景整套直接预约三件真实设备，不先创建方案；通知按这次预约聚合
+  ---
+  duration_ms: 3.0278
+  ...
+# Subtest: 最后一件设备冲突时整套拒绝，不部分写入，也不提前更新方案时间
+ok 32 - 最后一件设备冲突时整套拒绝，不部分写入，也不提前更新方案时间
+  ---
+  duration_ms: 2.1543
+  ...
+# Subtest: 设备重复、维护、无效时段、空请求都拒绝，不写入任何预约
+ok 33 - 设备重复、维护、无效时段、空请求都拒绝，不写入任何预约
+  ---
+  duration_ms: 1.3224
+  ...
+# Subtest: 本人已预约设备不重复创建；其他身份的占用不能被当作本人已预约
+ok 34 - 本人已预约设备不重复创建；其他身份的占用不能被当作本人已预约
+  ---
+  duration_ms: 1.9362
+  ...
+# Subtest: 同一请求重复提交与重启重放均幂等；取消后旧回执不能冒充有效预约
+ok 35 - 同一请求重复提交与重启重放均幂等；取消后旧回执不能冒充有效预约
+  ---
+  duration_ms: 54.2067
+  ...
+# Subtest: 方案只在最终确认事务中关联时间；跨身份与已变化设备组合不能借用方案
+ok 36 - 方案只在最终确认事务中关联时间；跨身份与已变化设备组合不能借用方案
+  ---
+  duration_ms: 2.7669
+  ...
+# Subtest: HTTP真实并发整套预约仅一套成功，失败请求不会留下部分记录
+ok 37 - HTTP真实并发整套预约仅一套成功，失败请求不会留下部分记录
+  ---
+  duration_ms: 49.3132
+  ...
+# Subtest: 预约意图不默认日期或时段；刷新保留设备、时间、来源和幂等标识，身份隔离
+ok 38 - 预约意图不默认日期或时段；刷新保留设备、时间、来源和幂等标识，身份隔离
+  ---
+  duration_ms: 0.6315
+  ...
+# Subtest: 模型默认时间不冒充用户选择；明确日期与时段分别保留
+ok 39 - 模型默认时间不冒充用户选择；明确日期与时段分别保留
+  ---
+  duration_ms: 0.4425
+  ...
+# Subtest: 不完整回执、跨身份、重复设备和已取消记录不能显示整套成功
+ok 40 - 不完整回执、跨身份、重复设备和已取消记录不能显示整套成功
+  ---
+  duration_ms: 0.2865
+  ...
+# Subtest: 切换方案保留各自本地草稿，不自动创建预约或覆盖另一身份
+ok 41 - 切换方案保留各自本地草稿，不自动创建预约或覆盖另一身份
+  ---
+  duration_ms: 0.2724
+  ...
+# Subtest: AI推荐刷新可恢复真实搭配与所选时间，账号隔离且拒绝目录外设备
+ok 42 - AI推荐刷新可恢复真实搭配与所选时间，账号隔离且拒绝目录外设备
+  ---
+  duration_ms: 0.2319
+  ...
+1..42
+# tests 42
+# suites 0
+# pass 38
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 407.9517

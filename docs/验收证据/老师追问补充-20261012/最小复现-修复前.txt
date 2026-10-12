@@ -1,0 +1,40 @@
+﻿TAP version 13
+# Subtest: 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
+ok 1 - 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
+  ---
+  duration_ms: 0.8842
+  ...
+# Subtest: 到期页面标记：过去日期、时段结束边界、使用中与未来日期
+not ok 2 - 到期页面标记：过去日期、时段结束边界、使用中与未来日期
+  ---
+  duration_ms: 0.8687
+  location: 'E:\\桌面\\vibecode\\vibe-pujiayang-git\\data\\ci-repro-20261012\\before\\test\\reservation-view.test.js:10:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    '已到期' !== '待使用'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '待使用'
+  actual: '已到期'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///E:/%E6%A1%8C%E9%9D%A2/vibecode/vibe-pujiayang-git/data/ci-repro-20261012/before/test/reservation-view.test.js:12:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 75.3948

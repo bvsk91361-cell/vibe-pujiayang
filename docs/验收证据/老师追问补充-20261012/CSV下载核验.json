@@ -1,0 +1,50 @@
+{
+  "scope": "Current Borrow Lab source; real browser click and real HTTP/SQLite on a new isolated database; no ordinary-user data",
+  "operator": "Codex browser automation, not the student manual operation",
+  "startedAt": "2026-10-12T02:43:46.924Z",
+  "http": [
+    {
+      "method": "POST",
+      "path": "/api/reservations",
+      "status": 201,
+      "source": "real isolated preparation API",
+      "recordId": "4f795227-a22a-4207-9786-cff06ded210e"
+    },
+    {
+      "method": "POST",
+      "path": "/api/reservations",
+      "status": 201,
+      "source": "real isolated preparation API",
+      "recordId": "f540e7de-d621-4b5f-b1a3-a19b02182012"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reservations",
+      "status": 200,
+      "time": "2026-10-12T02:43:47.338Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reservations",
+      "status": 200,
+      "time": "2026-10-12T02:43:47.553Z"
+    }
+  ],
+  "pageErrors": [],
+  "status": "PASS",
+  "browserVersion": "127.0.2651.86",
+  "sourceURL": "http://127.0.0.1:55074/#reservations-title",
+  "filename": "借一下-预约记录.csv",
+  "fileBytes": 152,
+  "sha256": "b645c80a26be6d93e0736db5f8821f4f974f66e489918e11521208268ef9f81f",
+  "firstThreeLines": [
+    "器材,预约人,日期,时段",
+    "数码相机,CSV隔离验收甲,2026-10-13,09:00–11:00",
+    "便携投影仪,CSV隔离验收甲,2026-10-13,14:00–16:00"
+  ],
+  "parsedRows": 2,
+  "utf8Bom": true,
+  "apiReplyMatchesDownload": true,
+  "ordinaryDatabaseTouched": false,
+  "finishedAt": "2026-10-12T02:43:47.846Z"
+}

@@ -1,0 +1,1385 @@
+﻿2026-10-09T00:28:40.5171565Z Current runner version: '2.337.0'
+2026-10-09T00:28:40.5199055Z ##[group]Runner Image Provisioner
+2026-10-09T00:28:40.5200026Z Hosted Compute Agent
+2026-10-09T00:28:40.5200904Z Version: 20261002.596
+2026-10-09T00:28:40.5201541Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-09T00:28:40.5202356Z Build Date: 2026-10-02T22:28:27Z
+2026-10-09T00:28:40.5203050Z Worker ID: {01bfa24a-fbf2-45dd-8285-5300154b4155}
+2026-10-09T00:28:40.5203919Z Region: eastus2
+2026-10-09T00:28:40.5204493Z Cloud: Azure
+2026-10-09T00:28:40.5205120Z ##[endgroup]
+2026-10-09T00:28:40.5206752Z ##[group]Operating System
+2026-10-09T00:28:40.5207474Z Ubuntu
+2026-10-09T00:28:40.5208098Z 24.04.5
+2026-10-09T00:28:40.5208659Z LTS
+2026-10-09T00:28:40.5209188Z ##[endgroup]
+2026-10-09T00:28:40.5209868Z ##[group]Runner Image
+2026-10-09T00:28:40.5210778Z Image: ubuntu-24.04
+2026-10-09T00:28:40.5211485Z Version: 20261004.327.1
+2026-10-09T00:28:40.5212732Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-09T00:28:40.5214761Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-09T00:28:40.5215810Z ##[endgroup]
+2026-10-09T00:28:40.5217067Z ##[group]GITHUB_TOKEN Permissions
+2026-10-09T00:28:40.5219454Z Contents: read
+2026-10-09T00:28:40.5220491Z Metadata: read
+2026-10-09T00:28:40.5221181Z ##[endgroup]
+2026-10-09T00:28:40.5223486Z Secret source: Actions
+2026-10-09T00:28:40.5224521Z Cache mode: write
+2026-10-09T00:28:40.5226087Z Prepare workflow directory
+2026-10-09T00:28:40.5579475Z Prepare all required actions
+2026-10-09T00:28:40.5631152Z Getting action download info
+2026-10-09T00:28:40.7776507Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-09T00:28:40.9078931Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-09T00:28:40.9969811Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-09T00:28:41.1905982Z Complete job name: test
+2026-10-09T00:28:41.2754109Z ##[group]Run actions/checkout@v4
+2026-10-09T00:28:41.2755084Z with:
+2026-10-09T00:28:41.2755535Z   fetch-depth: 0
+2026-10-09T00:28:41.2756049Z   repository: bvsk91361-cell/vibe-pujiayang
+2026-10-09T00:28:41.2760373Z   token: ***
+2026-10-09T00:28:41.2760848Z   ssh-strict: true
+2026-10-09T00:28:41.2761307Z   ssh-user: git
+2026-10-09T00:28:41.2761764Z   persist-credentials: true
+2026-10-09T00:28:41.2762264Z   clean: true
+2026-10-09T00:28:41.2762722Z   sparse-checkout-cone-mode: true
+2026-10-09T00:28:41.2763283Z   fetch-tags: false
+2026-10-09T00:28:41.2763740Z   show-progress: true
+2026-10-09T00:28:41.2764203Z   lfs: false
+2026-10-09T00:28:41.2764619Z   submodules: false
+2026-10-09T00:28:41.2765083Z   set-safe-directory: true
+2026-10-09T00:28:41.2765602Z   allow-unsafe-pr-checkout: false
+2026-10-09T00:28:41.2766421Z ##[endgroup]
+2026-10-09T00:28:41.3848641Z Syncing repository: bvsk91361-cell/vibe-pujiayang
+2026-10-09T00:28:41.3851917Z ##[group]Getting Git version info
+2026-10-09T00:28:41.3853259Z Working directory is '/home/runner/work/vibe-pujiayang/vibe-pujiayang'
+2026-10-09T00:28:41.3855072Z [command]/usr/bin/git version
+2026-10-09T00:28:41.3931232Z git version 2.55.0
+2026-10-09T00:28:41.4000632Z ##[endgroup]
+2026-10-09T00:28:41.4007510Z Temporarily overriding HOME='/home/runner/work/_temp/3f20fa8d-1973-4527-9653-df19b1333547' before making global git config changes
+2026-10-09T00:28:41.4008906Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-09T00:28:41.4010825Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vibe-pujiayang/vibe-pujiayang
+2026-10-09T00:28:41.4054999Z Deleting the contents of '/home/runner/work/vibe-pujiayang/vibe-pujiayang'
+2026-10-09T00:28:41.4061309Z ##[group]Initializing the repository
+2026-10-09T00:28:41.4067240Z [command]/usr/bin/git init /home/runner/work/vibe-pujiayang/vibe-pujiayang
+2026-10-09T00:28:41.4189159Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-09T00:28:41.4192139Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-09T00:28:41.4193987Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-09T00:28:41.4195479Z hint: call:
+2026-10-09T00:28:41.4196668Z hint:
+2026-10-09T00:28:41.4197400Z hint: 	git config --global init.defaultBranch <name>
+2026-10-09T00:28:41.4198159Z hint:
+2026-10-09T00:28:41.4198881Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-09T00:28:41.4199940Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-09T00:28:41.4201456Z hint:
+2026-10-09T00:28:41.4202246Z hint: 	git branch -m <name>
+2026-10-09T00:28:41.4203112Z hint:
+2026-10-09T00:28:41.4204161Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-09T00:28:41.4205351Z Initialized empty Git repository in /home/runner/work/vibe-pujiayang/vibe-pujiayang/.git/
+2026-10-09T00:28:41.4207394Z [command]/usr/bin/git remote add origin https://github.com/bvsk91361-cell/vibe-pujiayang
+2026-10-09T00:28:41.4262422Z ##[endgroup]
+2026-10-09T00:28:41.4263305Z ##[group]Disabling automatic garbage collection
+2026-10-09T00:28:41.4267807Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-09T00:28:41.4306354Z ##[endgroup]
+2026-10-09T00:28:41.4307232Z ##[group]Setting up auth
+2026-10-09T00:28:41.4316160Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-09T00:28:41.4356471Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-09T00:28:41.4880761Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-09T00:28:41.4925346Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-09T00:28:41.5190468Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-09T00:28:41.5242791Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-09T00:28:41.5531951Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-09T00:28:41.5589032Z ##[endgroup]
+2026-10-09T00:28:41.5590851Z ##[group]Fetching the repository
+2026-10-09T00:28:41.5605901Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-10-09T00:28:42.0526993Z From https://github.com/bvsk91361-cell/vibe-pujiayang
+2026-10-09T00:28:42.0529058Z  * [new branch]      docs/day1-5-catchup     -> origin/docs/day1-5-catchup
+2026-10-09T00:28:42.0531203Z  * [new branch]      docs/day6-final-audit   -> origin/docs/day6-final-audit
+2026-10-09T00:28:42.0533260Z  * [new branch]      docs/day6-published-issues -> origin/docs/day6-published-issues
+2026-10-09T00:28:42.0535517Z  * [new branch]      docs/day6-review-update -> origin/docs/day6-review-update
+2026-10-09T00:28:42.0537561Z  * [new branch]      drill/day6-recovery     -> origin/drill/day6-recovery
+2026-10-09T00:28:42.0539440Z  * [new branch]      feat/booking            -> origin/feat/booking
+2026-10-09T00:28:42.0543153Z  * [new branch]      feat/day4-public-demo   -> origin/feat/day4-public-demo
+2026-10-09T00:28:42.0545003Z  * [new branch]      feat/day5-audit-fixes   -> origin/feat/day5-audit-fixes
+2026-10-09T00:28:42.0546758Z  * [new branch]      feat/glass-review-workspace -> origin/feat/glass-review-workspace
+2026-10-09T00:28:42.0548892Z  * [new branch]      feat/topic5-baseline    -> origin/feat/topic5-baseline
+2026-10-09T00:28:42.0550840Z  * [new branch]      gh-pages                -> origin/gh-pages
+2026-10-09T00:28:42.0552841Z  * [new branch]      main                    -> origin/main
+2026-10-09T00:28:42.0554166Z  * [new branch]      master                  -> origin/master
+2026-10-09T00:28:42.0555505Z  * [new tag]         day1                    -> day1
+2026-10-09T00:28:42.0556902Z  * [new tag]         day10                   -> day10
+2026-10-09T00:28:42.0558115Z  * [new tag]         day2                    -> day2
+2026-10-09T00:28:42.0559276Z  * [new tag]         day3                    -> day3
+2026-10-09T00:28:42.0560881Z  * [new tag]         day4                    -> day4
+2026-10-09T00:28:42.0562278Z  * [new tag]         day5                    -> day5
+2026-10-09T00:28:42.0563458Z  * [new tag]         day6                    -> day6
+2026-10-09T00:28:42.0564642Z  * [new tag]         day7                    -> day7
+2026-10-09T00:28:42.0565782Z  * [new tag]         day8                    -> day8
+2026-10-09T00:28:42.0567011Z  * [new tag]         day9                    -> day9
+2026-10-09T00:28:42.0570079Z [command]/usr/bin/git branch --list --remote origin/feat/glass-review-workspace
+2026-10-09T00:28:42.0576754Z   origin/feat/glass-review-workspace
+2026-10-09T00:28:42.0591386Z [command]/usr/bin/git rev-parse refs/remotes/origin/feat/glass-review-workspace
+2026-10-09T00:28:42.0625106Z 6f8a91e5307ac3092cbfa0a8ce6191cf617bbf2e
+2026-10-09T00:28:42.0640631Z ##[endgroup]
+2026-10-09T00:28:42.0642091Z ##[group]Determining the checkout info
+2026-10-09T00:28:42.0643675Z ##[endgroup]
+2026-10-09T00:28:42.0649172Z [command]/usr/bin/git sparse-checkout disable
+2026-10-09T00:28:42.0714853Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-09T00:28:42.0757640Z ##[group]Checking out the ref
+2026-10-09T00:28:42.0764222Z [command]/usr/bin/git checkout --progress --force -B feat/glass-review-workspace refs/remotes/origin/feat/glass-review-workspace
+2026-10-09T00:28:42.1125201Z Switched to a new branch 'feat/glass-review-workspace'
+2026-10-09T00:28:42.1128563Z branch 'feat/glass-review-workspace' set up to track 'origin/feat/glass-review-workspace'.
+2026-10-09T00:28:42.1137377Z ##[endgroup]
+2026-10-09T00:28:42.1186262Z [command]/usr/bin/git log -1 --format=%H
+2026-10-09T00:28:42.1217442Z 6f8a91e5307ac3092cbfa0a8ce6191cf617bbf2e
+2026-10-09T00:28:42.1699535Z ##[group]Run actions/setup-node@v4
+2026-10-09T00:28:42.1701320Z with:
+2026-10-09T00:28:42.1702302Z   node-version: 22
+2026-10-09T00:28:42.1703360Z   always-auth: false
+2026-10-09T00:28:42.1704433Z   check-latest: false
+2026-10-09T00:28:42.1715799Z   token: ***
+2026-10-09T00:28:42.1716788Z ##[endgroup]
+2026-10-09T00:28:42.3337820Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-09T00:28:42.3342321Z (node:2294) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-09T00:28:42.3346011Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-09T00:28:42.3348523Z ##[group]Environment details
+2026-10-09T00:28:42.7333179Z node: v22.23.3
+2026-10-09T00:28:42.7333918Z npm: 10.9.9
+2026-10-09T00:28:42.7334182Z yarn: 1.22.22
+2026-10-09T00:28:42.7334883Z ##[endgroup]
+2026-10-09T00:28:42.7521523Z ##[group]Run actions/setup-python@v5
+2026-10-09T00:28:42.7521921Z with:
+2026-10-09T00:28:42.7522189Z   python-version: 3.12
+2026-10-09T00:28:42.7522476Z   check-latest: false
+2026-10-09T00:28:42.7525358Z   token: ***
+2026-10-09T00:28:42.7525649Z   update-environment: true
+2026-10-09T00:28:42.7525977Z   allow-prereleases: false
+2026-10-09T00:28:42.7526301Z   freethreaded: false
+2026-10-09T00:28:42.7526572Z ##[endgroup]
+2026-10-09T00:28:42.8947930Z ##[group]Installed versions
+2026-10-09T00:28:42.9052681Z (node:2325) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-09T00:28:42.9054350Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-09T00:28:42.9055451Z Successfully set up CPython (3.12.15)
+2026-10-09T00:28:42.9056557Z ##[endgroup]
+2026-10-09T00:28:42.9222247Z ##[group]Run npm test
+2026-10-09T00:28:42.9222911Z [36;1mnpm test[0m
+2026-10-09T00:28:42.9528506Z shell: /usr/bin/bash -e {0}
+2026-10-09T00:28:42.9529001Z env:
+2026-10-09T00:28:42.9529477Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-09T00:28:42.9530444Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-09T00:28:42.9531165Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-09T00:28:42.9531809Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-09T00:28:42.9532460Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-09T00:28:42.9533110Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-09T00:28:42.9533665Z ##[endgroup]
+2026-10-09T00:28:43.1418671Z 
+2026-10-09T00:28:43.1420587Z > vibe-pujiayang@0.1.0 test
+2026-10-09T00:28:43.1421835Z > node --test
+2026-10-09T00:28:43.1422285Z 
+2026-10-09T00:28:43.2595325Z TAP version 13
+2026-10-09T00:28:43.3260864Z # Subtest: 空台账周报完整六节、两条建议，明确样本不足和无法推断实际利用
+2026-10-09T00:28:43.3282078Z ok 1 - 空台账周报完整六节、两条建议，明确样本不足和无法推断实际利用
+2026-10-09T00:28:43.3291362Z   ---
+2026-10-09T00:28:43.3313226Z   duration_ms: 4.957516
+2026-10-09T00:28:43.3314313Z   type: 'test'
+2026-10-09T00:28:43.3314927Z   ...
+2026-10-09T00:28:43.3316097Z # Subtest: 有预约周报准确计数、热门设备、高峰和异常，重复或非法记录不虚增占用
+2026-10-09T00:28:43.3317246Z ok 2 - 有预约周报准确计数、热门设备、高峰和异常，重复或非法记录不虚增占用
+2026-10-09T00:28:43.3317987Z   ---
+2026-10-09T00:28:43.3318661Z   duration_ms: 2.477656
+2026-10-09T00:28:43.3319342Z   type: 'test'
+2026-10-09T00:28:43.3319940Z   ...
+2026-10-09T00:28:43.3321435Z # Subtest: 空内容最多自动重试一次，第二次仍为空清晰失败
+2026-10-09T00:28:43.3322466Z ok 3 - 空内容最多自动重试一次，第二次仍为空清晰失败
+2026-10-09T00:28:43.3323226Z   ---
+2026-10-09T00:28:43.3323897Z   duration_ms: 1.729777
+2026-10-09T00:28:43.3324637Z   type: 'test'
+2026-10-09T00:28:43.3325363Z   ...
+2026-10-09T00:28:43.3326254Z # Subtest: 标题过短最多重试一次且不作为成功周报返回
+2026-10-09T00:28:43.3327203Z ok 4 - 标题过短最多重试一次且不作为成功周报返回
+2026-10-09T00:28:43.3327897Z   ---
+2026-10-09T00:28:43.3328558Z   duration_ms: 1.308267
+2026-10-09T00:28:43.3329305Z   type: 'test'
+2026-10-09T00:28:43.3329929Z   ...
+2026-10-09T00:28:43.3331326Z # Subtest: 长度截断后一次重试可成功，token上限固定1800/2400，累计两次usage
+2026-10-09T00:28:43.3332573Z ok 5 - 长度截断后一次重试可成功，token上限固定1800/2400，累计两次usage
+2026-10-09T00:28:43.3333432Z   ---
+2026-10-09T00:28:43.3334097Z   duration_ms: 1.330279
+2026-10-09T00:28:43.3334815Z   type: 'test'
+2026-10-09T00:28:43.3335417Z   ...
+2026-10-09T00:28:43.3336242Z # Subtest: 模型引用不存在的数据或遗漏章节时拒绝，一次重试后停止
+2026-10-09T00:28:43.3337118Z ok 6 - 模型引用不存在的数据或遗漏章节时拒绝，一次重试后停止
+2026-10-09T00:28:43.3337717Z   ---
+2026-10-09T00:28:43.3338273Z   duration_ms: 3.713929
+2026-10-09T00:28:43.3338838Z   type: 'test'
+2026-10-09T00:28:43.3339324Z   ...
+2026-10-09T00:28:43.3340025Z # Subtest: 上游429与500不自动重试、不透传包含敏感值的错误正文
+2026-10-09T00:28:43.3341360Z ok 7 - 上游429与500不自动重试、不透传包含敏感值的错误正文
+2026-10-09T00:28:43.3341963Z   ---
+2026-10-09T00:28:43.3342472Z   duration_ms: 2.069051
+2026-10-09T00:28:43.3343000Z   type: 'test'
+2026-10-09T00:28:43.3343555Z   ...
+2026-10-09T00:28:43.3512371Z # Subtest: 超时信号生效并返回504，不因超时触发额外调用
+2026-10-09T00:28:43.3519665Z ok 8 - 超时信号生效并返回504，不因超时触发额外调用
+2026-10-09T00:28:43.3550035Z   ---
+2026-10-09T00:28:43.3551129Z   duration_ms: 10.828311
+2026-10-09T00:28:43.3551836Z   type: 'test'
+2026-10-09T00:28:43.3552388Z   ...
+2026-10-09T00:28:43.3553362Z # Subtest: HTTP非JSON响应不自动重试；模型非法JSON重试一次后停止
+2026-10-09T00:28:43.3554025Z ok 9 - HTTP非JSON响应不自动重试；模型非法JSON重试一次后停止
+2026-10-09T00:28:43.3554474Z   ---
+2026-10-09T00:28:43.3554845Z   duration_ms: 1.981147
+2026-10-09T00:28:43.3555259Z   type: 'test'
+2026-10-09T00:28:43.3555621Z   ...
+2026-10-09T00:28:43.3556216Z # Subtest: 复杂日期查询先发送真实设备和匿名预约上下文，再按完整台账核对占用；输出token受限
+2026-10-09T00:28:43.3556876Z ok 10 - 复杂日期查询先发送真实设备和匿名预约上下文，再按完整台账核对占用；输出token受限
+2026-10-09T00:28:43.3557330Z   ---
+2026-10-09T00:28:43.3557685Z   duration_ms: 3.169201
+2026-10-09T00:28:43.3558069Z   type: 'test'
+2026-10-09T00:28:43.3558423Z   ...
+2026-10-09T00:28:43.3559621Z # Subtest: 替代查询不把相机或录音笔冒充投影设备；最忙时段结论由实际记录计算
+2026-10-09T00:28:43.3560618Z ok 11 - 替代查询不把相机或录音笔冒充投影设备；最忙时段结论由实际记录计算
+2026-10-09T00:28:43.3561447Z   ---
+2026-10-09T00:28:43.3561828Z   duration_ms: 1.81199
+2026-10-09T00:28:43.3562254Z   type: 'test'
+2026-10-09T00:28:43.3562732Z   ...
+2026-10-09T00:28:43.3563305Z # Subtest: 连续并发请求整段处理期间被拒绝，避免双重API消耗；释放后可再次使用
+2026-10-09T00:28:43.3563921Z ok 12 - 连续并发请求整段处理期间被拒绝，避免双重API消耗；释放后可再次使用
+2026-10-09T00:28:43.3564362Z   ---
+2026-10-09T00:28:43.3564836Z   duration_ms: 1.886019
+2026-10-09T00:28:43.3565616Z   type: 'test'
+2026-10-09T00:28:43.3566325Z   ...
+2026-10-09T00:28:43.3567208Z # Subtest: 用户输入过长在调用前拒绝；查询空或截断不自动重试
+2026-10-09T00:28:43.3567815Z ok 13 - 用户输入过长在调用前拒绝；查询空或截断不自动重试
+2026-10-09T00:28:43.3568235Z   ---
+2026-10-09T00:28:43.3568592Z   duration_ms: 2.071447
+2026-10-09T00:28:43.3568981Z   type: 'test'
+2026-10-09T00:28:43.3569336Z   ...
+2026-10-09T00:28:43.3569837Z # Subtest: 七天窗口外的预约不计入周报，但指定日期查询仍使用完整真实台账
+2026-10-09T00:28:43.3571052Z ok 14 - 七天窗口外的预约不计入周报，但指定日期查询仍使用完整真实台账
+2026-10-09T00:28:43.3572764Z   ---
+2026-10-09T00:28:43.3573521Z   duration_ms: 8.097822
+2026-10-09T00:28:43.3574224Z   type: 'test'
+2026-10-09T00:28:43.3574794Z   ...
+2026-10-09T00:28:43.3752256Z # Subtest: 规划统计由真实记录生成，七天容量、跨月日期和时间终点正确
+2026-10-09T00:28:43.3789603Z not ok 15 - 规划统计由真实记录生成，七天容量、跨月日期和时间终点正确
+2026-10-09T00:28:43.3791340Z   ---
+2026-10-09T00:28:43.3792186Z   duration_ms: 5.550425
+2026-10-09T00:28:43.3793036Z   type: 'test'
+2026-10-09T00:28:43.3794348Z   location: '/home/runner/work/vibe-pujiayang/vibe-pujiayang/test/ai-planning.test.js:12:1'
+2026-10-09T00:28:43.3795787Z   failureType: 'testCodeFailure'
+2026-10-09T00:28:43.3796690Z   error: |-
+2026-10-09T00:28:43.3797622Z     Expected values to be strictly deep-equal:
+2026-10-09T00:28:43.3798604Z     + actual - expected
+2026-10-09T00:28:43.3799318Z     
+2026-10-09T00:28:43.3800011Z       [
+2026-10-09T00:28:43.3801229Z     -   '14:00–16:00',
+2026-10-09T00:28:43.3802160Z         '19:00–21:00'
+2026-10-09T00:28:43.3802926Z       ]
+2026-10-09T00:28:43.3803601Z     
+2026-10-09T00:28:43.3804372Z   code: 'ERR_ASSERTION'
+2026-10-09T00:28:43.3805294Z   name: 'AssertionError'
+2026-10-09T00:28:43.3806100Z   expected:
+2026-10-09T00:28:43.3806956Z     0: '14:00–16:00'
+2026-10-09T00:28:43.3807893Z     1: '19:00–21:00'
+2026-10-09T00:28:43.3808680Z   actual:
+2026-10-09T00:28:43.3809517Z     0: '19:00–21:00'
+2026-10-09T00:28:43.3810638Z   operator: 'deepStrictEqual'
+2026-10-09T00:28:43.3811523Z   stack: |-
+2026-10-09T00:28:43.3812962Z     TestContext.<anonymous> (file:///home/runner/work/vibe-pujiayang/vibe-pujiayang/test/ai-planning.test.js:14:9)
+2026-10-09T00:28:43.3814590Z     Test.runInAsyncScope (node:async_hooks:214:14)
+2026-10-09T00:28:43.3815767Z     Test.run (node:internal/test_runner/test:1047:25)
+2026-10-09T00:28:43.3816934Z     Test.start (node:internal/test_runner/test:944:17)
+2026-10-09T00:28:43.3818237Z     startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+2026-10-09T00:28:43.3819347Z   ...
+2026-10-09T00:28:43.3820800Z # Subtest: AI未配置时明确503，不发送外部请求
+2026-10-09T00:28:43.3822824Z ok 16 - AI未配置时明确503，不发送外部请求
+2026-10-09T00:28:43.3824132Z   ---
+2026-10-09T00:28:43.3824973Z   duration_ms: 1.709048
+2026-10-09T00:28:43.3825901Z   type: 'test'
+2026-10-09T00:28:43.3826717Z   ...
+2026-10-09T00:28:43.3827958Z # Subtest: 周报仅发送汇总台账，不发送预约人姓名或泄露密钥；usage来自接口
+2026-10-09T00:28:43.3829398Z ok 17 - 周报仅发送汇总台账，不发送预约人姓名或泄露密钥；usage来自接口
+2026-10-09T00:28:43.3830960Z   ---
+2026-10-09T00:28:43.3831873Z   duration_ms: 7.547432
+2026-10-09T00:28:43.3832806Z   type: 'test'
+2026-10-09T00:28:43.3833624Z   ...
+2026-10-09T00:28:43.3834800Z # Subtest: 空闲查询严格解析模型条件，空闲列表按台账计算而非模型推测
+2026-10-09T00:28:43.3836103Z ok 18 - 空闲查询严格解析模型条件，空闲列表按台账计算而非模型推测
+2026-10-09T00:28:43.3837094Z   ---
+2026-10-09T00:28:43.3837914Z   duration_ms: 4.718259
+2026-10-09T00:28:43.3838800Z   type: 'test'
+2026-10-09T00:28:43.3839505Z   ...
+2026-10-09T00:28:43.3840841Z # Subtest: 模型格式、未知设备和日期异常必须拒绝，不能当成正确空闲答案
+2026-10-09T00:28:43.3844327Z ok 19 - 模型格式、未知设备和日期异常必须拒绝，不能当成正确空闲答案
+2026-10-09T00:28:43.3845431Z   ---
+2026-10-09T00:28:43.3846190Z   duration_ms: 6.005327
+2026-10-09T00:28:43.3846909Z   type: 'test'
+2026-10-09T00:28:43.3847641Z   ...
+2026-10-09T00:28:43.3848632Z # Subtest: 模型401、额度、网络、超时等错误提供安全兜底，不暴露上游内容
+2026-10-09T00:28:43.3849759Z ok 20 - 模型401、额度、网络、超时等错误提供安全兜底，不暴露上游内容
+2026-10-09T00:28:43.3850817Z   ---
+2026-10-09T00:28:43.3851515Z   duration_ms: 5.884721
+2026-10-09T00:28:43.3852267Z   type: 'test'
+2026-10-09T00:28:43.3852956Z   ...
+2026-10-09T00:28:43.3854107Z # Subtest: 模型每日调用上限阻止重复消耗，HTTPS地址必须有效
+2026-10-09T00:28:43.3855288Z ok 21 - 模型每日调用上限阻止重复消耗，HTTPS地址必须有效
+2026-10-09T00:28:43.3856131Z   ---
+2026-10-09T00:28:43.3856827Z   duration_ms: 13.311138
+2026-10-09T00:28:43.3857584Z   type: 'test'
+2026-10-09T00:28:43.3858265Z   ...
+2026-10-09T00:28:43.3859443Z # Subtest: Yos Hub默认地址和模型生效，密钥只进入服务端Authorization，不进入返回状态
+2026-10-09T00:28:43.3861104Z ok 22 - Yos Hub默认地址和模型生效，密钥只进入服务端Authorization，不进入返回状态
+2026-10-09T00:28:43.3862058Z   ---
+2026-10-09T00:28:43.3862733Z   duration_ms: 0.873755
+2026-10-09T00:28:43.3863463Z   type: 'test'
+2026-10-09T00:28:43.3864091Z   ...
+2026-10-09T00:28:43.3865092Z # Subtest: 报告输出截断或只有标题时不能显示为有效报告，截断usage仍计入统计
+2026-10-09T00:28:43.3866345Z ok 23 - 报告输出截断或只有标题时不能显示为有效报告，截断usage仍计入统计
+2026-10-09T00:28:43.3867257Z   ---
+2026-10-09T00:28:43.3868884Z   duration_ms: 1.381267
+2026-10-09T00:28:43.3869311Z   type: 'test'
+2026-10-09T00:28:43.3869682Z   ...
+2026-10-09T00:28:43.3974453Z # Subtest: 真实预约失败恢复GET等待时更换设备，旧409不禁用新设备的确认
+2026-10-09T00:28:43.3982714Z ok 24 - 真实预约失败恢复GET等待时更换设备，旧409不禁用新设备的确认
+2026-10-09T00:28:43.3998175Z   ---
+2026-10-09T00:28:43.4017822Z   duration_ms: 29.738886
+2026-10-09T00:28:43.4018539Z   type: 'test'
+2026-10-09T00:28:43.4019209Z   ...
+2026-10-09T00:28:43.4020472Z # Subtest: 真实预约成功后列表刷新等待时换身份，旧成功/失败不污染新草稿或关闭其选择器
+2026-10-09T00:28:43.4021564Z ok 25 - 真实预约成功后列表刷新等待时换身份，旧成功/失败不污染新草稿或关闭其选择器
+2026-10-09T00:28:43.4022269Z   ---
+2026-10-09T00:28:43.4022833Z   duration_ms: 31.108068
+2026-10-09T00:28:43.4023457Z   type: 'test'
+2026-10-09T00:28:43.4024000Z   ...
+2026-10-09T00:28:43.4527400Z # Subtest: 空预约从真实选择建立单件草稿，不默认设备/日期/时段，身份与滚动上下文保留
+2026-10-09T00:28:43.4551976Z ok 26 - 空预约从真实选择建立单件草稿，不默认设备/日期/时段，身份与滚动上下文保留
+2026-10-09T00:28:43.4553395Z   ---
+2026-10-09T00:28:43.4554128Z   duration_ms: 4.580501
+2026-10-09T00:28:43.4554893Z   type: 'test'
+2026-10-09T00:28:43.4555509Z   ...
+2026-10-09T00:28:43.4556916Z # Subtest: 更换单件保留日期/时段/来源及滚动位置，幂等ID重建且不修改保存的方案
+2026-10-09T00:28:43.4558147Z ok 27 - 更换单件保留日期/时段/来源及滚动位置，幂等ID重建且不修改保存的方案
+2026-10-09T00:28:43.4558974Z   ---
+2026-10-09T00:28:43.4559584Z   duration_ms: 1.008447
+2026-10-09T00:28:43.4560590Z   type: 'test'
+2026-10-09T00:28:43.4561273Z   ...
+2026-10-09T00:28:43.4562224Z # Subtest: 组合只替换指定目标，保留其余设备；重复、维护、错误目标均拒绝
+2026-10-09T00:28:43.4563345Z ok 28 - 组合只替换指定目标，保留其余设备；重复、维护、错误目标均拒绝
+2026-10-09T00:28:43.4564153Z   ---
+2026-10-09T00:28:43.4564774Z   duration_ms: 0.5027
+2026-10-09T00:28:43.4565470Z   type: 'test'
+2026-10-09T00:28:43.4566218Z   ...
+2026-10-09T00:28:43.4567270Z # Subtest: 快速切换设备：即使旧GET不理会Abort，只有新草稿响应可以提交台账
+2026-10-09T00:28:43.4568653Z ok 29 - 快速切换设备：即使旧GET不理会Abort，只有新草稿响应可以提交台账
+2026-10-09T00:28:43.4569621Z   ---
+2026-10-09T00:28:43.4570779Z   duration_ms: 1.126408
+2026-10-09T00:28:43.4571610Z   type: 'test'
+2026-10-09T00:28:43.4572344Z   ...
+2026-10-09T00:28:43.4573490Z # Subtest: 共享台账版本拒绝旧包时不能放行确认；普通最新刷新能结束旧核对
+2026-10-09T00:28:43.4574717Z ok 30 - 共享台账版本拒绝旧包时不能放行确认；普通最新刷新能结束旧核对
+2026-10-09T00:28:43.4575613Z   ---
+2026-10-09T00:28:43.4576379Z   duration_ms: 0.604662
+2026-10-09T00:28:43.4577078Z   type: 'test'
+2026-10-09T00:28:43.4577747Z   ...
+2026-10-09T00:28:43.4578803Z # Subtest: 网络失败和超时只有一次请求；身份切换与最新刷新不被旧响应恢复
+2026-10-09T00:28:43.4580089Z ok 31 - 网络失败和超时只有一次请求；身份切换与最新刷新不被旧响应恢复
+2026-10-09T00:28:43.4581441Z   ---
+2026-10-09T00:28:43.4582205Z   duration_ms: 7.907513
+2026-10-09T00:28:43.4583021Z   type: 'test'
+2026-10-09T00:28:43.4583798Z   ...
+2026-10-09T00:28:43.5134305Z # (node:2380) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:43.5167343Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:43.5206455Z # Subtest: 业务规则1：有效预约保留器材、日期、时段，并去掉姓名两端空格
+2026-10-09T00:28:43.5271097Z ok 32 - 业务规则1：有效预约保留器材、日期、时段，并去掉姓名两端空格
+2026-10-09T00:28:43.5301342Z   ---
+2026-10-09T00:28:43.5321392Z   duration_ms: 3.004361
+2026-10-09T00:28:43.5322519Z   type: 'test'
+2026-10-09T00:28:43.5323293Z   ...
+2026-10-09T00:28:43.5324323Z # Subtest: 业务规则2：同器材、同日期、同时段的重复预约返回409
+2026-10-09T00:28:43.5325392Z ok 33 - 业务规则2：同器材、同日期、同时段的重复预约返回409
+2026-10-09T00:28:43.5326205Z   ---
+2026-10-09T00:28:43.5326893Z   duration_ms: 0.749692
+2026-10-09T00:28:43.5327543Z   type: 'test'
+2026-10-09T00:28:43.5328221Z   ...
+2026-10-09T00:28:43.5329051Z # Subtest: 业务规则3：不同器材或日期或时段不会被误判为重复
+2026-10-09T00:28:43.5330661Z ok 34 - 业务规则3：不同器材或日期或时段不会被误判为重复
+2026-10-09T00:28:43.5331289Z   ---
+2026-10-09T00:28:43.5331739Z   duration_ms: 0.504895
+2026-10-09T00:28:43.5332231Z   type: 'test'
+2026-10-09T00:28:43.5332627Z   ...
+2026-10-09T00:28:43.5333305Z # Subtest: 业务规则4：空姓名、未知器材和非法时段必须被拒绝
+2026-10-09T00:28:43.5334105Z ok 35 - 业务规则4：空姓名、未知器材和非法时段必须被拒绝
+2026-10-09T00:28:43.5335081Z   ---
+2026-10-09T00:28:43.5335817Z   duration_ms: 0.492932
+2026-10-09T00:28:43.5336286Z   type: 'test'
+2026-10-09T00:28:43.5336680Z   ...
+2026-10-09T00:28:43.5337370Z # Subtest: 业务规则5：过去日期、不存在的日期和错误日期格式必须被拒绝
+2026-10-09T00:28:43.5338224Z not ok 36 - 业务规则5：过去日期、不存在的日期和错误日期格式必须被拒绝
+2026-10-09T00:28:43.5338773Z   ---
+2026-10-09T00:28:43.5339189Z   duration_ms: 1.467586
+2026-10-09T00:28:43.5339653Z   type: 'test'
+2026-10-09T00:28:43.5340786Z   location: '/home/runner/work/vibe-pujiayang/vibe-pujiayang/test/booking.test.js:31:1'
+2026-10-09T00:28:43.5341794Z   failureType: 'testCodeFailure'
+2026-10-09T00:28:43.5342330Z   error: |-
+2026-10-09T00:28:43.5342761Z     Got unwanted exception.
+2026-10-09T00:28:43.5343492Z     Actual message: "这个时段已经结束，请选择后续时段。"
+2026-10-09T00:28:43.5344022Z   code: 'ERR_ASSERTION'
+2026-10-09T00:28:43.5344461Z   name: 'AssertionError'
+2026-10-09T00:28:43.5344852Z   actual:
+2026-10-09T00:28:43.5345326Z   error: '这个时段已经结束，请选择后续时段。'
+2026-10-09T00:28:43.5345798Z   stack: |-
+2026-10-09T00:28:43.5346693Z     validateBooking (file:///home/runner/work/vibe-pujiayang/vibe-pujiayang/src/booking.js:37:59)
+2026-10-09T00:28:43.5348083Z     file:///home/runner/work/vibe-pujiayang/vibe-pujiayang/test/booking.test.js:35:29
+2026-10-09T00:28:43.5348998Z     getActual (node:assert:609:5)
+2026-10-09T00:28:43.5349633Z     Function.doesNotThrow (node:assert:777:32)
+2026-10-09T00:28:43.5351073Z     TestContext.<anonymous> (file:///home/runner/work/vibe-pujiayang/vibe-pujiayang/test/booking.test.js:35:10)
+2026-10-09T00:28:43.5352147Z     Test.runInAsyncScope (node:async_hooks:214:14)
+2026-10-09T00:28:43.5352851Z     Test.run (node:internal/test_runner/test:1047:25)
+2026-10-09T00:28:43.5353685Z     Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+2026-10-09T00:28:43.5354539Z     Test.postRun (node:internal/test_runner/test:1173:19)
+2026-10-09T00:28:43.5355245Z     Test.run (node:internal/test_runner/test:1101:12)
+2026-10-09T00:28:43.5355801Z   operator: 'doesNotThrow'
+2026-10-09T00:28:43.5356232Z   stack: |-
+2026-10-09T00:28:43.5357130Z     TestContext.<anonymous> (file:///home/runner/work/vibe-pujiayang/vibe-pujiayang/test/booking.test.js:35:10)
+2026-10-09T00:28:43.5358221Z     Test.runInAsyncScope (node:async_hooks:214:14)
+2026-10-09T00:28:43.5358955Z     Test.run (node:internal/test_runner/test:1047:25)
+2026-10-09T00:28:43.5359859Z     Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+2026-10-09T00:28:43.5362022Z     Test.postRun (node:internal/test_runner/test:1173:19)
+2026-10-09T00:28:43.5362904Z     Test.run (node:internal/test_runner/test:1101:12)
+2026-10-09T00:28:43.5364711Z     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+2026-10-09T00:28:43.5365506Z   ...
+2026-10-09T00:28:43.6792426Z # Subtest: 接口闭环：预约保存、重建存储后读取、重复拒绝、取消后重新预约
+2026-10-09T00:28:43.6821851Z ok 37 - 接口闭环：预约保存、重建存储后读取、重复拒绝、取消后重新预约
+2026-10-09T00:28:43.6829027Z   ---
+2026-10-09T00:28:43.6829830Z   duration_ms: 169.659158
+2026-10-09T00:28:43.6861134Z   type: 'test'
+2026-10-09T00:28:43.6891083Z   ...
+2026-10-09T00:28:43.6948314Z # Subtest: 并发护栏：同时提交两个重复预约，只允许一个写入
+2026-10-09T00:28:43.6970112Z ok 38 - 并发护栏：同时提交两个重复预约，只允许一个写入
+2026-10-09T00:28:43.6971896Z   ---
+2026-10-09T00:28:43.6972708Z   duration_ms: 9.994832
+2026-10-09T00:28:43.6973375Z   type: 'test'
+2026-10-09T00:28:43.6973994Z   ...
+2026-10-09T00:28:43.7197361Z # Subtest: HTTP分块UTF-8：中文姓名跨数据块时必须原样保存
+2026-10-09T00:28:43.7212176Z ok 39 - HTTP分块UTF-8：中文姓名跨数据块时必须原样保存
+2026-10-09T00:28:43.7213068Z   ---
+2026-10-09T00:28:43.7213636Z   duration_ms: 31.092782
+2026-10-09T00:28:43.7214207Z   type: 'test'
+2026-10-09T00:28:43.7214717Z   ...
+2026-10-09T00:28:43.7854949Z # Subtest: 新增课程题变体保持台账快速查询，未提供具体设备的指代需要澄清
+2026-10-09T00:28:43.7903702Z ok 40 - 新增课程题变体保持台账快速查询，未提供具体设备的指代需要澄清
+2026-10-09T00:28:43.7955448Z   ---
+2026-10-09T00:28:43.7957452Z   duration_ms: 47.091307
+2026-10-09T00:28:43.7958225Z   type: 'test'
+2026-10-09T00:28:43.7958835Z   ...
+2026-10-09T00:28:43.7959999Z # Subtest: 设备指代在已配置模型时也不能降级成猜测ID或全部设备查询
+2026-10-09T00:28:43.7961763Z ok 41 - 设备指代在已配置模型时也不能降级成猜测ID或全部设备查询
+2026-10-09T00:28:43.7976969Z   ---
+2026-10-09T00:28:43.7977359Z   duration_ms: 0.796531
+2026-10-09T00:28:43.7977776Z   type: 'test'
+2026-10-09T00:28:43.7978139Z   ...
+2026-10-09T00:28:43.7978867Z # Subtest: 老师六个自然查询均走真实台账；本周/下周按业务时区而非旧日期解析
+2026-10-09T00:28:43.7979633Z ok 42 - 老师六个自然查询均走真实台账；本周/下周按业务时区而非旧日期解析
+2026-10-09T00:28:43.7980856Z   ---
+2026-10-09T00:28:43.7981269Z   duration_ms: 1.800268
+2026-10-09T00:28:43.7981684Z   type: 'test'
+2026-10-09T00:28:43.7982038Z   ...
+2026-10-09T00:28:43.7982707Z # Subtest: 六种课程查询不配置模型也可用，结果严格使用实时记录，不追加API调用
+2026-10-09T00:28:43.7983481Z ok 43 - 六种课程查询不配置模型也可用，结果严格使用实时记录，不追加API调用
+2026-10-09T00:28:43.7983956Z   ---
+2026-10-09T00:28:43.7984296Z   duration_ms: 29.807775
+2026-10-09T00:28:43.7984712Z   type: 'test'
+2026-10-09T00:28:43.7985058Z   ...
+2026-10-09T00:28:43.7985648Z # Subtest: 其他时间只推荐真实空闲时段，不推荐维护设备或已占用时段
+2026-10-09T00:28:43.7986332Z ok 44 - 其他时间只推荐真实空闲时段，不推荐维护设备或已占用时段
+2026-10-09T00:28:43.7986799Z   ---
+2026-10-09T00:28:43.7987238Z   duration_ms: 3.081506
+2026-10-09T00:28:43.7987712Z   type: 'test'
+2026-10-09T00:28:43.7988080Z   ...
+2026-10-09T00:28:43.7988732Z # Subtest: 周报含低预约设备和真实空闲调度选择；取消与维护不会虚增占用率
+2026-10-09T00:28:43.7989461Z ok 45 - 周报含低预约设备和真实空闲调度选择；取消与维护不会虚增占用率
+2026-10-09T00:28:43.7989922Z   ---
+2026-10-09T00:28:43.7990506Z   duration_ms: 7.127687
+2026-10-09T00:28:43.7990921Z   type: 'test'
+2026-10-09T00:28:43.7991265Z   ...
+2026-10-09T00:28:43.7991889Z # Subtest: 周报上下文仅发送完整事实与建议候选，避免重复长台账导致简单输出超时
+2026-10-09T00:28:43.7992633Z ok 46 - 周报上下文仅发送完整事实与建议候选，避免重复长台账导致简单输出超时
+2026-10-09T00:28:43.7993127Z   ---
+2026-10-09T00:28:43.7993460Z   duration_ms: 4.073552
+2026-10-09T00:28:43.7993857Z   type: 'test'
+2026-10-09T00:28:43.7994194Z   ...
+2026-10-09T00:28:43.7995117Z # (node:2396) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:43.7996349Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:43.7997463Z # Subtest: Asia/Shanghai日期与时段在UTC、洛杉矶和上海宿主下完全一致
+2026-10-09T00:28:43.7998271Z ok 47 - Asia/Shanghai日期与时段在UTC、洛杉矶和上海宿主下完全一致
+2026-10-09T00:28:43.7999136Z   ---
+2026-10-09T00:28:43.7999490Z   duration_ms: 181.717039
+2026-10-09T00:28:43.8065291Z   type: 'test'
+2026-10-09T00:28:43.8067161Z   ...
+2026-10-09T00:28:43.8068194Z # Subtest: 预约及到期边界精确到开始/结束分钟；取消状态独立；闰年与跨年日期有效
+2026-10-09T00:28:43.8069018Z ok 48 - 预约及到期边界精确到开始/结束分钟；取消状态独立；闰年与跨年日期有效
+2026-10-09T00:28:43.8069514Z   ---
+2026-10-09T00:28:43.8069871Z   duration_ms: 5.861648
+2026-10-09T00:28:43.8070631Z   type: 'test'
+2026-10-09T00:28:43.8071025Z   ...
+2026-10-09T00:28:43.8659858Z # Subtest: 台账seed更新目录payload，不重置预约与身份；统计排除取消及未知设备
+2026-10-09T00:28:43.8662619Z ok 49 - 台账seed更新目录payload，不重置预约与身份；统计排除取消及未知设备
+2026-10-09T00:28:43.8663993Z   ---
+2026-10-09T00:28:43.8665316Z   duration_ms: 93.848788
+2026-10-09T00:28:43.8665911Z   type: 'test'
+2026-10-09T00:28:43.8666426Z   ...
+2026-10-09T00:28:43.9564890Z # Subtest: SQLite唯一约束异常映射409，事务完全回滚，不泄露SQL
+2026-10-09T00:28:43.9599068Z ok 50 - SQLite唯一约束异常映射409，事务完全回滚，不泄露SQL
+2026-10-09T00:28:43.9600716Z   ---
+2026-10-09T00:28:43.9601344Z   duration_ms: 82.940575
+2026-10-09T00:28:43.9601885Z   type: 'test'
+2026-10-09T00:28:43.9602348Z   ...
+2026-10-09T00:28:43.9956416Z # Subtest: 非法单件输入与未知用户有业务错误；越权取消拒绝；取消释放并保留已取消历史
+2026-10-09T00:28:43.9979644Z ok 51 - 非法单件输入与未知用户有业务错误；越权取消拒绝；取消释放并保留已取消历史
+2026-10-09T00:28:43.9981115Z   ---
+2026-10-09T00:28:43.9981858Z   duration_ms: 46.755647
+2026-10-09T00:28:43.9982545Z   type: 'test'
+2026-10-09T00:28:43.9983100Z   ...
+2026-10-09T00:28:44.3303119Z # 课程并发证据 {"processes":2,"connections":2,"requests":12,"success":1,"conflicts":11,"activeSameSlot":1,"cancelThenRebook":true,"batchRequests":2,"batchSuccess":1,"batchConflicts":1,"batchRecords":3}
+2026-10-09T00:28:44.3642416Z # Subtest: 两个独立Node进程/SQLite连接同时抢槽：12次请求1成功11冲突；批量全有或全无
+2026-10-09T00:28:44.3662549Z ok 52 - 两个独立Node进程/SQLite连接同时抢槽：12次请求1成功11冲突；批量全有或全无
+2026-10-09T00:28:44.3663604Z   ---
+2026-10-09T00:28:44.3664247Z   duration_ms: 367.89027
+2026-10-09T00:28:44.3669249Z   type: 'test'
+2026-10-09T00:28:44.3670092Z   ...
+2026-10-09T00:28:44.3896082Z # Subtest: 旧JSON有重复占用时停止迁移并完整回滚，不静默丢记录；保留原始备份
+2026-10-09T00:28:44.3921844Z ok 53 - 旧JSON有重复占用时停止迁移并完整回滚，不静默丢记录；保留原始备份
+2026-10-09T00:28:44.3951402Z   ---
+2026-10-09T00:28:44.3981972Z   duration_ms: 23.515982
+2026-10-09T00:28:44.4061629Z   type: 'test'
+2026-10-09T00:28:44.4080893Z   ...
+2026-10-09T00:28:44.4142228Z # Subtest: 七天共同时间明确区分本人已预约、仍可预约、他人占用；切换日期不误复用本人状态
+2026-10-09T00:28:44.4147941Z ok 54 - 七天共同时间明确区分本人已预约、仍可预约、他人占用；切换日期不误复用本人状态
+2026-10-09T00:28:44.4191618Z   ---
+2026-10-09T00:28:44.4192564Z   duration_ms: 2.32488
+2026-10-09T00:28:44.4193299Z   type: 'test'
+2026-10-09T00:28:44.4193842Z   ...
+2026-10-09T00:28:44.4434641Z # (node:2408) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:44.4462346Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:44.4492420Z # Subtest: 刷新凭证逐项核对真实台账字段，不接受同编号但设备或时间不同的缓存
+2026-10-09T00:28:44.4521866Z ok 55 - 刷新凭证逐项核对真实台账字段，不接受同编号但设备或时间不同的缓存
+2026-10-09T00:28:44.4522798Z   ---
+2026-10-09T00:28:44.4581590Z   duration_ms: 1.981417
+2026-10-09T00:28:44.4585624Z   type: 'test'
+2026-10-09T00:28:44.4611468Z   ...
+2026-10-09T00:28:44.4641350Z # Subtest: 占用矩阵仅统计有效预约；取消释放、维护排除、今日已结束区分于空闲
+2026-10-09T00:28:44.4642248Z ok 56 - 占用矩阵仅统计有效预约；取消释放、维护排除、今日已结束区分于空闲
+2026-10-09T00:28:44.4661504Z   ---
+2026-10-09T00:28:44.4662169Z   duration_ms: 2.873076
+2026-10-09T00:28:44.4662929Z   type: 'test'
+2026-10-09T00:28:44.4663562Z   ...
+2026-10-09T00:28:44.4664613Z # Subtest: HTTP热力图与SQLite同一记录源：一次预约增一格，取消归零
+2026-10-09T00:28:44.4665695Z ok 57 - HTTP热力图与SQLite同一记录源：一次预约增一格，取消归零
+2026-10-09T00:28:44.4666435Z   ---
+2026-10-09T00:28:44.4667018Z   duration_ms: 89.960551
+2026-10-09T00:28:44.4667650Z   type: 'test'
+2026-10-09T00:28:44.4668266Z   ...
+2026-10-09T00:28:44.4669217Z # Subtest: 隔离演示禁止正式库路径，重复初始化不清空预约；真实时间夹具明确标识
+2026-10-09T00:28:44.4670566Z ok 58 - 隔离演示禁止正式库路径，重复初始化不清空预约；真实时间夹具明确标识
+2026-10-09T00:28:44.4671363Z   ---
+2026-10-09T00:28:44.4672509Z   duration_ms: 94.462585
+2026-10-09T00:28:44.4673158Z   type: 'test'
+2026-10-09T00:28:44.4673772Z   ...
+2026-10-09T00:28:44.4674875Z # (node:2441) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:44.4676270Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:44.4677424Z # Subtest: 十个场景都有真实设备与能力组合，关联图仅返回真实id
+2026-10-09T00:28:44.4678665Z ok 59 - 十个场景都有真实设备与能力组合，关联图仅返回真实id
+2026-10-09T00:28:44.4679401Z   ---
+2026-10-09T00:28:44.4680003Z   duration_ms: 1.435476
+2026-10-09T00:28:44.4680949Z   type: 'test'
+2026-10-09T00:28:44.4681531Z   ...
+2026-10-09T00:28:44.4682429Z # Subtest: 准备度只按真实时段计算，冲突、维护、无效设备或日期不会假装就绪
+2026-10-09T00:28:44.4683434Z ok 60 - 准备度只按真实时段计算，冲突、维护、无效设备或日期不会假装就绪
+2026-10-09T00:28:44.4684142Z   ---
+2026-10-09T00:28:44.4684697Z   duration_ms: 2.231555
+2026-10-09T00:28:44.4685321Z   type: 'test'
+2026-10-09T00:28:44.4685880Z   ...
+2026-10-09T00:28:44.4686769Z # Subtest: Smart Replace同用途、真实空闲、排除已选与维护，适配度可解释
+2026-10-09T00:28:44.4687900Z ok 61 - Smart Replace同用途、真实空闲、排除已选与维护，适配度可解释
+2026-10-09T00:28:44.4688695Z   ---
+2026-10-09T00:28:44.4689265Z   duration_ms: 0.83931
+2026-10-09T00:28:44.4689884Z   type: 'test'
+2026-10-09T00:28:44.4690688Z   ...
+2026-10-09T00:28:44.4691554Z # Subtest: SQLite seed可重复，不覆盖偏好、不重复账号、设备或收藏
+2026-10-09T00:28:44.4692639Z ok 62 - SQLite seed可重复，不覆盖偏好、不重复账号、设备或收藏
+2026-10-09T00:28:44.4693342Z   ---
+2026-10-09T00:28:44.4693907Z   duration_ms: 5.736323
+2026-10-09T00:28:44.4694547Z   type: 'test'
+2026-10-09T00:28:44.4695192Z   ...
+2026-10-09T00:28:44.4696071Z # Subtest: 多账号收藏、方案、历史、导出来源隔离；取消保留历史并可重约
+2026-10-09T00:28:44.4697063Z ok 63 - 多账号收藏、方案、历史、导出来源隔离；取消保留历史并可重约
+2026-10-09T00:28:44.4697765Z   ---
+2026-10-09T00:28:44.4698351Z   duration_ms: 5.260523
+2026-10-09T00:28:44.4698999Z   type: 'test'
+2026-10-09T00:28:44.4699557Z   ...
+2026-10-09T00:28:44.4700726Z # Subtest: SQLite唯一时段继续拒绝重复；预约不伪造真实使用或守约率
+2026-10-09T00:28:44.4701762Z ok 64 - SQLite唯一时段继续拒绝重复；预约不伪造真实使用或守约率
+2026-10-09T00:28:44.4702465Z   ---
+2026-10-09T00:28:44.4703116Z   duration_ms: 3.761909
+2026-10-09T00:28:44.4703801Z   type: 'test'
+2026-10-09T00:28:44.4704359Z   ...
+2026-10-09T00:28:44.4705185Z # Subtest: 方案保存、修改、冲突替换、完成准备与里程碑均真实持久化
+2026-10-09T00:28:44.4706131Z ok 65 - 方案保存、修改、冲突替换、完成准备与里程碑均真实持久化
+2026-10-09T00:28:44.4706805Z   ---
+2026-10-09T00:28:44.4707364Z   duration_ms: 6.979339
+2026-10-09T00:28:44.4707972Z   type: 'test'
+2026-10-09T00:28:44.4708526Z   ...
+2026-10-09T00:28:44.4709384Z # Subtest: 本人已经预约的计划设备视为锁定，不能错误推荐替换自己的预约
+2026-10-09T00:28:44.4710681Z ok 66 - 本人已经预约的计划设备视为锁定，不能错误推荐替换自己的预约
+2026-10-09T00:28:44.4711406Z   ---
+2026-10-09T00:28:44.4711966Z   duration_ms: 2.694512
+2026-10-09T00:28:44.4712592Z   type: 'test'
+2026-10-09T00:28:44.4713151Z   ...
+2026-10-09T00:28:44.4713959Z # Subtest: 方案归属、未知账号、重复昵称与不安全头像拒绝
+2026-10-09T00:28:44.4715069Z ok 67 - 方案归属、未知账号、重复昵称与不安全头像拒绝
+2026-10-09T00:28:44.4715777Z   ---
+2026-10-09T00:28:44.4716342Z   duration_ms: 2.916688
+2026-10-09T00:28:44.4716990Z   type: 'test'
+2026-10-09T00:28:44.4717696Z   ...
+2026-10-09T00:28:44.4719230Z # Subtest: 旧JSON迁移先备份且保留id，重开SQLite与重复seed不丢预约
+2026-10-09T00:28:44.4720963Z ok 68 - 旧JSON迁移先备份且保留id，重开SQLite与重复seed不丢预约
+2026-10-09T00:28:44.4721711Z   ---
+2026-10-09T00:28:44.4722270Z   duration_ms: 46.805589
+2026-10-09T00:28:44.4722914Z   type: 'test'
+2026-10-09T00:28:44.4723464Z   ...
+2026-10-09T00:28:44.4724390Z # Subtest: AI创作推荐来自真实catalog、匿名台账，结构化操作结果与冲突一致
+2026-10-09T00:28:44.4725510Z ok 69 - AI创作推荐来自真实catalog、匿名台账，结构化操作结果与冲突一致
+2026-10-09T00:28:44.4726225Z   ---
+2026-10-09T00:28:44.4726784Z   duration_ms: 7.676194
+2026-10-09T00:28:44.4727373Z   type: 'test'
+2026-10-09T00:28:44.4727938Z   ...
+2026-10-09T00:28:44.4728763Z # Subtest: AI虚构设备被过滤，全部虚构时按真实场景重配，不放行未知场景
+2026-10-09T00:28:44.4729810Z ok 70 - AI虚构设备被过滤，全部虚构时按真实场景重配，不放行未知场景
+2026-10-09T00:28:44.4730787Z   ---
+2026-10-09T00:28:44.4731354Z   duration_ms: 0.68438
+2026-10-09T00:28:44.4731934Z   type: 'test'
+2026-10-09T00:28:44.4732442Z   ...
+2026-10-09T00:28:44.4733314Z # Subtest: Command Palette联合设备、场景、计划和AI入口，不误匹配原始HTML
+2026-10-09T00:28:44.4734566Z ok 71 - Command Palette联合设备、场景、计划和AI入口，不误匹配原始HTML
+2026-10-09T00:28:44.4735434Z   ---
+2026-10-09T00:28:44.4735963Z   duration_ms: 0.643014
+2026-10-09T00:28:44.4736548Z   type: 'test'
+2026-10-09T00:28:44.4737055Z   ...
+2026-10-09T00:28:44.4737880Z # Subtest: HTTP产品路径可操作，私有SQLite/备份/env和后端模块不可访问
+2026-10-09T00:28:44.4738866Z ok 72 - HTTP产品路径可操作，私有SQLite/备份/env和后端模块不可访问
+2026-10-09T00:28:44.4739542Z   ---
+2026-10-09T00:28:44.4740080Z   duration_ms: 154.022632
+2026-10-09T00:28:44.4740962Z   type: 'test'
+2026-10-09T00:28:44.4741520Z   ...
+2026-10-09T00:28:44.4742318Z # Subtest: 视觉参数保留USB、无线频率、视频与焦距的完整单位
+2026-10-09T00:28:44.4743253Z ok 73 - 视觉参数保留USB、无线频率、视频与焦距的完整单位
+2026-10-09T00:28:44.4743958Z   ---
+2026-10-09T00:28:44.4744588Z   duration_ms: 0.57686
+2026-10-09T00:28:44.4745230Z   type: 'test'
+2026-10-09T00:28:44.4745782Z   ...
+2026-10-09T00:28:44.4746657Z # Subtest: 创作推荐截断、空回答与非法结构清晰失败且每次只有一次上游调用
+2026-10-09T00:28:44.4747639Z ok 74 - 创作推荐截断、空回答与非法结构清晰失败且每次只有一次上游调用
+2026-10-09T00:28:44.4748326Z   ---
+2026-10-09T00:28:44.4748987Z   duration_ms: 30.220137
+2026-10-09T00:28:44.4749697Z   type: 'test'
+2026-10-09T00:28:44.4750505Z   ...
+2026-10-09T00:28:44.4751697Z # (node:2449) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:44.4753136Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:44.4754365Z # Subtest: 通知按真实方案与时间聚合；不同身份、预约和时段不误合并
+2026-10-09T00:28:44.4755321Z ok 75 - 通知按真实方案与时间聚合；不同身份、预约和时段不误合并
+2026-10-09T00:28:44.4755994Z   ---
+2026-10-09T00:28:44.4756566Z   duration_ms: 44.202931
+2026-10-09T00:28:44.4757187Z   type: 'test'
+2026-10-09T00:28:44.4757750Z   ...
+2026-10-09T00:28:44.4758794Z # Subtest: 已读按身份持久化，重复确认幂等，取消后未读不残留
+2026-10-09T00:28:44.4759695Z ok 76 - 已读按身份持久化，重复确认幂等，取消后未读不残留
+2026-10-09T00:28:44.4760590Z   ---
+2026-10-09T00:28:44.4761172Z   duration_ms: 65.901229
+2026-10-09T00:28:44.4761870Z   type: 'test'
+2026-10-09T00:28:44.4762431Z   ...
+2026-10-09T00:28:44.4763235Z # Subtest: 冲突通知指向具体方案；进行中的预约不再写即将开始
+2026-10-09T00:28:44.4764491Z ok 77 - 冲突通知指向具体方案；进行中的预约不再写即将开始
+2026-10-09T00:28:44.4765477Z   ---
+2026-10-09T00:28:44.4766085Z   duration_ms: 8.472323
+2026-10-09T00:28:44.4766922Z   type: 'test'
+2026-10-09T00:28:44.4767527Z   ...
+2026-10-09T00:28:44.4768457Z # Subtest: 通知阅读接口校验真实事件，错误请求不改变未读；样式和头像模块可加载
+2026-10-09T00:28:44.4769481Z ok 78 - 通知阅读接口校验真实事件，错误请求不改变未读；样式和头像模块可加载
+2026-10-09T00:28:44.4770507Z   ---
+2026-10-09T00:28:44.4771135Z   duration_ms: 99.567396
+2026-10-09T00:28:44.4771758Z   type: 'test'
+2026-10-09T00:28:44.4772314Z   ...
+2026-10-09T00:28:44.4773175Z # Subtest: 1件本人已预约+2件可预约明确分离；其他身份占用不能计为已预约
+2026-10-09T00:28:44.4774165Z ok 79 - 1件本人已预约+2件可预约明确分离；其他身份占用不能计为已预约
+2026-10-09T00:28:44.4774861Z   ---
+2026-10-09T00:28:44.4775424Z   duration_ms: 7.449469
+2026-10-09T00:28:44.4776033Z   type: 'test'
+2026-10-09T00:28:44.4776584Z   ...
+2026-10-09T00:28:44.4777428Z # Subtest: 允许普通大照片，拒绝超过10MB、解码无效和过大像素，不原样保存
+2026-10-09T00:28:44.4778489Z ok 80 - 允许普通大照片，拒绝超过10MB、解码无效和过大像素，不原样保存
+2026-10-09T00:28:44.4779211Z   ---
+2026-10-09T00:28:44.4779866Z   duration_ms: 8.1433
+2026-10-09T00:28:44.4780929Z   type: 'test'
+2026-10-09T00:28:44.4781479Z   ...
+2026-10-09T00:28:44.4783052Z # Subtest: 日期轨道保留所选时段的冲突，不能偷换为当天另一个全空时段
+2026-10-09T00:28:44.4784166Z ok 81 - 日期轨道保留所选时段的冲突，不能偷换为当天另一个全空时段
+2026-10-09T00:28:44.4784839Z   ---
+2026-10-09T00:28:44.4785397Z   duration_ms: 1.654726
+2026-10-09T00:28:44.4786026Z   type: 'test'
+2026-10-09T00:28:44.4786649Z   ...
+2026-10-09T00:28:44.4787524Z # Subtest: 个人导出包含当前身份真实预约、收藏、方案和偏好，未加载不能导出空文件
+2026-10-09T00:28:44.4788518Z ok 82 - 个人导出包含当前身份真实预约、收藏、方案和偏好，未加载不能导出空文件
+2026-10-09T00:28:44.4789206Z   ---
+2026-10-09T00:28:44.4789736Z   duration_ms: 17.908009
+2026-10-09T00:28:44.4790578Z   type: 'test'
+2026-10-09T00:28:44.4791133Z   ...
+2026-10-09T00:28:44.4792063Z # Subtest: 源图正方形裁剪保持比例，圆形遮罩保留透明背景，编码有上限
+2026-10-09T00:28:44.4793022Z ok 83 - 源图正方形裁剪保持比例，圆形遮罩保留透明背景，编码有上限
+2026-10-09T00:28:44.4793685Z   ---
+2026-10-09T00:28:44.4794242Z   duration_ms: 7.576825
+2026-10-09T00:28:44.4794819Z   type: 'test'
+2026-10-09T00:28:44.4795459Z   ...
+2026-10-09T00:28:44.4796235Z # Subtest: 头像与偏好写入绑定身份；超限资源失败保持原头像和偏好
+2026-10-09T00:28:44.4797327Z ok 84 - 头像与偏好写入绑定身份；超限资源失败保持原头像和偏好
+2026-10-09T00:28:44.4798064Z   ---
+2026-10-09T00:28:44.4798746Z   duration_ms: 10.664845
+2026-10-09T00:28:44.4799466Z   type: 'test'
+2026-10-09T00:28:44.4800075Z   ...
+2026-10-09T00:28:44.4801359Z # Subtest: 首页轮播：5秒循环、手动切换重置计时、不进入永久暂停
+2026-10-09T00:28:44.4802425Z ok 85 - 首页轮播：5秒循环、手动切换重置计时、不进入永久暂停
+2026-10-09T00:28:44.4803100Z   ---
+2026-10-09T00:28:44.4803659Z   duration_ms: 2.833883
+2026-10-09T00:28:44.4804249Z   type: 'test'
+2026-10-09T00:28:44.4804798Z   ...
+2026-10-09T00:28:44.4805736Z # Subtest: 方案加件：保留原组合、去重、最多8件、拒绝不存在或维护设备
+2026-10-09T00:28:44.4806785Z ok 86 - 方案加件：保留原组合、去重、最多8件、拒绝不存在或维护设备
+2026-10-09T00:28:44.4807587Z   ---
+2026-10-09T00:28:44.4808259Z   duration_ms: 0.67826
+2026-10-09T00:28:44.4808955Z   type: 'test'
+2026-10-09T00:28:44.4809595Z   ...
+2026-10-09T00:28:44.4810910Z # Subtest: 兴趣引导：六个场景生成可继续编辑的2至4件装备问题；五张Hero专属海报不重复
+2026-10-09T00:28:44.4812744Z ok 87 - 兴趣引导：六个场景生成可继续编辑的2至4件装备问题；五张Hero专属海报不重复
+2026-10-09T00:28:44.4813995Z   ---
+2026-10-09T00:28:44.4814677Z   duration_ms: 0.699639
+2026-10-09T00:28:44.4815406Z   type: 'test'
+2026-10-09T00:28:44.4816064Z   ...
+2026-10-09T00:28:44.4817096Z # Subtest: 智能建议固定2至4件真实设备，单件补足、过长收敛、未知设备不会进入方案
+2026-10-09T00:28:44.4818307Z ok 88 - 智能建议固定2至4件真实设备，单件补足、过长收敛、未知设备不会进入方案
+2026-10-09T00:28:44.4819107Z   ---
+2026-10-09T00:28:44.4820035Z   duration_ms: 2.534853
+2026-10-09T00:28:44.4821164Z   type: 'test'
+2026-10-09T00:28:44.4821846Z   ...
+2026-10-09T00:28:44.4822955Z # Subtest: 方案主动替换：原位置不变、没有重复、维护和失效目标拒绝、8件满额仍可换
+2026-10-09T00:28:44.4824271Z ok 89 - 方案主动替换：原位置不变、没有重复、维护和失效目标拒绝、8件满额仍可换
+2026-10-09T00:28:44.4825150Z   ---
+2026-10-09T00:28:44.4825829Z   duration_ms: 0.56665
+2026-10-09T00:28:44.4826610Z   type: 'test'
+2026-10-09T00:28:44.4827324Z   ...
+2026-10-09T00:28:44.5163165Z # Subtest: navigation restores each view scroll and browser back/forward
+2026-10-09T00:28:44.5165130Z ok 90 - navigation restores each view scroll and browser back/forward
+2026-10-09T00:28:44.5166199Z   ---
+2026-10-09T00:28:44.5166583Z   duration_ms: 1.932255
+2026-10-09T00:28:44.5166986Z   type: 'test'
+2026-10-09T00:28:44.5167333Z   ...
+2026-10-09T00:28:44.5171333Z # Subtest: same-view actions do not scroll to the top
+2026-10-09T00:28:44.5191463Z ok 91 - same-view actions do not scroll to the top
+2026-10-09T00:28:44.5192577Z   ---
+2026-10-09T00:28:44.5192980Z   duration_ms: 1.155212
+2026-10-09T00:28:44.5193384Z   type: 'test'
+2026-10-09T00:28:44.5193739Z   ...
+2026-10-09T00:28:44.5194180Z # Subtest: new navigation after back discards forward trail
+2026-10-09T00:28:44.5194694Z ok 92 - new navigation after back discards forward trail
+2026-10-09T00:28:44.5195026Z   ---
+2026-10-09T00:28:44.5195247Z   duration_ms: 0.269334
+2026-10-09T00:28:44.5195488Z   type: 'test'
+2026-10-09T00:28:44.5195700Z   ...
+2026-10-09T00:28:44.5196004Z # Subtest: avatar accepts decoded png
+2026-10-09T00:28:44.5196370Z ok 93 - avatar accepts decoded png
+2026-10-09T00:28:44.5196691Z   ---
+2026-10-09T00:28:44.5196898Z   duration_ms: 0.604411
+2026-10-09T00:28:44.5197197Z   type: 'test'
+2026-10-09T00:28:44.5197399Z   ...
+2026-10-09T00:28:44.5197712Z # Subtest: avatar accepts decoded jpeg
+2026-10-09T00:28:44.5198065Z ok 94 - avatar accepts decoded jpeg
+2026-10-09T00:28:44.5198493Z   ---
+2026-10-09T00:28:44.5198714Z   duration_ms: 0.399107
+2026-10-09T00:28:44.5198952Z   type: 'test'
+2026-10-09T00:28:44.5199157Z   ...
+2026-10-09T00:28:44.5221415Z # Subtest: avatar accepts decoded webp
+2026-10-09T00:28:44.5225298Z ok 95 - avatar accepts decoded webp
+2026-10-09T00:28:44.5226409Z   ---
+2026-10-09T00:28:44.5227172Z   duration_ms: 0.201777
+2026-10-09T00:28:44.5227951Z   type: 'test'
+2026-10-09T00:28:44.5228627Z   ...
+2026-10-09T00:28:44.5229718Z # Subtest: avatar rejects unsupported types and oversize before reading
+2026-10-09T00:28:44.5231450Z ok 96 - avatar rejects unsupported types and oversize before reading
+2026-10-09T00:28:44.5232477Z   ---
+2026-10-09T00:28:44.5233505Z   duration_ms: 1.052329
+2026-10-09T00:28:44.5234328Z   type: 'test'
+2026-10-09T00:28:44.5235342Z   ...
+2026-10-09T00:28:44.5236366Z # Subtest: avatar rejects invalid image decoding or read failure
+2026-10-09T00:28:44.5237694Z ok 97 - avatar rejects invalid image decoding or read failure
+2026-10-09T00:28:44.5238619Z   ---
+2026-10-09T00:28:44.5239338Z   duration_ms: 0.681605
+2026-10-09T00:28:44.5240102Z   type: 'test'
+2026-10-09T00:28:44.5241081Z   ...
+2026-10-09T00:28:44.5242240Z # Subtest: drafts persist per account without sharing equipment arrays
+2026-10-09T00:28:44.5243671Z ok 98 - drafts persist per account without sharing equipment arrays
+2026-10-09T00:28:44.5244684Z   ---
+2026-10-09T00:28:44.5245384Z   duration_ms: 1.158428
+2026-10-09T00:28:44.5246063Z   type: 'test'
+2026-10-09T00:28:44.5246858Z   ...
+2026-10-09T00:28:44.5247850Z # Subtest: invalid drafts and storage failures are recoverable
+2026-10-09T00:28:44.5249194Z ok 99 - invalid drafts and storage failures are recoverable
+2026-10-09T00:28:44.5250437Z   ---
+2026-10-09T00:28:44.5251233Z   duration_ms: 0.908099
+2026-10-09T00:28:44.5252081Z   type: 'test'
+2026-10-09T00:28:44.5252766Z   ...
+2026-10-09T00:28:44.5253848Z # Subtest: AI optimization carries real plan and respects input limit
+2026-10-09T00:28:44.5255295Z ok 100 - AI optimization carries real plan and respects input limit
+2026-10-09T00:28:44.5256398Z   ---
+2026-10-09T00:28:44.5257188Z   duration_ms: 0.66264
+2026-10-09T00:28:44.5257991Z   type: 'test'
+2026-10-09T00:28:44.5258721Z   ...
+2026-10-09T00:28:44.5259956Z # Subtest: AI optimization replaces only equipment, preserving name, identity and moment
+2026-10-09T00:28:44.5261869Z ok 101 - AI optimization replaces only equipment, preserving name, identity and moment
+2026-10-09T00:28:44.5262638Z   ---
+2026-10-09T00:28:44.5263005Z   duration_ms: 0.238226
+2026-10-09T00:28:44.5263396Z   type: 'test'
+2026-10-09T00:28:44.5263734Z   ...
+2026-10-09T00:28:44.5346398Z # Subtest: explicit plan optimization uses a small context, bounded 1536 token budget and separate deadline
+2026-10-09T00:28:44.5348735Z ok 102 - explicit plan optimization uses a small context, bounded 1536 token budget and separate deadline
+2026-10-09T00:28:44.5349682Z   ---
+2026-10-09T00:28:44.5350040Z   duration_ms: 25.729161
+2026-10-09T00:28:44.5350694Z   type: 'test'
+2026-10-09T00:28:44.5351035Z   ...
+2026-10-09T00:28:44.5549584Z # Subtest: optimization timeout remains finite, with exactly one upstream call
+2026-10-09T00:28:44.5571675Z ok 103 - optimization timeout remains finite, with exactly one upstream call
+2026-10-09T00:28:44.5572969Z   ---
+2026-10-09T00:28:44.5573646Z   duration_ms: 23.0391
+2026-10-09T00:28:44.5574348Z   type: 'test'
+2026-10-09T00:28:44.5575007Z   ...
+2026-10-09T00:28:44.5576169Z # Subtest: preference writes preserve account and click order across delayed responses
+2026-10-09T00:28:44.5577739Z ok 104 - preference writes preserve account and click order across delayed responses
+2026-10-09T00:28:44.5578830Z   ---
+2026-10-09T00:28:44.5579488Z   duration_ms: 0.823351
+2026-10-09T00:28:44.5580449Z   type: 'test'
+2026-10-09T00:28:44.5581116Z   ...
+2026-10-09T00:28:44.5582163Z # Subtest: failed preference save does not block subsequent settings
+2026-10-09T00:28:44.5583442Z ok 105 - failed preference save does not block subsequent settings
+2026-10-09T00:28:44.5584603Z   ---
+2026-10-09T00:28:44.5585411Z   duration_ms: 0.332943
+2026-10-09T00:28:44.5586141Z   type: 'test'
+2026-10-09T00:28:44.5586745Z   ...
+2026-10-09T00:28:44.5587950Z # Subtest: an account with no saved preferences resets previous account appearance
+2026-10-09T00:28:44.5589441Z ok 106 - an account with no saved preferences resets previous account appearance
+2026-10-09T00:28:44.5590760Z   ---
+2026-10-09T00:28:44.5591426Z   duration_ms: 0.237665
+2026-10-09T00:28:44.5592110Z   type: 'test'
+2026-10-09T00:28:44.5592862Z   ...
+2026-10-09T00:28:44.5712380Z # Subtest: 优化只提供当前装备和最多两件真实可用替代，排除其他预约及姓名
+2026-10-09T00:28:44.5722016Z ok 107 - 优化只提供当前装备和最多两件真实可用替代，排除其他预约及姓名
+2026-10-09T00:28:44.5722908Z   ---
+2026-10-09T00:28:44.5724036Z   duration_ms: 5.263792
+2026-10-09T00:28:44.5724832Z   type: 'test'
+2026-10-09T00:28:44.5725746Z   ...
+2026-10-09T00:28:44.5726711Z # Subtest: 优化替换冲突装备，保持方案名称、身份、日期与时段
+2026-10-09T00:28:44.5727755Z ok 108 - 优化替换冲突装备，保持方案名称、身份、日期与时段
+2026-10-09T00:28:44.5728444Z   ---
+2026-10-09T00:28:44.5728955Z   duration_ms: 2.063872
+2026-10-09T00:28:44.5729518Z   type: 'test'
+2026-10-09T00:28:44.5730015Z   ...
+2026-10-09T00:28:44.5731116Z # Subtest: 优化拒绝非候选设备，包含已存在但用途错误的真实设备
+2026-10-09T00:28:44.5732098Z ok 109 - 优化拒绝非候选设备，包含已存在但用途错误的真实设备
+2026-10-09T00:28:44.5732752Z   ---
+2026-10-09T00:28:44.5733252Z   duration_ms: 0.856232
+2026-10-09T00:28:44.5733794Z   type: 'test'
+2026-10-09T00:28:44.5734296Z   ...
+2026-10-09T00:28:44.5735090Z # Subtest: 优化拒绝重复归类、重复装备、遗漏原设备与移除所有装备
+2026-10-09T00:28:44.5736100Z ok 110 - 优化拒绝重复归类、重复装备、遗漏原设备与移除所有装备
+2026-10-09T00:28:44.5736724Z   ---
+2026-10-09T00:28:44.5737213Z   duration_ms: 0.565448
+2026-10-09T00:28:44.5737772Z   type: 'test'
+2026-10-09T00:28:44.5738298Z   ...
+2026-10-09T00:28:44.5744176Z # Subtest: 缺少当前方案不消耗模型调用
+2026-10-09T00:28:44.5745066Z ok 111 - 缺少当前方案不消耗模型调用
+2026-10-09T00:28:44.5745826Z   ---
+2026-10-09T00:28:44.5746370Z   duration_ms: 5.605188
+2026-10-09T00:28:44.5746966Z   type: 'test'
+2026-10-09T00:28:44.5747518Z   ...
+2026-10-09T00:28:44.5748403Z # Subtest: 共同时间使用全组合，不将部分可用误标为共同可用
+2026-10-09T00:28:44.5749457Z ok 112 - 共同时间使用全组合，不将部分可用误标为共同可用
+2026-10-09T00:28:44.5750509Z   ---
+2026-10-09T00:28:44.5751109Z   duration_ms: 1.414226
+2026-10-09T00:28:44.5751794Z   type: 'test'
+2026-10-09T00:28:44.5752388Z   ...
+2026-10-09T00:28:44.5753366Z # Subtest: 本人已经锁定的设备计入准备度，其他账号不共享
+2026-10-09T00:28:44.5754399Z ok 113 - 本人已经锁定的设备计入准备度，其他账号不共享
+2026-10-09T00:28:44.5755155Z   ---
+2026-10-09T00:28:44.5755747Z   duration_ms: 1.529733
+2026-10-09T00:28:44.5756380Z   type: 'test'
+2026-10-09T00:28:44.5756949Z   ...
+2026-10-09T00:28:44.5757774Z # Subtest: 共同时间不包含已结束时段，维护设备不参与空闲
+2026-10-09T00:28:44.5758770Z not ok 114 - 共同时间不包含已结束时段，维护设备不参与空闲
+2026-10-09T00:28:44.5759481Z   ---
+2026-10-09T00:28:44.5760130Z   duration_ms: 1.748462
+2026-10-09T00:28:44.5761141Z   type: 'test'
+2026-10-09T00:28:44.5762364Z   location: '/home/runner/work/vibe-pujiayang/vibe-pujiayang/test/desktop-workspace.test.js:47:1'
+2026-10-09T00:28:44.5763561Z   failureType: 'testCodeFailure'
+2026-10-09T00:28:44.5764221Z   error: |-
+2026-10-09T00:28:44.5764900Z     Expected values to be strictly equal:
+2026-10-09T00:28:44.5765577Z     
+2026-10-09T00:28:44.5766132Z     0 !== 1
+2026-10-09T00:28:44.5766666Z     
+2026-10-09T00:28:44.5767223Z   code: 'ERR_ASSERTION'
+2026-10-09T00:28:44.5767893Z   name: 'AssertionError'
+2026-10-09T00:28:44.5768611Z   expected: 1
+2026-10-09T00:28:44.5769216Z   actual: 0
+2026-10-09T00:28:44.5769808Z   operator: 'strictEqual'
+2026-10-09T00:28:44.5770774Z   stack: |-
+2026-10-09T00:28:44.5772149Z     TestContext.<anonymous> (file:///home/runner/work/vibe-pujiayang/vibe-pujiayang/test/desktop-workspace.test.js:50:9)
+2026-10-09T00:28:44.5773700Z     Test.runInAsyncScope (node:async_hooks:214:14)
+2026-10-09T00:28:44.5775086Z     Test.run (node:internal/test_runner/test:1047:25)
+2026-10-09T00:28:44.5776432Z     Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+2026-10-09T00:28:44.5777605Z     Test.postRun (node:internal/test_runner/test:1173:19)
+2026-10-09T00:28:44.5778631Z     Test.run (node:internal/test_runner/test:1101:12)
+2026-10-09T00:28:44.5779838Z     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+2026-10-09T00:28:44.5781238Z   ...
+2026-10-09T00:28:44.5782134Z # Subtest: 设备搜索支持创作场景、分类与可借状态
+2026-10-09T00:28:44.5783027Z ok 115 - 设备搜索支持创作场景、分类与可借状态
+2026-10-09T00:28:44.5783705Z   ---
+2026-10-09T00:28:44.5784331Z   duration_ms: 2.354886
+2026-10-09T00:28:44.5785000Z   type: 'test'
+2026-10-09T00:28:44.5785606Z   ...
+2026-10-09T00:28:44.5786505Z # Subtest: 设备视觉类别覆盖全部台账，区别高、宽、紧凑产品
+2026-10-09T00:28:44.5787481Z ok 116 - 设备视觉类别覆盖全部台账，区别高、宽、紧凑产品
+2026-10-09T00:28:44.5788229Z   ---
+2026-10-09T00:28:44.5788850Z   duration_ms: 0.474818
+2026-10-09T00:28:44.5789623Z   type: 'test'
+2026-10-09T00:28:44.5790601Z   ...
+2026-10-09T00:28:44.5791795Z # Subtest: 快速重新打开弹层取消旧关闭，旧计时器不能关闭新上下文
+2026-10-09T00:28:44.5793160Z ok 117 - 快速重新打开弹层取消旧关闭，旧计时器不能关闭新上下文
+2026-10-09T00:28:44.5793999Z   ---
+2026-10-09T00:28:44.5794586Z   duration_ms: 22.500212
+2026-10-09T00:28:44.5795226Z   type: 'test'
+2026-10-09T00:28:44.5795803Z   ...
+2026-10-09T00:28:44.5796619Z # Subtest: 重复关闭只执行一次，后续可以正常再次打开
+2026-10-09T00:28:44.5797473Z ok 118 - 重复关闭只执行一次，后续可以正常再次打开
+2026-10-09T00:28:44.5798142Z   ---
+2026-10-09T00:28:44.5798708Z   duration_ms: 14.70774
+2026-10-09T00:28:44.5799326Z   type: 'test'
+2026-10-09T00:28:44.5799895Z   ...
+2026-10-09T00:28:44.5801125Z # Subtest: 收藏导致入口重新渲染后，关闭详情仍恢复同一设备入口、滚动和背景锁
+2026-10-09T00:28:44.5802262Z ok 119 - 收藏导致入口重新渲染后，关闭详情仍恢复同一设备入口、滚动和背景锁
+2026-10-09T00:28:44.5803073Z   ---
+2026-10-09T00:28:44.5803744Z   duration_ms: 1.304481
+2026-10-09T00:28:44.5804411Z   type: 'test'
+2026-10-09T00:28:44.5805000Z   ...
+2026-10-09T00:28:44.7622543Z # (node:2511) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:44.7649606Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:44.7812175Z # Subtest: 成功摘要只取完整真实回执，设备分项和场景准确；拒绝部分及跨身份结果
+2026-10-09T00:28:44.7828679Z ok 120 - 成功摘要只取完整真实回执，设备分项和场景准确；拒绝部分及跨身份结果
+2026-10-09T00:28:44.7872325Z   ---
+2026-10-09T00:28:44.7891934Z   duration_ms: 9.716051
+2026-10-09T00:28:44.7946840Z   type: 'test'
+2026-10-09T00:28:44.8006975Z   ...
+2026-10-09T00:28:44.8076363Z # Subtest: 头像拖动保持正方形比例、使用源图坐标，定位不会越界或压扁照片
+2026-10-09T00:28:44.8093419Z ok 121 - 头像拖动保持正方形比例、使用源图坐标，定位不会越界或压扁照片
+2026-10-09T00:28:44.8161435Z   ---
+2026-10-09T00:28:44.8162076Z   duration_ms: 1.506269
+2026-10-09T00:28:44.8162558Z   type: 'test'
+2026-10-09T00:28:44.8268949Z   ...
+2026-10-09T00:28:44.8293005Z # Subtest: 头像导出先使用圆形遮罩；WebP保留透明背景，JPEG降级才填品牌中性底
+2026-10-09T00:28:44.8377757Z ok 122 - 头像导出先使用圆形遮罩；WebP保留透明背景，JPEG降级才填品牌中性底
+2026-10-09T00:28:44.8424061Z   ---
+2026-10-09T00:28:44.8428793Z   duration_ms: 0.943926
+2026-10-09T00:28:44.8442542Z   type: 'test'
+2026-10-09T00:28:44.8471755Z   ...
+2026-10-09T00:28:44.8497177Z # Subtest: 方案相同状态与时间按最近修改及稳定ID排序，刷新和输入顺序不改变结果
+2026-10-09T00:28:44.8521456Z ok 123 - 方案相同状态与时间按最近修改及稳定ID排序，刷新和输入顺序不改变结果
+2026-10-09T00:28:44.8527635Z   ---
+2026-10-09T00:28:44.8551128Z   duration_ms: 13.790214
+2026-10-09T00:28:44.8571089Z   type: 'test'
+2026-10-09T00:28:44.8580541Z   ...
+2026-10-09T00:28:44.8598614Z # Subtest: 简单查询解析真实设备、日期和唯一时段，云台不混入相机，未知或复杂表达交给模型
+2026-10-09T00:28:44.8623066Z ok 124 - 简单查询解析真实设备、日期和唯一时段，云台不混入相机，未知或复杂表达交给模型
+2026-10-09T00:28:44.8636394Z   ---
+2026-10-09T00:28:44.8661334Z   duration_ms: 7.974191
+2026-10-09T00:28:44.8679053Z   type: 'test'
+2026-10-09T00:28:44.8701836Z   ...
+2026-10-09T00:28:44.8720869Z # Subtest: 简单空闲查询直接按实际台账回答，无Key也可核对，零模型调用且不泄露身份
+2026-10-09T00:28:44.8751546Z ok 125 - 简单空闲查询直接按实际台账回答，无Key也可核对，零模型调用且不泄露身份
+2026-10-09T00:28:44.8771371Z   ---
+2026-10-09T00:28:44.8791060Z   duration_ms: 8.008145
+2026-10-09T00:28:44.8841158Z   type: 'test'
+2026-10-09T00:28:44.8880847Z   ...
+2026-10-09T00:28:44.8905721Z # Subtest: 复杂推荐未完成时简单查询仍即时返回，使用真实台账且不追加上游调用
+2026-10-09T00:28:44.8923298Z ok 126 - 复杂推荐未完成时简单查询仍即时返回，使用真实台账且不追加上游调用
+2026-10-09T00:28:44.8933958Z   ---
+2026-10-09T00:28:44.8969495Z   duration_ms: 13.792158
+2026-10-09T00:28:44.8975288Z   type: 'test'
+2026-10-09T00:28:44.8978251Z   ...
+2026-10-09T00:28:44.9005941Z # Subtest: AI重复点击不新建请求；新请求取消旧请求，旧响应与旧finally不能覆盖新状态
+2026-10-09T00:28:44.9020597Z ok 127 - AI重复点击不新建请求；新请求取消旧请求，旧响应与旧finally不能覆盖新状态
+2026-10-09T00:28:44.9046257Z   ---
+2026-10-09T00:28:44.9070940Z   duration_ms: 1.007365
+2026-10-09T00:28:44.9078125Z   type: 'test'
+2026-10-09T00:28:44.9101071Z   ...
+2026-10-09T00:28:44.9125378Z # Subtest: 取消AI请求传到上游并释放忙碌锁，不自动重试或丢失后续请求
+2026-10-09T00:28:44.9130958Z ok 128 - 取消AI请求传到上游并释放忙碌锁，不自动重试或丢失后续请求
+2026-10-09T00:28:44.9160880Z   ---
+2026-10-09T00:28:44.9174047Z   duration_ms: 10.750777
+2026-10-09T00:28:44.9200899Z   type: 'test'
+2026-10-09T00:28:44.9202092Z   ...
+2026-10-09T00:28:44.9220643Z # Subtest: HTTP客户端断开会取消对应的上游任务；后续请求可恢复
+2026-10-09T00:28:44.9251739Z ok 129 - HTTP客户端断开会取消对应的上游任务；后续请求可恢复
+2026-10-09T00:28:44.9281045Z   ---
+2026-10-09T00:28:44.9311251Z   duration_ms: 136.883992
+2026-10-09T00:28:44.9323101Z   type: 'test'
+2026-10-09T00:28:44.9324054Z   ...
+2026-10-09T00:28:44.9357231Z # Subtest: 在线存储：预约、重复拒绝、刷新保留、取消后重约
+2026-10-09T00:28:44.9391249Z ok 130 - 在线存储：预约、重复拒绝、刷新保留、取消后重约
+2026-10-09T00:28:44.9420853Z   ---
+2026-10-09T00:28:44.9421489Z   duration_ms: 10.493284
+2026-10-09T00:28:44.9450604Z   type: 'test'
+2026-10-09T00:28:44.9481348Z   ...
+2026-10-09T00:28:44.9511321Z # Subtest: 存储不可用时拒绝保存，不显示虚假的预约成功
+2026-10-09T00:28:44.9539888Z ok 131 - 存储不可用时拒绝保存，不显示虚假的预约成功
+2026-10-09T00:28:44.9550913Z   ---
+2026-10-09T00:28:44.9581248Z   duration_ms: 0.653934
+2026-10-09T00:28:44.9596953Z   type: 'test'
+2026-10-09T00:28:44.9618587Z   ...
+2026-10-09T00:28:44.9644074Z # Subtest: 外部CSV组件：中文表头、逗号引号换行与公式注入防护
+2026-10-09T00:28:44.9678424Z ok 132 - 外部CSV组件：中文表头、逗号引号换行与公式注入防护
+2026-10-09T00:28:44.9681102Z   ---
+2026-10-09T00:28:44.9685667Z   duration_ms: 23.647619
+2026-10-09T00:28:44.9711949Z   type: 'test'
+2026-10-09T00:28:44.9727716Z   ...
+2026-10-09T00:28:44.9751727Z # (node:2518) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:44.9781600Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:44.9810442Z # Subtest: 生产台账28件10类、ID唯一、旧设备保持、Hero指向可借设备，型号参数齐全
+2026-10-09T00:28:44.9832382Z ok 133 - 生产台账28件10类、ID唯一、旧设备保持、Hero指向可借设备，型号参数齐全
+2026-10-09T00:28:44.9852472Z   ---
+2026-10-09T00:28:44.9860835Z   duration_ms: 2.586971
+2026-10-09T00:28:44.9881068Z   type: 'test'
+2026-10-09T00:28:44.9911495Z   ...
+2026-10-09T00:28:44.9941655Z # Subtest: 新增设备遵循原冲突规则；维护设备拒约且不虚增空闲或计划容量
+2026-10-09T00:28:44.9971743Z ok 134 - 新增设备遵循原冲突规则；维护设备拒约且不虚增空闲或计划容量
+2026-10-09T00:28:45.0001301Z   ---
+2026-10-09T00:28:45.0002081Z   duration_ms: 12.886874
+2026-10-09T00:28:45.0006068Z   type: 'test'
+2026-10-09T00:28:45.0031068Z   ...
+2026-10-09T00:28:45.0061677Z # Subtest: 分类、型号/用途搜索、场景与维护过滤一致；热门只用实际预约数量排序
+2026-10-09T00:28:45.0091607Z ok 135 - 分类、型号/用途搜索、场景与维护过滤一致；热门只用实际预约数量排序
+2026-10-09T00:28:45.0092339Z   ---
+2026-10-09T00:28:45.0093255Z   duration_ms: 3.763311
+2026-10-09T00:28:45.0121336Z   type: 'test'
+2026-10-09T00:28:45.0151055Z   ...
+2026-10-09T00:28:45.0178445Z # Subtest: 扩充后台台账用于AI查询与六节周报，替代设备来自实际同用途设备而非旧ID硬判断
+2026-10-09T00:28:45.0201332Z ok 136 - 扩充后台台账用于AI查询与六节周报，替代设备来自实际同用途设备而非旧ID硬判断
+2026-10-09T00:28:45.0205568Z   ---
+2026-10-09T00:28:45.0231101Z   duration_ms: 19.762067
+2026-10-09T00:28:45.0266345Z   type: 'test'
+2026-10-09T00:28:45.0271906Z   ...
+2026-10-09T00:28:45.0273141Z # Subtest: 28件查询上下文保留真实台账/匿名预约/时段，避免重复周报长文本；周报仍保留完整依据
+2026-10-09T00:28:45.0274172Z ok 137 - 28件查询上下文保留真实台账/匿名预约/时段，避免重复周报长文本；周报仍保留完整依据
+2026-10-09T00:28:45.0274812Z   ---
+2026-10-09T00:28:45.0275305Z   duration_ms: 9.832127
+2026-10-09T00:28:45.0275876Z   type: 'test'
+2026-10-09T00:28:45.0276383Z   ...
+2026-10-09T00:28:45.0277102Z # Subtest: 轮播自动切换、边界循环；手动选择持久暂停，不在用户操作后抢画面
+2026-10-09T00:28:45.0277873Z ok 138 - 轮播自动切换、边界循环；手动选择持久暂停，不在用户操作后抢画面
+2026-10-09T00:28:45.0278423Z   ---
+2026-10-09T00:28:45.0278921Z   duration_ms: 0.754782
+2026-10-09T00:28:45.0279466Z   type: 'test'
+2026-10-09T00:28:45.0279921Z   ...
+2026-10-09T00:28:45.0280956Z # Subtest: 轮播焦点、悬停、隐藏与减弱动画暂停独立，解除一个原因不能强行恢复
+2026-10-09T00:28:45.0281958Z ok 139 - 轮播焦点、悬停、隐藏与减弱动画暂停独立，解除一个原因不能强行恢复
+2026-10-09T00:28:45.0282677Z   ---
+2026-10-09T00:28:45.0283204Z   duration_ms: 0.369822
+2026-10-09T00:28:45.0283773Z   type: 'test'
+2026-10-09T00:28:45.0284364Z   ...
+2026-10-09T00:28:45.0285456Z # Subtest: 预约按钮只在保存成功后进入success，并发点击不重复保存；失败返回idle可修正重试
+2026-10-09T00:28:45.0286588Z ok 140 - 预约按钮只在保存成功后进入success，并发点击不重复保存；失败返回idle可修正重试
+2026-10-09T00:28:45.0287288Z   ---
+2026-10-09T00:28:45.0287837Z   duration_ms: 0.816227
+2026-10-09T00:28:45.0288425Z   type: 'test'
+2026-10-09T00:28:45.0289007Z   ...
+2026-10-09T00:28:45.0289959Z # Subtest: 字号/动效偏好保存并恢复，损坏或不可用的localStorage不阻断页面且不谎报已保存
+2026-10-09T00:28:45.0291399Z ok 141 - 字号/动效偏好保存并恢复，损坏或不可用的localStorage不阻断页面且不谎报已保存
+2026-10-09T00:28:45.0292178Z   ---
+2026-10-09T00:28:45.0293163Z   duration_ms: 0.918439
+2026-10-09T00:28:45.0294159Z   type: 'test'
+2026-10-09T00:28:45.0295326Z   ...
+2026-10-09T00:28:45.0296468Z # Subtest: 本机HTTP提供统一28件设备与所有模块资源，后端与.env仍不可访问
+2026-10-09T00:28:45.0297905Z ok 142 - 本机HTTP提供统一28件设备与所有模块资源，后端与.env仍不可访问
+2026-10-09T00:28:45.0298771Z   ---
+2026-10-09T00:28:45.0299631Z   duration_ms: 174.637063
+2026-10-09T00:28:45.0300889Z   type: 'test'
+2026-10-09T00:28:45.0301692Z   ...
+2026-10-09T00:28:45.1022490Z # (node:2538) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:45.1128363Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:45.1130004Z # Subtest: 七种状态与CTA由设备、时间和真实预约推导，百分比不决定完成
+2026-10-09T00:28:45.1151702Z ok 143 - 七种状态与CTA由设备、时间和真实预约推导，百分比不决定完成
+2026-10-09T00:28:45.1152432Z   ---
+2026-10-09T00:28:45.1152843Z   duration_ms: 4.535597
+2026-10-09T00:28:45.1153247Z   type: 'test'
+2026-10-09T00:28:45.1153591Z   ...
+2026-10-09T00:28:45.1154270Z # Subtest: 取消其中一件预约后状态重新推导，不沿用存储的ready标记
+2026-10-09T00:28:45.1154999Z ok 144 - 取消其中一件预约后状态重新推导，不沿用存储的ready标记
+2026-10-09T00:28:45.1155485Z   ---
+2026-10-09T00:28:45.1155843Z   duration_ms: 10.861303
+2026-10-09T00:28:45.1156241Z   type: 'test'
+2026-10-09T00:28:45.1156575Z   ...
+2026-10-09T00:28:45.1157149Z # Subtest: 同方案同时间合为一次安排，不同时间和无关联预约保持独立
+2026-10-09T00:28:45.1157819Z ok 145 - 同方案同时间合为一次安排，不同时间和无关联预约保持独立
+2026-10-09T00:28:45.1158263Z   ---
+2026-10-09T00:28:45.1158605Z   duration_ms: 13.748355
+2026-10-09T00:28:45.1159010Z   type: 'test'
+2026-10-09T00:28:45.1159374Z   ...
+2026-10-09T00:28:45.1159968Z # Subtest: 近期安排排除过期、已取消；不能借用另一个身份的方案名称聚合
+2026-10-09T00:28:45.1171155Z ok 146 - 近期安排排除过期、已取消；不能借用另一个身份的方案名称聚合
+2026-10-09T00:28:45.1171667Z   ---
+2026-10-09T00:28:45.1172023Z   duration_ms: 0.849329
+2026-10-09T00:28:45.1172420Z   type: 'test'
+2026-10-09T00:28:45.1172757Z   ...
+2026-10-09T00:28:45.1173333Z # Subtest: 方案关联必须属于当前身份且匹配设备与时间，失败不落预约
+2026-10-09T00:28:45.1173991Z ok 147 - 方案关联必须属于当前身份且匹配设备与时间，失败不落预约
+2026-10-09T00:28:45.1174412Z   ---
+2026-10-09T00:28:45.1174791Z   duration_ms: 5.31749
+2026-10-09T00:28:45.1175185Z   type: 'test'
+2026-10-09T00:28:45.1175509Z   ...
+2026-10-09T00:28:45.1176061Z # Subtest: 个人首要行动按冲突、未完成、预约中、已就绪、近期安排排序
+2026-10-09T00:28:45.1176696Z ok 148 - 个人首要行动按冲突、未完成、预约中、已就绪、近期安排排序
+2026-10-09T00:28:45.1177109Z   ---
+2026-10-09T00:28:45.1177427Z   duration_ms: 0.76419
+2026-10-09T00:28:45.1177791Z   type: 'test'
+2026-10-09T00:28:45.1178105Z   ...
+2026-10-09T00:28:45.1178605Z # Subtest: 足迹使用真实总量和聚合安排，不制造3次目标
+2026-10-09T00:28:45.1179176Z ok 149 - 足迹使用真实总量和聚合安排，不制造3次目标
+2026-10-09T00:28:45.1179559Z   ---
+2026-10-09T00:28:45.1179878Z   duration_ms: 6.106015
+2026-10-09T00:28:45.1180681Z   type: 'test'
+2026-10-09T00:28:45.1181019Z   ...
+2026-10-09T00:28:45.1181554Z # Subtest: 部分设备已约且另一个设备冲突，近期安排仍明确为预约中
+2026-10-09T00:28:45.1182178Z ok 150 - 部分设备已约且另一个设备冲突，近期安排仍明确为预约中
+2026-10-09T00:28:45.1182583Z   ---
+2026-10-09T00:28:45.1182900Z   duration_ms: 0.485679
+2026-10-09T00:28:45.1183280Z   type: 'test'
+2026-10-09T00:28:45.1183597Z   ...
+2026-10-09T00:28:45.1184495Z # Subtest: 日期文案依据实际日期和年份，不写死今天明天
+2026-10-09T00:28:45.1185291Z ok 151 - 日期文案依据实际日期和年份，不写死今天明天
+2026-10-09T00:28:45.1185679Z   ---
+2026-10-09T00:28:45.1185993Z   duration_ms: 0.492812
+2026-10-09T00:28:45.1186372Z   type: 'test'
+2026-10-09T00:28:45.1186686Z   ...
+2026-10-09T00:28:45.1187222Z # Subtest: 未选设备或时间的草稿可以保存并恢复状态，顾问来源可追踪
+2026-10-09T00:28:45.1187851Z ok 152 - 未选设备或时间的草稿可以保存并恢复状态，顾问来源可追踪
+2026-10-09T00:28:45.1188256Z   ---
+2026-10-09T00:28:45.1188571Z   duration_ms: 3.652003
+2026-10-09T00:28:45.1188929Z   type: 'test'
+2026-10-09T00:28:45.1189251Z   ...
+2026-10-09T00:28:45.1190131Z # (node:2545) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:45.1192375Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:45.1193279Z # Subtest: 过期方案保留历史而不会使个人空间失败，重新准备仍必须用有效未来日期
+2026-10-09T00:28:45.1193966Z ok 153 - 过期方案保留历史而不会使个人空间失败，重新准备仍必须用有效未来日期
+2026-10-09T00:28:45.1194410Z   ---
+2026-10-09T00:28:45.1194756Z   duration_ms: 29.562173
+2026-10-09T00:28:45.1195138Z   type: 'test'
+2026-10-09T00:28:45.1195474Z   ...
+2026-10-09T00:28:45.1346140Z # Subtest: 本地API拒绝跨站写入和未指定归属的取消，合法本机来源保留业务
+2026-10-09T00:28:45.1347151Z ok 154 - 本地API拒绝跨站写入和未指定归属的取消，合法本机来源保留业务
+2026-10-09T00:28:45.1347609Z   ---
+2026-10-09T00:28:45.1347944Z   duration_ms: 58.303225
+2026-10-09T00:28:45.1348350Z   type: 'test'
+2026-10-09T00:28:45.1348685Z   ...
+2026-10-09T00:28:45.2411526Z # Subtest: 当前、到期、已取消采用当前身份的同一份真实记录，取消不混入有效预约
+2026-10-09T00:28:45.2412781Z ok 155 - 当前、到期、已取消采用当前身份的同一份真实记录，取消不混入有效预约
+2026-10-09T00:28:45.2413620Z   ---
+2026-10-09T00:28:45.2414327Z   duration_ms: 15.876738
+2026-10-09T00:28:45.2414960Z   type: 'test'
+2026-10-09T00:28:45.2415508Z   ...
+2026-10-09T00:28:45.2416441Z # Subtest: 到期边界不依赖缓存的past分组，同一条记录在分钟时钟更新后转入历史
+2026-10-09T00:28:45.2417485Z ok 156 - 到期边界不依赖缓存的past分组，同一条记录在分钟时钟更新后转入历史
+2026-10-09T00:28:45.2418193Z   ---
+2026-10-09T00:28:45.2418746Z   duration_ms: 0.530022
+2026-10-09T00:28:45.2419359Z   type: 'test'
+2026-10-09T00:28:45.2419957Z   ...
+2026-10-09T00:28:45.2421585Z # Subtest: 取消记录在过期后仍保留在已取消区域，不能变成历史有效预约
+2026-10-09T00:28:45.2422651Z ok 157 - 取消记录在过期后仍保留在已取消区域，不能变成历史有效预约
+2026-10-09T00:28:45.2423359Z   ---
+2026-10-09T00:28:45.2424034Z   duration_ms: 0.278321
+2026-10-09T00:28:45.2424694Z   type: 'test'
+2026-10-09T00:28:45.2425286Z   ...
+2026-10-09T00:28:45.2426214Z # Subtest: 当前安排按时间升序，历史及取消按时间降序，相同时间用稳定ID打破并列
+2026-10-09T00:28:45.2427406Z ok 158 - 当前安排按时间升序，历史及取消按时间降序，相同时间用稳定ID打破并列
+2026-10-09T00:28:45.2428216Z   ---
+2026-10-09T00:28:45.2428842Z   duration_ms: 0.634647
+2026-10-09T00:28:45.2429516Z   type: 'test'
+2026-10-09T00:28:45.2430128Z   ...
+2026-10-09T00:28:45.2431356Z # Subtest: 再次预约仅保留未结束的原时间；过期或非法旧时间清空，不能偷偷改到明天
+2026-10-09T00:28:45.2432420Z ok 159 - 再次预约仅保留未结束的原时间；过期或非法旧时间清空，不能偷偷改到明天
+2026-10-09T00:28:45.2433144Z   ---
+2026-10-09T00:28:45.2433749Z   duration_ms: 0.527988
+2026-10-09T00:28:45.2434393Z   type: 'test'
+2026-10-09T00:28:45.2434959Z   ...
+2026-10-09T00:28:45.2435804Z # Subtest: 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
+2026-10-09T00:28:45.2437180Z ok 160 - 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
+2026-10-09T00:28:45.2438281Z   ---
+2026-10-09T00:28:45.2438877Z   duration_ms: 3.780525
+2026-10-09T00:28:45.2439557Z   type: 'test'
+2026-10-09T00:28:45.2440431Z   ...
+2026-10-09T00:28:45.2441367Z # Subtest: 到期页面标记：过去日期、时段结束边界、使用中与未来日期
+2026-10-09T00:28:45.2442394Z not ok 161 - 到期页面标记：过去日期、时段结束边界、使用中与未来日期
+2026-10-09T00:28:45.2443140Z   ---
+2026-10-09T00:28:45.2443720Z   duration_ms: 1.860071
+2026-10-09T00:28:45.2444337Z   type: 'test'
+2026-10-09T00:28:45.2445482Z   location: '/home/runner/work/vibe-pujiayang/vibe-pujiayang/test/reservation-view.test.js:10:1'
+2026-10-09T00:28:45.2446775Z   failureType: 'testCodeFailure'
+2026-10-09T00:28:45.2447488Z   error: |-
+2026-10-09T00:28:45.2448175Z     Expected values to be strictly equal:
+2026-10-09T00:28:45.2448917Z     
+2026-10-09T00:28:45.2449588Z     '已到期' !== '待使用'
+2026-10-09T00:28:45.2451609Z     
+2026-10-09T00:28:45.2452309Z   code: 'ERR_ASSERTION'
+2026-10-09T00:28:45.2452963Z   name: 'AssertionError'
+2026-10-09T00:28:45.2453727Z   expected: '待使用'
+2026-10-09T00:28:45.2454395Z   actual: '已到期'
+2026-10-09T00:28:45.2455015Z   operator: 'strictEqual'
+2026-10-09T00:28:45.2455651Z   stack: |-
+2026-10-09T00:28:45.2456996Z     TestContext.<anonymous> (file:///home/runner/work/vibe-pujiayang/vibe-pujiayang/test/reservation-view.test.js:12:10)
+2026-10-09T00:28:45.2458526Z     Test.runInAsyncScope (node:async_hooks:214:14)
+2026-10-09T00:28:45.2459510Z     Test.run (node:internal/test_runner/test:1047:25)
+2026-10-09T00:28:45.2460900Z     Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+2026-10-09T00:28:45.2462078Z     Test.postRun (node:internal/test_runner/test:1173:19)
+2026-10-09T00:28:45.2463091Z     Test.run (node:internal/test_runner/test:1101:12)
+2026-10-09T00:28:45.2464259Z     async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+2026-10-09T00:28:45.2465246Z   ...
+2026-10-09T00:28:45.2537600Z # (node:2575) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-10-09T00:28:45.2556547Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-09T00:28:45.2557977Z # Subtest: 创建空方案真实可恢复；编辑、保存和重开都不产生预约
+2026-10-09T00:28:45.2558938Z ok 162 - 创建空方案真实可恢复；编辑、保存和重开都不产生预约
+2026-10-09T00:28:45.2559739Z   ---
+2026-10-09T00:28:45.2560429Z   duration_ms: 34.744294
+2026-10-09T00:28:45.2561274Z   type: 'test'
+2026-10-09T00:28:45.2561629Z   ...
+2026-10-09T00:28:45.2562301Z # Subtest: 场景整套直接预约三件真实设备，不先创建方案；通知按这次预约聚合
+2026-10-09T00:28:45.2563005Z ok 163 - 场景整套直接预约三件真实设备，不先创建方案；通知按这次预约聚合
+2026-10-09T00:28:45.2563442Z   ---
+2026-10-09T00:28:45.2563769Z   duration_ms: 6.073404
+2026-10-09T00:28:45.2564152Z   type: 'test'
+2026-10-09T00:28:45.2564477Z   ...
+2026-10-09T00:28:45.2565050Z # Subtest: 最后一件设备冲突时整套拒绝，不部分写入，也不提前更新方案时间
+2026-10-09T00:28:45.2566247Z ok 164 - 最后一件设备冲突时整套拒绝，不部分写入，也不提前更新方案时间
+2026-10-09T00:28:45.2566709Z   ---
+2026-10-09T00:28:45.2567036Z   duration_ms: 3.91194
+2026-10-09T00:28:45.2567403Z   type: 'test'
+2026-10-09T00:28:45.2567718Z   ...
+2026-10-09T00:28:45.2568315Z # Subtest: 设备重复、维护、无效时段、空请求都拒绝，不写入任何预约
+2026-10-09T00:28:45.2568972Z ok 165 - 设备重复、维护、无效时段、空请求都拒绝，不写入任何预约
+2026-10-09T00:28:45.2569375Z   ---
+2026-10-09T00:28:45.2569690Z   duration_ms: 2.369623
+2026-10-09T00:28:45.2570053Z   type: 'test'
+2026-10-09T00:28:45.2570591Z   ...
+2026-10-09T00:28:45.2571177Z # Subtest: 本人已预约设备不重复创建；其他身份的占用不能被当作本人已预约
+2026-10-09T00:28:45.2571841Z ok 166 - 本人已预约设备不重复创建；其他身份的占用不能被当作本人已预约
+2026-10-09T00:28:45.2572252Z   ---
+2026-10-09T00:28:45.2572565Z   duration_ms: 3.672462
+2026-10-09T00:28:45.2572945Z   type: 'test'
+2026-10-09T00:28:45.2573422Z   ...
+2026-10-09T00:28:45.3081981Z # Subtest: 同一请求重复提交与重启重放均幂等；取消后旧回执不能冒充有效预约
+2026-10-09T00:28:45.3083204Z not ok 167 - 同一请求重复提交与重启重放均幂等；取消后旧回执不能冒充有效预约
+2026-10-09T00:28:45.3111781Z   ---
+2026-10-09T00:28:45.3112954Z   duration_ms: 28.796122
+2026-10-09T00:28:45.3113913Z   type: 'test'
+2026-10-09T00:28:45.3115404Z   location: '/home/runner/work/vibe-pujiayang/vibe-pujiayang/test/simplified-flows.test.js:55:1'
+2026-10-09T00:28:45.3117527Z   failureType: 'hookFailed'
+2026-10-09T00:28:45.3118859Z   error: |-
+2026-10-09T00:28:45.3119763Z     The expression evaluated to a falsy value:
+2026-10-09T00:28:45.3120896Z     
+2026-10-09T00:28:45.3121859Z       assert.ok(resolve(dir).startsWith(resolve(tmpdir())+'\\borrow-simplify-'))
+2026-10-09T00:28:45.3122798Z     
+2026-10-09T00:28:45.3123414Z   code: 'ERR_ASSERTION'
+2026-10-09T00:28:45.3124084Z   name: 'AssertionError'
+2026-10-09T00:28:45.3124574Z   expected: true
+2026-10-09T00:28:45.3125004Z   actual: false
+2026-10-09T00:28:45.3125449Z   operator: '=='
+2026-10-09T00:28:45.3125904Z   stack: |-
+2026-10-09T00:28:45.3126951Z     TestContext.<anonymous> (file:///home/runner/work/vibe-pujiayang/vibe-pujiayang/test/simplified-flows.test.js:57:38)
+2026-10-09T00:28:45.3128087Z     TestHook.runInAsyncScope (node:async_hooks:214:14)
+2026-10-09T00:28:45.3128780Z     TestHook.run (node:internal/test_runner/test:1047:25)
+2026-10-09T00:28:45.3129469Z     TestHook.run (node:internal/test_runner/test:1354:18)
+2026-10-09T00:28:45.3130126Z     TestHook.run (node:internal/util:580:20)
+2026-10-09T00:28:45.3131106Z     Test.runHook (node:internal/test_runner/test:965:20)
+2026-10-09T00:28:45.3131761Z     after (node:internal/test_runner/test:1005:20)
+2026-10-09T00:28:45.3132384Z     Test.run (node:internal/test_runner/test:1070:13)
+2026-10-09T00:28:45.3133198Z     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+2026-10-09T00:28:45.3133875Z   ...
+2026-10-09T00:28:45.3134650Z # Subtest: 方案只在最终确认事务中关联时间；跨身份与已变化设备组合不能借用方案
+2026-10-09T00:28:45.3135320Z ok 168 - 方案只在最终确认事务中关联时间；跨身份与已变化设备组合不能借用方案
+2026-10-09T00:28:45.3135754Z   ---
+2026-10-09T00:28:45.3136073Z   duration_ms: 5.748677
+2026-10-09T00:28:45.3136433Z   type: 'test'
+2026-10-09T00:28:45.3136752Z   ...
+2026-10-09T00:28:45.3422194Z # Subtest: HTTP真实并发整套预约仅一套成功，失败请求不会留下部分记录
+2026-10-09T00:28:45.3422985Z ok 169 - HTTP真实并发整套预约仅一套成功，失败请求不会留下部分记录
+2026-10-09T00:28:45.3423444Z   ---
+2026-10-09T00:28:45.3423776Z   duration_ms: 50.133638
+2026-10-09T00:28:45.3424197Z   type: 'test'
+2026-10-09T00:28:45.3424519Z   ...
+2026-10-09T00:28:45.3425143Z # Subtest: 预约意图不默认日期或时段；刷新保留设备、时间、来源和幂等标识，身份隔离
+2026-10-09T00:28:45.3425840Z ok 170 - 预约意图不默认日期或时段；刷新保留设备、时间、来源和幂等标识，身份隔离
+2026-10-09T00:28:45.3426311Z   ---
+2026-10-09T00:28:45.3426642Z   duration_ms: 0.848708
+2026-10-09T00:28:45.3427001Z   type: 'test'
+2026-10-09T00:28:45.3427314Z   ...
+2026-10-09T00:28:45.3427814Z # Subtest: 模型默认时间不冒充用户选择；明确日期与时段分别保留
+2026-10-09T00:28:45.3428437Z ok 171 - 模型默认时间不冒充用户选择；明确日期与时段分别保留
+2026-10-09T00:28:45.3428854Z   ---
+2026-10-09T00:28:45.3429167Z   duration_ms: 0.598601
+2026-10-09T00:28:45.3429549Z   type: 'test'
+2026-10-09T00:28:45.3429861Z   ...
+2026-10-09T00:28:45.3448335Z # Subtest: 不完整回执、跨身份、重复设备和已取消记录不能显示整套成功
+2026-10-09T00:28:45.3466525Z ok 172 - 不完整回执、跨身份、重复设备和已取消记录不能显示整套成功
+2026-10-09T00:28:45.3471024Z   ---
+2026-10-09T00:28:45.3471740Z   duration_ms: 0.382606
+2026-10-09T00:28:45.3472386Z   type: 'test'
+2026-10-09T00:28:45.3472796Z   ...
+2026-10-09T00:28:45.3474065Z # Subtest: 切换方案保留各自本地草稿，不自动创建预约或覆盖另一身份
+2026-10-09T00:28:45.3474852Z ok 173 - 切换方案保留各自本地草稿，不自动创建预约或覆盖另一身份
+2026-10-09T00:28:45.3475497Z   ---
+2026-10-09T00:28:45.3475873Z   duration_ms: 0.379049
+2026-10-09T00:28:45.3476271Z   type: 'test'
+2026-10-09T00:28:45.3476630Z   ...
+2026-10-09T00:28:45.3477179Z # Subtest: AI推荐刷新可恢复真实搭配与所选时间，账号隔离且拒绝目录外设备
+2026-10-09T00:28:45.3477762Z ok 174 - AI推荐刷新可恢复真实搭配与所选时间，账号隔离且拒绝目录外设备
+2026-10-09T00:28:45.3478194Z   ---
+2026-10-09T00:28:45.3478585Z   duration_ms: 0.398666
+2026-10-09T00:28:45.3478974Z   type: 'test'
+2026-10-09T00:28:45.3479337Z   ...
+2026-10-09T00:28:45.4107312Z 1..174
+2026-10-09T00:28:45.4107788Z # tests 174
+2026-10-09T00:28:45.4108142Z # suites 0
+2026-10-09T00:28:45.4108534Z # pass 169
+2026-10-09T00:28:45.4108882Z # fail 5
+2026-10-09T00:28:45.4109243Z # cancelled 0
+2026-10-09T00:28:45.4109689Z # skipped 0
+2026-10-09T00:28:45.4110045Z # todo 0
+2026-10-09T00:28:45.4110746Z # duration_ms 2224.168839
+2026-10-09T00:28:45.4276975Z ##[error]Process completed with exit code 1.
+2026-10-09T00:28:45.4448120Z Post job cleanup.
+2026-10-09T00:28:45.5369091Z [command]/usr/bin/git version
+2026-10-09T00:28:45.5421689Z git version 2.55.0
+2026-10-09T00:28:45.5481428Z Temporarily overriding HOME='/home/runner/work/_temp/cb524f1c-aed1-4e4a-95b1-7c80e75c5341' before making global git config changes
+2026-10-09T00:28:45.5482632Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-09T00:28:45.5488192Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vibe-pujiayang/vibe-pujiayang
+2026-10-09T00:28:45.5539093Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-09T00:28:45.5579966Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-09T00:28:45.5856435Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-09T00:28:45.5894362Z http.https://github.com/.extraheader
+2026-10-09T00:28:45.5907797Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-09T00:28:45.5949536Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-09T00:28:45.6238529Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-09T00:28:45.6287697Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-09T00:28:45.6699255Z Cleaning up orphan processes
+2026-10-09T00:28:45.7025539Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

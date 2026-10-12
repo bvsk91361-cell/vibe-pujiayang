@@ -1,0 +1,142 @@
+{
+  "date": "2026-10-12",
+  "csv": {
+    "scope": "Current Borrow Lab source; real browser click and real HTTP/SQLite on a new isolated database; no ordinary-user data",
+    "operator": "Codex browser automation, not the student manual operation",
+    "startedAt": "2026-10-12T02:43:46.924Z",
+    "http": [
+      {
+        "method": "POST",
+        "path": "/api/reservations",
+        "status": 201,
+        "source": "real isolated preparation API",
+        "recordId": "4f795227-a22a-4207-9786-cff06ded210e"
+      },
+      {
+        "method": "POST",
+        "path": "/api/reservations",
+        "status": 201,
+        "source": "real isolated preparation API",
+        "recordId": "f540e7de-d621-4b5f-b1a3-a19b02182012"
+      },
+      {
+        "method": "GET",
+        "path": "/api/reservations",
+        "status": 200,
+        "time": "2026-10-12T02:43:47.338Z"
+      },
+      {
+        "method": "GET",
+        "path": "/api/reservations",
+        "status": 200,
+        "time": "2026-10-12T02:43:47.553Z"
+      }
+    ],
+    "pageErrors": [],
+    "status": "PASS",
+    "browserVersion": "127.0.2651.86",
+    "sourceURL": "http://127.0.0.1:55074/#reservations-title",
+    "filename": "借一下-预约记录.csv",
+    "fileBytes": 152,
+    "sha256": "b645c80a26be6d93e0736db5f8821f4f974f66e489918e11521208268ef9f81f",
+    "firstThreeLines": [
+      "器材,预约人,日期,时段",
+      "数码相机,CSV隔离验收甲,2026-10-13,09:00–11:00",
+      "便携投影仪,CSV隔离验收甲,2026-10-13,14:00–16:00"
+    ],
+    "parsedRows": 2,
+    "utf8Bom": true,
+    "apiReplyMatchesDownload": true,
+    "ordinaryDatabaseTouched": false,
+    "finishedAt": "2026-10-12T02:43:47.846Z"
+  },
+  "ci": {
+    "originalRun": 37864967609,
+    "originalJob": 113609410020,
+    "originalFailures": 5,
+    "oldCommit": "6f8a91e",
+    "fixCommit": "c5f0009",
+    "localUTC": {
+      "oldTotal": 42,
+      "oldFailures": 4,
+      "fixedPass": 42
+    },
+    "minimal": {
+      "oldTotal": 2,
+      "oldFailures": 1,
+      "fixedPass": 2
+    }
+  },
+  "files": [
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/CI-37864967609-原始Job日志.txt",
+      "bytes": 98334,
+      "sha256": "de01961d3739f599f96c2c8ccb913cbeec37a2572b0a61ad9fd0c726051b9e63"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/CI-五项失败原文摘录.txt",
+      "bytes": 6095,
+      "sha256": "b7a6958652820cbe92100d3bf3201784f44cabcaacdb65c2703a08ec35b0df21"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/CI失败与最小复现.md",
+      "bytes": 2318,
+      "sha256": "82fe3a3c88a0156b62170d9be7b0eb184ddbcccc1ceb39b99eb81be5517ffb9c"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/CSV下载-真实请求.har",
+      "bytes": 105968,
+      "sha256": "afd9c4171629658307d53727d6077762818fe07243a87a094320bfe023c82f3d"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/CSV下载核验.json",
+      "bytes": 1564,
+      "sha256": "cce6ed6a7400f7b8a278d301e6a3c8b4dea9989b9aa5adb3761162cdeacf4258"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/CSV导出-下载成功.png",
+      "bytes": 81599,
+      "sha256": "9f55b8d128e7cd736b549dd3300127bdc889c1dc8f38c6ffa7bda8b03f84c630"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/CSV导出-点击前.png",
+      "bytes": 77949,
+      "sha256": "25bc5c7636b1dc8702259c98c21a0a16f1bd98f49e82a157a8a3f29b6f206268"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/借一下-预约记录.csv",
+      "bytes": 152,
+      "sha256": "b645c80a26be6d93e0736db5f8821f4f974f66e489918e11521208268ef9f81f"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/历史修复差异.patch",
+      "bytes": 7414,
+      "sha256": "ca02696ac7055f73efeadee5e369c12f1910c665b7e34042bd81643e09ea2ab1"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/最小复现-修复前.txt",
+      "bytes": 1451,
+      "sha256": "4d5eed8e6363b5c8727b4a97c7e269cd0cb3161087db0fdd42b55c29079f19b5"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/最小复现-修复后.txt",
+      "bytes": 539,
+      "sha256": "852f0259b64934cf59b5778735664329e959dac14d6a53507d770010d0c50e75"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/本机UTC-修复前42项.txt",
+      "bytes": 13778,
+      "sha256": "2f12409880ab5092e5b3d226ee09f107453d3e96c5c49821e62840ffd14fd5f2"
+    },
+    {
+      "path": "docs/验收证据/老师追问补充-20261012/本机UTC-修复后42项.txt",
+      "bytes": 9403,
+      "sha256": "1f3b110cf419dd312d0f664bb945c9219689ca8f1b6065544fa5823c0ef26894"
+    }
+  ]
+}

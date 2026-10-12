@@ -1,0 +1,20 @@
+﻿TAP version 13
+# Subtest: 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
+ok 1 - 我的预约：按去空格姓名精确筛选，全部视图不遗漏他人
+  ---
+  duration_ms: 0.9133
+  ...
+# Subtest: 到期页面标记：过去日期、时段结束边界、使用中与未来日期
+ok 2 - 到期页面标记：过去日期、时段结束边界、使用中与未来日期
+  ---
+  duration_ms: 0.3575
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 77.7586

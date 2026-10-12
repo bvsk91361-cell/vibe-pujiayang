@@ -1,0 +1,62 @@
+import assert from 'node:assert/strict';
+import {mkdir,mkdtemp,readFile,writeFile,stat} from 'node:fs/promises';
+import {join,resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {createHash} from 'node:crypto';
+import vm from 'node:vm';
+import {createProductStore} from '../src/product-store.js';
+import {createApp} from '../server.js';
+import {createAiAssistant} from '../src/ai.js';
+import {localDate,slots} from '../src/booking.js';
+import {addDays} from '../src/planning.js';
+
+const {chromium}=await import(pathToFileURL(process.env.ADMIN_PLAYWRIGHT_PATH||'E:/桌面/vibecode/Borrow Lab 路演影片/V5/project/node_modules/playwright/index.mjs'));
+const output=resolve('docs/验收证据/老师追问补充-20261012');
+await mkdir(output,{recursive:true});
+await mkdir(resolve('data/teacher-csv'),{recursive:true});
+const run=await mkdtemp(resolve('data/teacher-csv/run-'));
+const store=createProductStore(join(run,'isolated.sqlite'));
+const user=store.createUser({name:'CSV隔离验收甲'});
+const server=createApp(store,createAiAssistant({config:{},catalog:store.catalog()}));
+await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+const base='http://127.0.0.1:'+server.address().port;
+let browser;
+const evidence={scope:'Current Borrow Lab source; real browser click and real HTTP/SQLite on a new isolated database; no ordinary-user data',operator:'Codex browser automation, not the student manual operation',startedAt:new Date().toISOString(),http:[],pageErrors:[]};
+try{
+ browser=await chromium.launch({executablePath:process.env.ADMIN_BROWSER_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
+ const context=await browser.newContext({acceptDownloads:true,viewport:{width:1600,height:900},colorScheme:'dark',recordHar:{path:join(output,'CSV下载-真实请求.har'),mode:'minimal',content:'omit'}});
+ await context.addInitScript(({id})=>localStorage.setItem('borrow-active-user',id),{id:user.id});
+ const page=await context.newPage();
+ page.on('pageerror',e=>evidence.pageErrors.push(e.message));
+ page.on('response',response=>{const u=new URL(response.url());if(u.pathname==='/api/reservations')evidence.http.push({method:response.request().method(),path:u.pathname,status:response.status(),time:new Date().toISOString()});});
+ const date=addDays(localDate(),1);
+ const requested=[{userId:user.id,equipmentId:'camera',date,slot:slots[0]},{userId:user.id,equipmentId:'projector',date,slot:slots[1]}];
+ for(const row of requested){const response=await context.request.post(base+'/api/reservations',{data:row});assert.equal(response.status(),201);const record=await response.json();evidence.http.push({method:'POST',path:'/api/reservations',status:201,source:'real isolated preparation API',recordId:record.id});}
+ assert.equal(store.list().length,2);
+ await page.goto(base+'/#reservations-title');
+ await page.waitForFunction(()=>document.body.dataset.view==='reservations'&&document.querySelector('#booking-form [name=userId]')?.value);
+ await page.locator('#reservations').filter({hasText:'数码相机'}).waitFor();
+ await page.screenshot({path:join(output,'CSV导出-点击前.png')});
+ const responsePromise=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/reservations'&&r.request().method()==='GET');
+ const downloadPromise=page.waitForEvent('download');
+ await page.getByRole('button',{name:'导出记录',exact:true}).click();
+ const [download,response]=await Promise.all([downloadPromise,responsePromise]);
+ assert.equal(response.status(),200);
+ assert.equal(await download.failure(),null);
+ const file=join(output,download.suggestedFilename());
+ await download.saveAs(file);
+ const bytes=await readFile(file),text=bytes.toString('utf8').replace(/^\uFEFF/,'');
+ const sandbox={};vm.createContext(sandbox);vm.runInContext(await readFile('public/vendor/papaparse.min.js','utf8'),sandbox);
+ const result=sandbox.Papa.parse(text,{header:true,skipEmptyLines:true});
+ assert.deepEqual(Array.from(result.meta.fields),['器材','预约人','日期','时段']);
+ assert.equal(result.errors.length,0);assert.equal(result.data.length,2);
+ for(const row of requested){const name=store.catalog().find(x=>x.id===row.equipmentId).name;assert.ok(result.data.some(x=>x['器材']===name&&x['日期']===row.date&&x['时段']===row.slot&&x['预约人']===user.name));}
+ assert.equal(bytes.subarray(0,3).toString('hex'),'efbbbf');
+ await page.waitForFunction(()=>document.querySelector('#message')?.textContent.includes('已导出预约记录'));
+ await page.screenshot({path:join(output,'CSV导出-下载成功.png')});
+ Object.assign(evidence,{status:'PASS',browserVersion:await browser.version(),sourceURL:base+'/#reservations-title',filename:download.suggestedFilename(),fileBytes:(await stat(file)).size,sha256:createHash('sha256').update(bytes).digest('hex'),firstThreeLines:text.split(/\r?\n/).slice(0,3),parsedRows:2,utf8Bom:true,apiReplyMatchesDownload:true,ordinaryDatabaseTouched:false,finishedAt:new Date().toISOString()});
+ assert.deepEqual(evidence.pageErrors,[]);
+ await context.close();
+ await writeFile(join(output,'CSV下载核验.json'),JSON.stringify(evidence,null,2)+'\n');
+ console.log(JSON.stringify({status:evidence.status,filename:evidence.filename,fileBytes:evidence.fileBytes,firstThreeLines:evidence.firstThreeLines,http:evidence.http},null,2));
+}finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));store.close();}
