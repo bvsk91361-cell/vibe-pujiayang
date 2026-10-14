@@ -11,3 +11,17 @@ export function rankSearch(query,equipment,scenes,plans=[]){
  for(const plan of plans)if(!term||plan.name.toLowerCase().includes(term))results.push({type:'plan',id:plan.id,title:plan.name,subtitle:'继续准备你的计划'});
  if(term)results.unshift({type:'ai',id:query,title:'问智能设备顾问',subtitle:query});return results.slice(0,15);
 }
+
+export function aiErrorMessage(error){
+ const message=error?.message||'';
+ if(/^(请(?:先)?选择|请一次|时段描述不一致|问题需为)/.test(message))return message;
+ if(/超时/.test(message)||error?.name==='TimeoutError')return '这次思考超时了，请再试一次';
+ if(/长度上限|内容被截断|空内容|不是有效JSON|安全长度/.test(message))return '这次建议没有生成完整，请重试';
+ if(/20次AI调用上限/.test(message))return '今天的智能推荐次数已用完，可以通过场景选择设备';
+ if(/额度不足/.test(message))return '智能推荐服务额度不足，请联系管理员';
+ if(/上一条请求/.test(message))return '上一条建议仍在生成，请稍候再试';
+ if(/限流/.test(message))return '智能推荐请求较多，请稍后重试';
+ if(/无法连接模型服务/.test(message))return '暂时无法连接智能推荐服务，请检查网络后重试';
+ if(/授权失败|尚未配置|配置无效/.test(message))return '智能推荐连接需要检查，请联系管理员';
+ return '这次没有生成完整结果，请再试一次';
+}

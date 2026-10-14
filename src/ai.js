@@ -37,7 +37,7 @@ function validateQuery(value,context){
  if(query.slot!==null&&!context.stats.slotCounts.some(item=>item.slot===query.slot))throw new IncompleteOutput('助手未识别有效时段，请明确上午、下午或晚上。');
  return query;
 }
-export function createAiAssistant({ config=process.env, fetchImpl=fetch, timeoutMs=15000, creativeTimeoutMs=25000, catalog=equipment }={}){
+export function createAiAssistant({ config=process.env, fetchImpl=fetch, timeoutMs=15000, creativeTimeoutMs=60000, catalog=equipment }={}){
  const settings={key:config.YOSHUB_API_KEY||'',base:config.YOSHUB_BASE_URL||'https://api.yoshub.com/v1',model:config.YOSHUB_MODEL||'deepseek-v4-flash'};
  let calls=0,promptTokens=0,completionTokens=0,day=localDate(),busy=false;
  function status(){return {configured:!!(settings.key&&settings.base&&settings.model),model:settings.model||null,calls,promptTokens,completionTokens,scope:'当前服务进程，重启后计数清零'};}
@@ -48,7 +48,7 @@ export function createAiAssistant({ config=process.env, fetchImpl=fetch, timeout
   let response,payload;
   try{
    const deadline=AbortSignal.timeout(requestTimeout),signal=requestSignal?AbortSignal.any([deadline,requestSignal]):deadline;
-   response=await fetchImpl(`${settings.base.replace(/\/$/,'')}/chat/completions`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${settings.key}`},body:JSON.stringify({model:settings.model,messages,max_tokens:maxTokens,temperature:0.2,stream:false}),signal,redirect:'error'});
+   response=await fetchImpl(`${settings.base.replace(/\/$/,'')}/chat/completions`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${settings.key}`},body:JSON.stringify({model:settings.model,messages,max_tokens:maxTokens,temperature:0.2,stream:false,...(/^deepseek/i.test(settings.model)?{thinking:{type:'disabled'}}:{})}),signal,redirect:'error'});
    if(!response.ok){
     if([401,403].includes(response.status))throw new BookingError('模型授权失败，请检查本机密钥与权限；普通预约不受影响。',503);
     if([402,429].includes(response.status))throw new BookingError('模型额度不足或限流，请稍后重试或手动预约。',503);
@@ -92,7 +92,7 @@ export function createAiAssistant({ config=process.env, fetchImpl=fetch, timeout
    const limit=input.mode==='report'?2:1;
    for(let index=0;index<limit;index++){
     const messages=index===0?initial:[...initial,{role:'user',content:'上一份输出不完整。最后一次重试：仅返回完整紧凑JSON，六部分所需引用和2～3个建议ID必须齐全，不输出思考、标题或额外文字。'}];
-    const result=await callModel(messages,input.mode==='report'?(index===0?1800:2400):input.mode==='creative'?(optimizing?1536:3000):2400,input.mode==='creative'?creativeTimeoutMs:timeoutMs,signal);attempts++;
+    const result=await callModel(messages,input.mode==='report'?(index===0?1800:2400):input.mode==='creative'?(optimizing?1536:8192):2400,input.mode==='creative'?creativeTimeoutMs:timeoutMs,signal);attempts++;
     usage.prompt_tokens+=result.usage.prompt_tokens;usage.completion_tokens+=result.usage.completion_tokens;
     try{
      if(result.finishReason==='length')throw new IncompleteOutput('助手输出达到长度上限，内容被截断。');
